@@ -41,12 +41,12 @@ public class Business {
     )
     private List<Supplier> suppliers;
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "business")
     private List<CashRegister> cashRegisters;
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "business")
     private List<TimeSlot> timeSlots;
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "business")
     private List<Expense> expenses;
 }

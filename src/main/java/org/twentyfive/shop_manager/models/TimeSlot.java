@@ -36,7 +36,7 @@ public class TimeSlot {
     @JoinColumn(name = "business_id")
     private Business business; //Una fascia è associata a una ed una sola attività
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "timeSlot")
     private List<CashRegister> cashRegisters; //Una fascia è associata a più chiusure cassa
 
 

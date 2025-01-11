@@ -27,7 +27,7 @@ public class Supplier {
     @ManyToMany(mappedBy = "suppliers")
     private List<Business> workFor;
 
-    @OneToMany(mappedBy ="id")
+    @OneToMany(mappedBy ="supplier")
     private List<Expense> expenses;
 
 }
