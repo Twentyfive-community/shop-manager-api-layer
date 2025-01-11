@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.twentyfive.shop_manager.utilities.Operation;
 
 import java.util.List;
 
@@ -21,6 +22,9 @@ public class Entry {
 
     @Column(name = "label", nullable = false)
     private String label; //Nome della voce
+
+    @Column(name ="operation", nullable = false)
+    private Operation operation;
 
     @OneToMany(mappedBy = "id.entry")  // mappedBy si riferisce al campo 'entry' in EntryClosureId, chiave composta
     private List<EntryClosure> entryClosures;

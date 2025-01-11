@@ -1,5 +1,7 @@
 package org.twentyfive.shop_manager.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,14 +10,14 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name ="employers")
+@Table(name ="workers")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employer {
+public class Worker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id") //ID dell'attività, generata automaticamente
+    @Column(name = "id") //ID del dipendente, generata automaticamente
     private Long id;
 
     @Column(name = "keycloak_id") //ID del dipendente, generata automaticamente
@@ -36,7 +38,8 @@ public class Employer {
     @Column(name = "phone_number") //telefono
     private String phoneNumber;
 
-    @ManyToMany(mappedBy = "employers")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "workers")
     private List<Business> workFor;
 
     @OneToMany(mappedBy = "closedBy")

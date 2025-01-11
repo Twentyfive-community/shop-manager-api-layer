@@ -1,5 +1,6 @@
 package org.twentyfive.shop_manager.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,11 +26,11 @@ public class Business {
     // Relazione ManyToMany con i dipendenti
     @ManyToMany
     @JoinTable(
-            name = "business_employers",  // Nome della tabella di JOIN
+            name = "business_workers",  // Nome della tabella di JOIN
             joinColumns = @JoinColumn(name = "business_id"),  // La colonna che si riferisce alla chiave primaria di attività
-            inverseJoinColumns = @JoinColumn(name = "employer_id")  // La colonna che si riferisce alla chiave primaria di dipendente
+            inverseJoinColumns = @JoinColumn(name = "worker_id")  // La colonna che si riferisce alla chiave primaria di dipendente
     )
-    private List<Employer> employers;
+    private List<Worker> workers;
 
     // Relazione ManyToMany con i fornitori
     @ManyToMany

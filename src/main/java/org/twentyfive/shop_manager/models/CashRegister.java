@@ -39,11 +39,11 @@ public class CashRegister {
 
     @ManyToOne
     @JoinColumn(name = "closed_by_id") // Dipendente che ha fatto la chiusura cassa
-    private Employer closedBy;
+    private Worker closedBy;
 
     @ManyToOne
     @JoinColumn(name = "updated_by_id") // Dipendente che ha fatto l'ultima modifica della chiusura cassa, può essere null
-    private Employer updatedBy;
+    private Worker updatedBy;
 
     @Column (name ="update_time")
     private LocalDateTime updatedTime; //tempo ultima chiusura o update della chiusura cassa
