@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -12,7 +13,9 @@
     <groupId>org.twentyfive</groupId>
     <artifactId>shop_manager_api_layer</artifactId>
     <version>0.0.1</version>
-    <name>shop_manager</name>
+
+    <name>shop_manager_api_layer</name>
+    <description>shop_manager_api_layer</description>
 
     <packaging>war</packaging>
 
@@ -54,10 +57,37 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.0.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.twentyfive</groupId>
+            <artifactId>authorization-flow</artifactId>
+            <version>0.0.16</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub Twentyfivesrls Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Twentyfivesrls/*</url>
+        </repository>
+    </repositories>
+
     <build>
-        <finalName>apa-api-layer</finalName>
+        <finalName>shop_manager_api_layer</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
