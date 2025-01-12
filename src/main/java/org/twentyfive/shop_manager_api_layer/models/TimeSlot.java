@@ -1,5 +1,6 @@
 package org.twentyfive.shop_manager_api_layer.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,10 +33,12 @@ public class TimeSlot {
     @Column(name = "end_time")
     private LocalTime end; //Orario fine fascia
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "business_id")
     private Business business; //Una fascia è associata a una ed una sola attività
 
+    @JsonIgnore
     @OneToMany(mappedBy = "timeSlot")
     private List<CashRegister> cashRegisters; //Una fascia è associata a più chiusure cassa
 

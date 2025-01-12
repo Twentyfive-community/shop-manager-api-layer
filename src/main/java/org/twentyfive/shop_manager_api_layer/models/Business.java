@@ -1,5 +1,6 @@
 package org.twentyfive.shop_manager_api_layer.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,10 +25,14 @@ public class Business {
 
     // Relazione ManyToMany con i dipendenti
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "business_workers",  // Nome della tabella di JOIN
             joinColumns = @JoinColumn(name = "business_id"),  // La colonna che si riferisce alla chiave primaria di attività
-            inverseJoinColumns = @JoinColumn(name = "worker_id")  // La colonna che si riferisce alla chiave primaria di dipendente
+            inverseJoinColumns = @JoinColumn(name = "worker_id"),
+            indexes = {  // Indici sulla tabella di JOIN
+                    @Index(name = "idx_business_worker", columnList = "business_id")  // Indice sulla colonna 'worker_id'
+            }// La colonna che si riferisce alla chiave primaria di dipendente
     )
     private List<Worker> workers;
 
@@ -36,14 +41,15 @@ public class Business {
     @JoinTable(
             name = "business_suppliers",  // Nome della tabella di JOIN
             joinColumns = @JoinColumn(name = "business_id"),  // La colonna che si riferisce alla chiave primaria di attività
-            inverseJoinColumns = @JoinColumn(name = "supplier_id")  // La colonna che si riferisce alla chiave primaria di fornitore
+            inverseJoinColumns = @JoinColumn(name = "supplier_id") //La colonna che si riferisce alla chiave primaria di fornitore
     )
     private List<Supplier> suppliers;
 
     @OneToMany(mappedBy = "business")
     private List<CashRegister> cashRegisters;
 
-    @OneToMany(mappedBy = "business")
+    @JsonIgnore
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TimeSlot> timeSlots;
 
     @OneToMany(mappedBy = "business")

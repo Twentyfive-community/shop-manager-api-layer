@@ -1,4 +1,4 @@
-package org.twentyfive.shop_manager_api_layer.utilities;
+package org.twentyfive.shop_manager_api_layer.utilities.classes;
 
 public enum Operation {
     ADDITION("+"),

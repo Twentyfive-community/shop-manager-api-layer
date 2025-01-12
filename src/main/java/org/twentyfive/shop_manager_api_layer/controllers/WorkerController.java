@@ -8,6 +8,7 @@ import org.twentyfive.shop_manager_api_layer.dtos.requests.AddWorkerReq;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.services.WorkerService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -17,15 +18,14 @@ public class WorkerController {
 
     private final WorkerService workerService;
 
-    //TODO togliere pathVariable e prenderselo direttamente dal token
-    @GetMapping("/getAllWorkersByBusinessId/{id}")
-    public ResponseEntity<List<Worker>> getAllWorkersByBusinessId(@PathVariable Long id) {
-        return ResponseEntity.ok().body(workerService.getAllWorkersByBusinessId(id));
+    @GetMapping("/getAllByBusinessId/{id}")
+    public ResponseEntity<List<Worker>> getAllByBusinessId(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(workerService.getAllByBusinessId(id));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Boolean> addWorker(@RequestBody AddWorkerReq addWorkerReq) {
-        return ResponseEntity.ok().body(workerService.addWorker(addWorkerReq));
+    public ResponseEntity<Boolean> add(@RequestBody AddWorkerReq addWorkerReq) {
+        return ResponseEntity.ok().body(workerService.add(addWorkerReq));
     }
 
     @PostMapping("/addInExistentBusiness")

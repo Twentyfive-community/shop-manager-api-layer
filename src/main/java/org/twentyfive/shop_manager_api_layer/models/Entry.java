@@ -1,10 +1,11 @@
 package org.twentyfive.shop_manager_api_layer.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.twentyfive.shop_manager_api_layer.utilities.Operation;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.Operation;
 
 import java.util.List;
 
@@ -26,10 +27,12 @@ public class Entry {
     @Column(name ="operation", nullable = false)
     private Operation operation;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "id.entry")  // mappedBy si riferisce al campo 'entry' in EntryClosureId, chiave composta
     private List<EntryClosure> entryClosures;
 
-    @ManyToMany(mappedBy="entries")
+    @JsonIgnore
+    @ManyToMany(mappedBy="entries") //si riferisce a quali voci composte fa riferimento
     private List<ComposedEntry> composedEntries;
 
 }

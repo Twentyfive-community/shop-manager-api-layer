@@ -40,13 +40,12 @@ public interface KeycloakClient {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/admin/realms/${keycloak.realm}/users/{id}/reset-password", produces = "application/json")
     ResponseEntity<Object> updatePassword(@RequestHeader("Authorization") String accessToken, @PathVariable String id, @RequestBody PasswordUpdateKeycloak newPassword);
-    @RequestMapping(method = RequestMethod.GET, value ="admin/realms/${keycloak.realm}/clients/${keycloak.twentyId}/roles")
-    ResponseEntity<List<KeycloakRole>> getRoles(@RequestHeader("Authorization") String accessToken);
+    @RequestMapping(method = RequestMethod.GET, value ="admin/realms/${keycloak.realm}/roles")
+    List<LinkedHashMap<String,String>> getRoles(@RequestHeader("Authorization") String accessToken);
 
-    @RequestMapping(method = RequestMethod.POST, value = "/admin/realms/${keycloak.realm}/users/{id}/role-mappings/clients/{clientIdRole}", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = "/admin/realms/${keycloak.realm}/users/{id}/role-mappings/realm", produces = "application/json")
     ResponseEntity<Object> addRoleToUser(@RequestHeader("Authorization") String accessToken,
                                          @PathVariable String id,
-                                         @PathVariable String clientIdRole,
                                          @RequestBody List<RoleRepresentation> roles);
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/admin/realms/${keycloak.realm}/users/{id}/role-mappings/clients/{clientIdRole}", produces = "application/json")

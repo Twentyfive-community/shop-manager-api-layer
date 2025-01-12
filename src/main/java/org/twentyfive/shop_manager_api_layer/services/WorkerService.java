@@ -15,20 +15,28 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class WorkerService {
+
     private final WorkerRepository workerRepository;
     private final BusinessService businessService;
+    private final KeycloakService keycloakService;
 
     public Worker getById(Long id) {
         return workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException("Worker not found"));
     }
-    public Boolean addWorker(AddWorkerReq addWorkerReq) {
+
+    public Worker getByKeycloakId(String keycloakId) {
+        return workerRepository.findByKeycloakId(keycloakId).orElseThrow(() -> new WorkerNotFoundException("Worker not found"));
+    }
+
+    public Boolean add(AddWorkerReq addWorkerReq) {
         Business business = businessService.getById(addWorkerReq.getBusinessId());
         Worker worker = addWorkerReq.getWorker();
+        keycloakService.addEmployeeToRealm(worker);
         return assignWorkerToABusiness(business, worker);
     }
 
 
-    public List<Worker> getAllWorkersByBusinessId(Long id) {
+    public List<Worker> getAllByBusinessId(Long id){
         return workerRepository.findByWorkFor_Id(id);
     }
 
@@ -39,6 +47,7 @@ public class WorkerService {
     }
 
     private Boolean assignWorkerToABusiness(Business business, Worker worker) {
+
         if(worker.getWorkFor() == null){
             worker.setWorkFor(new ArrayList<>());
         }
