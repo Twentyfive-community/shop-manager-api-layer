@@ -5,12 +5,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.Operation;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Operation;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name ="entries")
+@Table(name ="entries",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"label"})  // Unicità label
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,6 +36,6 @@ public class Entry {
 
     @JsonIgnore
     @ManyToMany(mappedBy="entries") //si riferisce a quali voci composte fa riferimento
-    private List<ComposedEntry> composedEntries;
+    private Set<ComposedEntry> composedEntries;
 
 }

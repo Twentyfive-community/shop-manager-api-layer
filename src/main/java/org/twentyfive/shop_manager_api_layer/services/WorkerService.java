@@ -10,6 +10,7 @@ import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -49,7 +50,7 @@ public class WorkerService {
     private Boolean assignWorkerToABusiness(Business business, Worker worker) {
 
         if(worker.getWorkFor() == null){
-            worker.setWorkFor(new ArrayList<>());
+            worker.setWorkFor(new HashSet<>());
         }
 
         worker.getWorkFor().add(business);

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name ="businesses")
@@ -29,12 +30,13 @@ public class Business {
     @JoinTable(
             name = "business_workers",  // Nome della tabella di JOIN
             joinColumns = @JoinColumn(name = "business_id"),  // La colonna che si riferisce alla chiave primaria di attività
-            inverseJoinColumns = @JoinColumn(name = "worker_id"),
+            inverseJoinColumns = @JoinColumn(name = "worker_id"), // La colonna che si riferisce alla chiave primaria di dipendente
             indexes = {  // Indici sulla tabella di JOIN
                     @Index(name = "idx_business_worker", columnList = "business_id")  // Indice sulla colonna 'worker_id'
-            }// La colonna che si riferisce alla chiave primaria di dipendente
+            },
+            uniqueConstraints = @UniqueConstraint(columnNames = {"business_id", "worker_id"})  // Unicità della combinazione business_id + worker_id
     )
-    private List<Worker> workers;
+    private Set<Worker> workers;
 
     // Relazione ManyToMany con i fornitori
     @ManyToMany
@@ -43,15 +45,15 @@ public class Business {
             joinColumns = @JoinColumn(name = "business_id"),  // La colonna che si riferisce alla chiave primaria di attività
             inverseJoinColumns = @JoinColumn(name = "supplier_id") //La colonna che si riferisce alla chiave primaria di fornitore
     )
-    private List<Supplier> suppliers;
+    private Set<Supplier> suppliers;
 
     @OneToMany(mappedBy = "business")
-    private List<CashRegister> cashRegisters;
+    private Set<CashRegister> cashRegisters;
 
     @JsonIgnore
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TimeSlot> timeSlots;
+    private Set<TimeSlot> timeSlots;
 
     @OneToMany(mappedBy = "business")
-    private List<Expense> expenses;
+    private Set<Expense> expenses;
 }

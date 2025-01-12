@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name ="workers")
@@ -39,7 +40,7 @@ public class Worker {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "workers")
-    private List<Business> workFor;
+    private Set<Business> workFor;
 
     @OneToMany(mappedBy = "closedBy")
     private List<CashRegister> closedRegisters;

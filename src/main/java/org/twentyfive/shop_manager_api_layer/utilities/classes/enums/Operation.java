@@ -1,8 +1,8 @@
-package org.twentyfive.shop_manager_api_layer.utilities.classes;
+package org.twentyfive.shop_manager_api_layer.utilities.classes.enums;
 
 public enum Operation {
     ADDITION("+"),
-    SUBTRACTION("-");
+    SUBSTRACTION("-");
 
     private final String symbol;
 

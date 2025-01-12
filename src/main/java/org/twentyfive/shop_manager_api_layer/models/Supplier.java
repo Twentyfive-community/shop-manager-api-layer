@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name ="suppliers")
@@ -25,9 +26,9 @@ public class Supplier {
     private String address;
 
     @ManyToMany(mappedBy = "suppliers")
-    private List<Business> workFor;
+    private Set<Business> workFor;
 
     @OneToMany(mappedBy ="supplier")
-    private List<Expense> expenses;
+    private Set<Expense> expenses;
 
 }
