@@ -42,20 +42,20 @@ public class KeycloakService {
         return "Bearer " + login(tokenRequest);
     }
 
-    public void addEmployeeToRealm(Worker worker){
+    public void addEmployeeToRealm(Worker worker, String role){
         String bearerToken = getAdminBearerToken();
         KeycloakUser keycloakUser = KeycloakUtility.addEmployeeToRealm(worker);
         ResponseEntity<Object> response = keycloakClient.add(bearerToken, keycloakUser);
         String keycloakId = KeycloakUtility.getKeycloakIdFromResponse(response);
-        addRoleToUser(bearerToken,keycloakId,worker);
+        addRoleToUser(bearerToken,keycloakId,role);
         worker.setKeycloakId(keycloakId);
     }
 
-    private void addRoleToUser(String bearerToken, String keycloakId, Worker worker) {
+    private void addRoleToUser(String bearerToken, String keycloakId,String role) {
         List<LinkedHashMap<String, String>> rawRoles = keycloakClient.getRoles(bearerToken);
         List<RoleRepresentation> keycloakRoles = rawRoles.stream()
                 .map(KeycloakUtility::convertToRoleRepresentation)
-                .filter(role -> role.getName().equals(worker.getRole())) // Filtra il ruolo specifico
+                .filter(keycloakRole -> keycloakRole.getName().equals(role)) // Filtra il ruolo specifico
                 .toList();
         keycloakClient.addRoleToUser(bearerToken, keycloakId, keycloakRoles);
     }

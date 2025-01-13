@@ -3,6 +3,7 @@ package org.twentyfive.shop_manager_api_layer.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddTimeSlotReq;
+import org.twentyfive.shop_manager_api_layer.exceptions.TimeSlotNotFoundException;
 import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.TimeSlot;
 import org.twentyfive.shop_manager_api_layer.repositories.TimeSlotRepository;
@@ -30,5 +31,9 @@ public class TimeSlotService {
     public List<TimeSlot> getAllByBusinessId(Long id) {
         return timeSlotRepository.findByBusiness_Id(id);
 
+    }
+
+    public TimeSlot getByNameAndBusinessId(String timeSlotName, Long businessId) {
+        return timeSlotRepository.findByNameAndBusiness_Id(timeSlotName,businessId).orElseThrow(()-> new TimeSlotNotFoundException("timeSlot not found"));
     }
 }

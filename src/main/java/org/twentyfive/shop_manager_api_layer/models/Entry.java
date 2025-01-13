@@ -34,8 +34,4 @@ public class Entry {
     @OneToMany(mappedBy = "id.entry")  // mappedBy si riferisce al campo 'entry' in EntryClosureId, chiave composta
     private List<EntryClosure> entryClosures;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy="entries") //si riferisce a quali voci composte fa riferimento
-    private Set<ComposedEntry> composedEntries;
-
 }

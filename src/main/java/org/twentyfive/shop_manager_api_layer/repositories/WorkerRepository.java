@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface WorkerRepository extends JpaRepository<Worker, Long> {
 
-    List<Worker> findByWorkFor_Id(Long businessId);
+    //List<Worker> findByWorkFor_Id(Long businessId);
 
     Optional<Worker> findByKeycloakId(String keycloakId);
 }

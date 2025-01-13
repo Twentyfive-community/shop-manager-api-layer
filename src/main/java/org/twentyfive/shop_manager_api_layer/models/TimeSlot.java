@@ -10,7 +10,9 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Entity
-@Table(name ="time_slots")
+@Table(name ="time_slots",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name", "business_id"}) // Impostazione del vincolo di unicità
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

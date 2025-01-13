@@ -13,7 +13,8 @@ import java.util.List;
 @Table(name ="cash_registers",
         indexes = {
                 @Index(name = "idx_cash_register_ref_time", columnList = "ref_time")
-        }
+        },
+        uniqueConstraints = @UniqueConstraint(columnNames ={"ref_time","time_slot_id"})
 )
 @Data
 @NoArgsConstructor
@@ -49,7 +50,7 @@ public class CashRegister {
     @JoinColumn(name = "updated_by_id") // Dipendente che ha fatto l'ultima modifica della chiusura cassa, può essere null
     private Worker updatedBy;
 
-    @Column (name ="update_time")
+    @Column(name ="update_time")
     private LocalDateTime updatedTime; //tempo ultima chiusura o update della chiusura cassa
 
     @OneToMany(mappedBy="cashRegister")

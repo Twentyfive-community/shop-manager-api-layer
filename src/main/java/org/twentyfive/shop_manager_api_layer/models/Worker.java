@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name ="workers")
+@Table(name ="workers",
+uniqueConstraints = @UniqueConstraint(columnNames ={"keycloak_id"})
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,11 +25,8 @@ public class Worker {
     @Column(name = "keycloak_id") //ID del dipendente, generata automaticamente
     private String keycloakId;
 
-    @Column(name="role") //Ruolo, capo, dipendente semplice ecc, uguale a Keycloak
-    private String role;
-
-    @Column(name = "name", nullable = false) //nome della persona
-    private String name;
+    @Column(name = "first_name", nullable = false) //nome della persona
+    private String firstName;
 
     @Column(name = "last_name", nullable = false) //cognome della persona
     private String lastName;
@@ -39,12 +38,14 @@ public class Worker {
     private String phoneNumber;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "workers")
-    private Set<Business> workFor;
+    @OneToMany(mappedBy = "id.worker", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BusinessWorker> businessRoles; // Ruoli del worker nei business
 
+    @JsonIgnore
     @OneToMany(mappedBy = "closedBy")
     private List<CashRegister> closedRegisters;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "updatedBy")
     private List<CashRegister> updatedRegisters;
 

@@ -12,5 +12,4 @@ import java.util.List;
 @NoArgsConstructor
 public class AddComposedEntryReq {
     private ComposedEntry composedEntry;
-    private List<String> entryNames;
 }

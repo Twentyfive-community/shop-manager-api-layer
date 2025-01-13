@@ -5,10 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddInExistentBusinessReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddWorkerReq;
-import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.services.WorkerService;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,7 +18,7 @@ public class WorkerController {
     private final WorkerService workerService;
 
     @GetMapping("/getAllByBusinessId/{id}")
-    public ResponseEntity<List<Worker>> getAllByBusinessId(@PathVariable("id") Long id){
+    public ResponseEntity<List<SimpleWorker>> getAllByBusinessId(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(workerService.getAllByBusinessId(id));
     }
 

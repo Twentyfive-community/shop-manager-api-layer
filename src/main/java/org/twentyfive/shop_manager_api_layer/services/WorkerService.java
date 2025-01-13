@@ -5,12 +5,15 @@ import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddInExistentBusinessReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddWorkerReq;
 import org.twentyfive.shop_manager_api_layer.exceptions.WorkerNotFoundException;
+import org.twentyfive.shop_manager_api_layer.mappers.WorkerMapperService;
 import org.twentyfive.shop_manager_api_layer.models.Business;
+import org.twentyfive.shop_manager_api_layer.models.BusinessWorker;
+import org.twentyfive.shop_manager_api_layer.models.ids.BusinessWorkerId;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
+import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -18,8 +21,12 @@ import java.util.List;
 public class WorkerService {
 
     private final WorkerRepository workerRepository;
+    private final BusinessWorkerRepository businessWorkerRepository;
+
     private final BusinessService businessService;
     private final KeycloakService keycloakService;
+
+    private final WorkerMapperService workerMapperService;
 
     public Worker getById(Long id) {
         return workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException("Worker not found"));
@@ -31,33 +38,42 @@ public class WorkerService {
 
     public Boolean add(AddWorkerReq addWorkerReq) {
         Business business = businessService.getById(addWorkerReq.getBusinessId());
-        Worker worker = addWorkerReq.getWorker();
-        keycloakService.addEmployeeToRealm(worker);
-        return assignWorkerToABusiness(business, worker);
+
+        Worker worker = createWorkerFromAdd(addWorkerReq.getWorker());
+        keycloakService.addEmployeeToRealm(worker, addWorkerReq.getRole());
+        Worker workerDB = workerRepository.save(worker);
+
+        createBusinessWorkerFromAdd(business,workerDB,addWorkerReq.getRole());
+
+        return true;
     }
 
 
-    public List<Worker> getAllByBusinessId(Long id){
-        return workerRepository.findByWorkFor_Id(id);
+    public List<SimpleWorker> getAllByBusinessId(Long id){
+        List<BusinessWorker> businessWorkers = businessWorkerRepository.findById_Business_Id(id);
+        return workerMapperService.mapListSimpleWorkersFromBusinessWorkers(businessWorkers);
     }
 
     public Boolean AddInExistentBusiness(AddInExistentBusinessReq addInExistentBusinessReq) {
         Business business = businessService.getById(addInExistentBusinessReq.getBusinessId());
         Worker worker = getById(addInExistentBusinessReq.getWorkerId());
-        return assignWorkerToABusiness(business, worker);
+        createBusinessWorkerFromAdd(business,worker,addInExistentBusinessReq.getRole());
+        return true;
     }
 
-    private Boolean assignWorkerToABusiness(Business business, Worker worker) {
+    private Worker createWorkerFromAdd(SimpleWorker simpleWorker) {
+        Worker worker = new Worker();
+        worker.setFirstName(simpleWorker.getFirstName());
+        worker.setLastName(simpleWorker.getLastName());
+        worker.setEmail(simpleWorker.getEmail());
+        worker.setPhoneNumber(simpleWorker.getPhoneNumber());
+        return worker;
+    }
 
-        if(worker.getWorkFor() == null){
-            worker.setWorkFor(new HashSet<>());
-        }
-
-        worker.getWorkFor().add(business);
-        business.getWorkers().add(worker);
-
-        workerRepository.save(worker);
-        businessService.add(business);
-        return true;
+    private BusinessWorker createBusinessWorkerFromAdd(Business business, Worker worker, String role) {
+        BusinessWorkerId businessWorkerId = new BusinessWorkerId(business, worker);
+        BusinessWorker businessWorker = new BusinessWorker(businessWorkerId,role);
+        businessWorkerRepository.save(businessWorker);
+        return businessWorker;
     }
 }

@@ -11,7 +11,7 @@ public class KeycloakUtility {
     public static KeycloakUser addEmployeeToRealm(Worker worker) {
         KeycloakUser user = new KeycloakUser();
         user.setEmail(worker.getEmail());
-        user.setFirstName(worker.getName());
+        user.setFirstName(worker.getFirstName());
         user.setLastName(worker.getLastName());
         Map<String, List<String>> attributes = new HashMap<>();
         attributes.put("phoneNumber", Collections.singletonList(worker.getPhoneNumber()));

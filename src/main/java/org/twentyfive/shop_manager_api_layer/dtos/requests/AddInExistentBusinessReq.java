@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class AddInExistentBusinessReq {
     private Long businessId;
     private Long workerId;
+    private String role;
 }

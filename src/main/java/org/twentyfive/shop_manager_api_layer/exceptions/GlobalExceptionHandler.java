@@ -34,8 +34,20 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(LabelNotFoundException.class)
-    public ResponseEntity<ApiError> handleLabelNotFoundException(LabelNotFoundException ex) {
+    @ExceptionHandler(EntryNotFoundException.class)
+    public ResponseEntity<ApiError> handleLabelNotFoundException(EntryNotFoundException ex) {
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TimeSlotNotFoundException.class)
+    public ResponseEntity<ApiError> handleTimeSlotNotFoundException(TimeSlotNotFoundException ex) {
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ComposedEntryNotFoundException.class)
+    public ResponseEntity<ApiError> handleComposedEntryNotFoundException(ComposedEntryNotFoundException ex) {
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }

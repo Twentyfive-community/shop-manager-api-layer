@@ -28,13 +28,4 @@ public class ComposedEntry {
     @JsonIgnore
     @OneToMany(mappedBy = "id.composedEntry")  // mappedBy si riferisce al campo 'entry' in EntryClosureId, chiave composta
     private List<ComposedEntryClosure> composedEntryClosures;
-
-    // Relazione ManyToMany con le voci
-    @ManyToMany
-    @JoinTable(
-            name = "composed_entry_linked",  // Nome della tabella di JOIN
-            joinColumns = @JoinColumn(name = "composed_entry_id"),  // La colonna che si riferisce alla chiave primaria di attività
-            inverseJoinColumns = @JoinColumn(name = "entry_id")  // La colonna che si riferisce alla chiave primaria di fornitore
-    )
-    private Set<Entry> entries;
 }

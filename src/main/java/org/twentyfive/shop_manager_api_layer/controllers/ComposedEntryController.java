@@ -20,7 +20,7 @@ public class ComposedEntryController {
         return ResponseEntity.ok().body(composedEntryService.getAll());
     }
     @PostMapping("/add")
-    public ResponseEntity<Boolean> add(@RequestBody AddComposedEntryReq addComposedEntryReq) {
-        return ResponseEntity.ok().body(composedEntryService.add(addComposedEntryReq));
+    public ResponseEntity<Boolean> add(@RequestBody ComposedEntry composedEntry) {
+        return ResponseEntity.ok().body(composedEntryService.add(composedEntry));
     }
 }

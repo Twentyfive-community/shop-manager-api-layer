@@ -24,19 +24,9 @@ public class Business {
     @Column(name = "name", nullable = false) //nome dell'attività
     private String name;
 
-    // Relazione ManyToMany con i dipendenti
-    @ManyToMany
     @JsonIgnore
-    @JoinTable(
-            name = "business_workers",  // Nome della tabella di JOIN
-            joinColumns = @JoinColumn(name = "business_id"),  // La colonna che si riferisce alla chiave primaria di attività
-            inverseJoinColumns = @JoinColumn(name = "worker_id"), // La colonna che si riferisce alla chiave primaria di dipendente
-            indexes = {  // Indici sulla tabella di JOIN
-                    @Index(name = "idx_business_worker", columnList = "business_id")  // Indice sulla colonna 'worker_id'
-            },
-            uniqueConstraints = @UniqueConstraint(columnNames = {"business_id", "worker_id"})  // Unicità della combinazione business_id + worker_id
-    )
-    private Set<Worker> workers;
+    @OneToMany(mappedBy = "id.business", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BusinessWorker> workersWithRoles; // Workers associati con ruoli
 
     // Relazione ManyToMany con i fornitori
     @ManyToMany
@@ -47,6 +37,7 @@ public class Business {
     )
     private Set<Supplier> suppliers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "business")
     private Set<CashRegister> cashRegisters;
 
