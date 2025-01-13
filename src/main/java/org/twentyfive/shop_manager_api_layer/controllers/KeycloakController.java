@@ -14,7 +14,7 @@ public class KeycloakController {
     private final KeycloakService keycloakService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody TokenRequest tokenRequest) {
-        return ResponseEntity.ok().body(keycloakService.login(tokenRequest));
+    public String login(@RequestBody TokenRequest tokenRequest) {
+        return keycloakService.login(tokenRequest);
     }
 }
