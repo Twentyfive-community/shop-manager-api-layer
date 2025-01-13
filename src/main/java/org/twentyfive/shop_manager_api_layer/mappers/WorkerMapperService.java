@@ -20,6 +20,15 @@ public class WorkerMapperService {
         return simpleWorkers;
     }
 
+    public SimpleWorker mapSimpleWorkerFromWorker (Worker worker) {
+        SimpleWorker simpleWorker = new SimpleWorker();
+        simpleWorker.setFirstName(worker.getFirstName());
+        simpleWorker.setLastName(worker.getLastName());
+        simpleWorker.setEmail(worker.getEmail());
+        simpleWorker.setPhoneNumber(worker.getPhoneNumber());
+        return simpleWorker;
+    }
+
     private SimpleWorker mapSimpleWorkerFromBusinessWorker(Worker worker) {
         SimpleWorker simpleWorker = new SimpleWorker();
         simpleWorker.setFirstName(worker.getFirstName());
@@ -28,4 +37,5 @@ public class WorkerMapperService {
         simpleWorker.setPhoneNumber(worker.getPhoneNumber());
         return simpleWorker;
     }
+
 }

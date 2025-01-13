@@ -13,7 +13,9 @@ import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
+import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -34,6 +36,12 @@ public class WorkerService {
 
     public Worker getByKeycloakId(String keycloakId) {
         return workerRepository.findByKeycloakId(keycloakId).orElseThrow(() -> new WorkerNotFoundException("Worker not found with keycloakId: " + keycloakId));
+    }
+
+    public SimpleWorker getSimpleWorkerFromToken() throws IOException {
+        String keycloakId = JwtUtility.getIdKeycloak();
+        Worker worker = getByKeycloakId(keycloakId);
+        return workerMapperService.mapSimpleWorkerFromWorker(worker);
     }
 
     public Boolean add(AddWorkerReq addWorkerReq) {
@@ -76,4 +84,5 @@ public class WorkerService {
         businessWorkerRepository.save(businessWorker);
         return businessWorker;
     }
+
 }

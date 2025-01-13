@@ -7,14 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.clients.KeycloakClient;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
+import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.KeycloakUtility;
-import twentyfive.twentyfiveadapter.dto.keycloakDto.KeycloakRole;
 import twentyfive.twentyfiveadapter.dto.keycloakDto.KeycloakUser;
 import twentyfive.twentyfiveadapter.dto.keycloakDto.TokenRequest;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,11 @@ public class KeycloakService {
     private String getAdminBearerToken() {
         TokenRequest tokenRequest = new TokenRequest(clientId, clientSecret, grantType, username, password);
         return "Bearer " + login(tokenRequest);
+    }
+
+    public SimpleWorker getUserByKeycloakId() throws IOException {
+        String idKeycloak = JwtUtility.getIdKeycloak();
+        return keycloakClient.getUserById(getAdminBearerToken(), idKeycloak);
     }
 
     public void addEmployeeToRealm(Worker worker, String role){

@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
 import twentyfive.twentyfiveadapter.dto.keycloakDto.KeycloakRole;
 import twentyfive.twentyfiveadapter.dto.keycloakDto.PasswordUpdateKeycloak;
 import twentyfive.twentyfiveadapter.dto.keycloakDto.TokenRequest;
@@ -25,8 +26,8 @@ public interface KeycloakClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/admin/realms/${keycloak.realm}/users", produces = "application/json")
     ResponseEntity<List<UserRepresentation>> getUserFromEmail(@RequestHeader("Authorization") String accessToken, @RequestParam String email);
-    @GetMapping("/admin/realms/Twentyfive-internal/users/{id}")
-    UserRepresentation getUserById(@RequestHeader("Authorization") String accessToken,@PathVariable("id") String id);
+    @GetMapping("/admin/realms/${keycloak.realm}/users/{id}")
+    SimpleWorker getUserById(@RequestHeader("Authorization") String accessToken, @PathVariable("id") String id);
 
     @RequestMapping(method = RequestMethod.GET, value="/admin/realms/${keycloak.realm}/ui-ext/brute-force-user")
     ResponseEntity<List<UserRepresentation>> search(@RequestHeader("Authorization") String accessToken, @RequestParam String search);
