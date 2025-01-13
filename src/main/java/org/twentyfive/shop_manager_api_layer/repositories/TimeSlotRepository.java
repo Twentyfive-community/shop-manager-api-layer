@@ -12,4 +12,6 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlot, Long> {
     List<TimeSlot> findByBusiness_Id(Long id);
 
     Optional<TimeSlot> findByNameAndBusiness_Id(String timeSlotName, Long businessId);
+
+
 }

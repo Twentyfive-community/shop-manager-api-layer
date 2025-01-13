@@ -19,7 +19,9 @@ public class CashRegisterController {
     @GetMapping("/getAllByBusinessId/{id}")
     public ResponseEntity<List<CashRegister>> getAllByBusinessId(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(cashRegisterService.getAllByBusinessId(id));
-    }    @PostMapping("/add")
+    }
+
+    @PostMapping("/add")
     public ResponseEntity<Boolean> add(@RequestBody AddCashRegisterReq addCashRegisterReq) throws IOException {
         return ResponseEntity.ok().body(cashRegisterService.add(addCashRegisterReq));
     }

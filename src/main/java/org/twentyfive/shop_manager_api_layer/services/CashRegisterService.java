@@ -31,7 +31,8 @@ public class CashRegisterService {
         Worker worker = workerService.getByKeycloakId(keycloakId);
         TimeSlot timeSlot = timeSlotService.getByNameAndBusinessId(addCashRegisterReq.getTimeSlotName(), addCashRegisterReq.getBusinessId());
 
-        CashRegister cashRegister = addCashRegisterReq.getCashRegister();
+        CashRegister cashRegister = new CashRegister();
+        cashRegister.setRefTime(addCashRegisterReq.getCashRegisterDate());
         cashRegister.setBusiness(business);
         cashRegister.setTimeSlot(timeSlot);
         cashRegister.setClosedBy(worker);

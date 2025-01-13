@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SimpleEntry {
-    private String label;
-    private double value;
+public class SimpleComposedEntryClosure {
+    private String composedLabelEntry;
+    private List<LabelAndValue> labelAndValues;
 }

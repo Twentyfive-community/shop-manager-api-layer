@@ -5,9 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class SimpleComposedEntry {
+@AllArgsConstructor
+public class SimpleGenericEntry {
     private String label;
-    private double value;
 }

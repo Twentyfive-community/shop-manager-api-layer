@@ -29,11 +29,11 @@ public class WorkerService {
     private final WorkerMapperService workerMapperService;
 
     public Worker getById(Long id) {
-        return workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException("Worker not found"));
+        return workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException("Worker not found with id: " + id));
     }
 
     public Worker getByKeycloakId(String keycloakId) {
-        return workerRepository.findByKeycloakId(keycloakId).orElseThrow(() -> new WorkerNotFoundException("Worker not found"));
+        return workerRepository.findByKeycloakId(keycloakId).orElseThrow(() -> new WorkerNotFoundException("Worker not found with keycloakId: " + keycloakId));
     }
 
     public Boolean add(AddWorkerReq addWorkerReq) {
