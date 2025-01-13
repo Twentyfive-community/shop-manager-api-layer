@@ -15,6 +15,6 @@ public class KeycloakController {
 
     @PostMapping("/login")
     public String login(@RequestBody TokenRequest tokenRequest) {
-        return keycloakService.login(tokenRequest);
+        return keycloakService.getAccessToken(tokenRequest.getClient_id(), tokenRequest.getClient_secret(), tokenRequest.getUsername(), tokenRequest.getPassword());
     }
 }

@@ -1,5 +1,6 @@
 package org.twentyfive.shop_manager_api_layer.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +15,10 @@ import twentyfive.twentyfiveadapter.dto.keycloakDto.KeycloakUser;
 import twentyfive.twentyfiveadapter.dto.keycloakDto.TokenRequest;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,14 +36,28 @@ public class KeycloakService {
 
     private final KeycloakClient keycloakClient;
 
-    public String login(TokenRequest tokenRequest) {
-        LinkedHashMap<String, String> details = keycloakClient.getToken(tokenRequest);
-        return details.get("access_token");
+    public String getAccessToken(String clientId, String clientSecret, String username, String password) {
+        Map<String, String> params = new HashMap<>();
+        params.put("client_id", clientId);
+        params.put("client_secret", clientSecret);
+        params.put("grant_type", "password");
+        params.put("username", username);
+        params.put("password", password);
+
+        TokenRequest request = new TokenRequest(clientId, clientSecret, "password", username, password);
+        System.out.println(request);
+        ResponseEntity<Object> response = keycloakClient.getToken(request);
+        System.out.println(response.getBody());
+        System.out.println("IL CACCHIO DEL TOKEN");
+        System.out.println(response.getBody());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map responseMap = objectMapper.convertValue(response.getBody(), Map.class);
+        return (String) responseMap.get("access_token");
     }
 
     private String getAdminBearerToken() {
-        TokenRequest tokenRequest = new TokenRequest(clientId, clientSecret, grantType, username, password);
-        return "Bearer " + login(tokenRequest);
+        return "Bearer " + getAccessToken(clientId, clientSecret, username, password);
     }
 
     public SimpleWorker getUserByKeycloakId() throws IOException {

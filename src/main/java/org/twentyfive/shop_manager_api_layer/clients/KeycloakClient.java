@@ -19,14 +19,14 @@ import java.util.List;
 public interface KeycloakClient {
 
     @RequestMapping(method = RequestMethod.POST, value="/realms/${keycloak.realm}/protocol/openid-connect/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    LinkedHashMap<String,String> getToken(@RequestBody TokenRequest params);
+    ResponseEntity<Object> getToken(@RequestBody TokenRequest params);
 
     @RequestMapping(method = RequestMethod.GET, value = "/admin/realms/${keycloak.realm}/users", produces = "application/json")
     ResponseEntity<List<UserRepresentation>> getAllUsers(@RequestHeader("Authorization") String accessToken);
 
     @RequestMapping(method = RequestMethod.GET, value = "/admin/realms/${keycloak.realm}/users", produces = "application/json")
     ResponseEntity<List<UserRepresentation>> getUserFromEmail(@RequestHeader("Authorization") String accessToken, @RequestParam String email);
-    @GetMapping("/admin/realms/${keycloak.realm}/users/{id}")
+    @GetMapping("/admin/realms/${keycloak.realm/users/{id}")
     SimpleWorker getUserById(@RequestHeader("Authorization") String accessToken, @PathVariable("id") String id);
 
     @RequestMapping(method = RequestMethod.GET, value="/admin/realms/${keycloak.realm}/ui-ext/brute-force-user")
