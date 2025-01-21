@@ -12,6 +12,7 @@ import org.twentyfive.shop_manager_api_layer.models.ids.BusinessWorkerId;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleComposedEntryClosure;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 
@@ -47,9 +48,17 @@ public class WorkerService {
     public Boolean add(AddWorkerReq addWorkerReq) {
         Business business = businessService.getById(addWorkerReq.getBusinessId());
 
-        Worker worker = createWorkerFromAdd(addWorkerReq.getWorker());
-        keycloakService.addEmployeeToRealm(worker, addWorkerReq.getRole());
-        Worker workerDB = workerRepository.save(worker);
+        Worker newWorker = createWorkerFromAdd(addWorkerReq.getWorker());
+        List<Worker> allWorkers = workerRepository.getAllWorker();
+
+        for(Worker worker: allWorkers) {
+            if(worker == newWorker){
+                return false;
+            }
+        }
+
+        keycloakService.addEmployeeToRealm(newWorker, addWorkerReq.getRole());
+        Worker workerDB = workerRepository.save(newWorker);
 
         createBusinessWorkerFromAdd(business,workerDB,addWorkerReq.getRole());
 
