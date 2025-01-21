@@ -18,6 +18,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +53,7 @@ public class WorkerService {
         List<Worker> allWorkers = workerRepository.findAll();
 
         for(Worker worker: allWorkers) {
-            if(worker == newWorker){
+            if(Objects.equals(worker.getEmail(), newWorker.getEmail())){
                 return false;
             }
         }
