@@ -13,5 +13,4 @@ public interface WorkerRepository extends JpaRepository<Worker, Long> {
     //List<Worker> findByWorkFor_Id(Long businessId);
 
     Optional<Worker> findByKeycloakId(String keycloakId);
-    List<Worker> getAllWorker();
 }

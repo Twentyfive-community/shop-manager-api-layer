@@ -49,7 +49,7 @@ public class WorkerService {
         Business business = businessService.getById(addWorkerReq.getBusinessId());
 
         Worker newWorker = createWorkerFromAdd(addWorkerReq.getWorker());
-        List<Worker> allWorkers = workerRepository.getAllWorker();
+        List<Worker> allWorkers = workerRepository.findAll();
 
         for(Worker worker: allWorkers) {
             if(worker == newWorker){
