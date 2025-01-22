@@ -3,10 +3,12 @@ package org.twentyfive.shop_manager_api_layer.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddEntryReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.GetAllTotalEntriesReq;
 import org.twentyfive.shop_manager_api_layer.exceptions.EntryNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.EntryMapperService;
 import org.twentyfive.shop_manager_api_layer.models.*;
 import org.twentyfive.shop_manager_api_layer.models.ids.EntryClosureId;
+import org.twentyfive.shop_manager_api_layer.repositories.ComposedEntryRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.EntryClosureRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.EntryRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
@@ -22,6 +24,8 @@ public class EntryService {
 
     private final EntryRepository entryRepository;
     private final EntryClosureRepository entryClosureRepository;
+
+    private final ComposedEntryRepository composedEntryRepository;
 
     private final EntryMapperService entryMapperService;
 
@@ -70,5 +74,11 @@ public class EntryService {
         entry.setLabel(addEntryReq.getLabel());
         entry.setOperation(addEntryReq.getOperation());
         return entry;
+    }
+
+    public List<GetAllTotalEntriesReq> getAllTotalEntries() {
+        List<Entry> entries = entryRepository.findAll();
+        List<ComposedEntry> composedEntries = composedEntryRepository.findAll();
+        return entryMapperService.mapTotalEntriesToDTO(entries,composedEntries);
     }
 }

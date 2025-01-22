@@ -1,6 +1,8 @@
 package org.twentyfive.shop_manager_api_layer.mappers;
 
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.GetAllTotalEntriesReq;
+import org.twentyfive.shop_manager_api_layer.models.ComposedEntry;
 import org.twentyfive.shop_manager_api_layer.models.Entry;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
 
@@ -23,5 +25,25 @@ public class EntryMapperService {
         SimpleGenericEntry simpleGenericEntry = new SimpleGenericEntry();
         simpleGenericEntry.setLabel(entry.getLabel());
         return simpleGenericEntry;
+    }
+
+    public List<GetAllTotalEntriesReq> mapTotalEntriesToDTO(List<Entry> entries, List<ComposedEntry> composedEntries) {
+        List<GetAllTotalEntriesReq> totalEntries = new ArrayList<>();
+
+        for(Entry entry : entries){
+            GetAllTotalEntriesReq getAllTotalEntriesReq = new GetAllTotalEntriesReq();
+            getAllTotalEntriesReq.setLabel(entry.getLabel());
+            getAllTotalEntriesReq.setMultiple(false);
+            totalEntries.add(getAllTotalEntriesReq);
+        }
+
+        for(ComposedEntry composedEntry : composedEntries){
+            GetAllTotalEntriesReq getAllTotalEntriesReq = new GetAllTotalEntriesReq();
+            getAllTotalEntriesReq.setLabel(composedEntry.getLabel());
+            getAllTotalEntriesReq.setMultiple(true);
+            totalEntries.add(getAllTotalEntriesReq);
+        }
+
+        return totalEntries;
     }
 }

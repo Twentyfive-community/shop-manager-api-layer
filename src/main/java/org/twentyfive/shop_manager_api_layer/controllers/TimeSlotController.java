@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddTimeSlotReq;
-import org.twentyfive.shop_manager_api_layer.models.TimeSlot;
 import org.twentyfive.shop_manager_api_layer.services.TimeSlotService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.CheckCashRegister;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleTimeSlot;
