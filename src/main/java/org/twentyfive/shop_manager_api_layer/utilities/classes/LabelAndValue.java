@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LabelAndValue {
     private String label;
-    private double value;
+    private Double value;
 }

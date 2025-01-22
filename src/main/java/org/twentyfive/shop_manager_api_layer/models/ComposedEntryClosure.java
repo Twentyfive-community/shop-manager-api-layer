@@ -27,8 +27,8 @@ public class ComposedEntryClosure {
     public double getTotalValue() {
         double total = 0;
         for (LabelAndValue labelAndValue : this.value) {
-            for (Double value : labelAndValue.getValue()) {
-                total += value;
+            if (labelAndValue.getValue() != null) { // Controllo di null
+                total += labelAndValue.getValue();
             }
         }
         return total;
