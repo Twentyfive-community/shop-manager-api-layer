@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.twentyfive.shop_manager_api_layer.auditable.Auditable;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CashRegisterLog {
+public class CashRegisterLog extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // ID generato automaticamente
     @Column(name = "id")
@@ -21,7 +22,4 @@ public class CashRegisterLog {
     @ManyToOne
     @JoinColumn(name = "cash_register_id") // Colonna che fa riferimento a CashRegister
     private CashRegister cashRegister;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt; //Ora di creazione di questo log
 }

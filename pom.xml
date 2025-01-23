@@ -82,6 +82,13 @@
             <version>0.0.196</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-envers</artifactId>
+            <version>6.6.5.Final</version>
+        </dependency>
+
+
     </dependencies>
 
     <repositories>

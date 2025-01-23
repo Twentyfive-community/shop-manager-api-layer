@@ -7,20 +7,21 @@ import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotR
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetCashRegisterByDateAndTimeSlotRes;
 import org.twentyfive.shop_manager_api_layer.exceptions.CashRegisterNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.CashRegisterMapperService;
-import org.twentyfive.shop_manager_api_layer.models.Business;
-import org.twentyfive.shop_manager_api_layer.models.CashRegister;
-import org.twentyfive.shop_manager_api_layer.models.TimeSlot;
-import org.twentyfive.shop_manager_api_layer.models.Worker;
+import org.twentyfive.shop_manager_api_layer.models.*;
+import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterLogRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CashRegisterService {
     private final CashRegisterRepository cashRegisterRepository;
+    private final CashRegisterLogRepository cashRegisterLogRepository;
 
     private final BusinessService businessService;
     private final WorkerService workerService;
@@ -33,21 +34,59 @@ public class CashRegisterService {
     public Boolean add(AddCashRegisterReq addCashRegisterReq) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
 
+        // Recupera il business associato
         Business business = businessService.getById(addCashRegisterReq.getBusinessId());
         Worker worker = workerService.getByKeycloakId(keycloakId);
         TimeSlot timeSlot = timeSlotService.getByNameAndBusinessId(addCashRegisterReq.getTimeSlotName(), addCashRegisterReq.getBusinessId());
 
-        CashRegister cashRegister = new CashRegister();
-        cashRegister.setRefTime(addCashRegisterReq.getCashRegisterDate());
-        cashRegister.setBusiness(business);
-        cashRegister.setTimeSlot(timeSlot);
-        cashRegister.setClosedBy(worker);
+        Optional<CashRegister> optCashRegister =cashRegisterRepository.findByBusiness_IdAndTimeSlot_NameAndRefTime(addCashRegisterReq.getBusinessId(), addCashRegisterReq.getTimeSlotName(), addCashRegisterReq.getCashRegisterDate());
 
-        CashRegister savedCashRegister = cashRegisterRepository.save(cashRegister);
+        if (optCashRegister.isEmpty()) {
+            CashRegister cashRegister = new CashRegister();
+            cashRegister.setRefTime(addCashRegisterReq.getCashRegisterDate());
+            cashRegister.setBusiness(business);
+            cashRegister.setTimeSlot(timeSlot);
+            cashRegister.setClosedBy(worker);
 
-        entryService.createAndAddListOfEntryClosure(addCashRegisterReq.getEntries(),savedCashRegister);
-        composedEntryService.createAndAddListOfComposedEntryClosure(addCashRegisterReq.getComposedEntries(),savedCashRegister);
+            CashRegister savedCashRegister = cashRegisterRepository.save(cashRegister);
+
+            // Crea voci Entry e Composed Entry
+            if(addCashRegisterReq.getEntries() != null){
+                entryService.createAndAddListOfEntryClosure(addCashRegisterReq.getEntries(), savedCashRegister);
+            }
+            if(addCashRegisterReq.getComposedEntries() != null){
+                composedEntryService.createAndAddListOfComposedEntryClosure(addCashRegisterReq.getComposedEntries(), savedCashRegister);
+            }
+
+        } else {
+            CashRegister cashRegister = optCashRegister.get();
+
+            // Aggiorna i campi modificabili
+            cashRegister.setRefTime(addCashRegisterReq.getCashRegisterDate());
+            cashRegister.setBusiness(business);
+            cashRegister.setTimeSlot(timeSlot);
+            cashRegister.setUpdatedBy(worker); // Aggiorna il campo updatedBy
+
+            // Salva la CashRegister aggiornata
+            CashRegister updatedCashRegister = cashRegisterRepository.save(cashRegister);
+
+            // Aggiorna le voci Entry e Composed Entry
+            entryService.createAndAddListOfEntryClosure(addCashRegisterReq.getEntries(), updatedCashRegister);
+            composedEntryService.createAndAddListOfComposedEntryClosure(addCashRegisterReq.getComposedEntries(), updatedCashRegister);
+
+            // Crea il log per l'aggiornamento
+            createLog(cashRegister);
+        }
+
         return true;
+    }
+
+    private void createLog(CashRegister cashRegister) {
+        CashRegisterLog log = new CashRegisterLog();
+        log.setCashRegister(cashRegister);
+        log.setCreatedAt(LocalDateTime.now());
+        log.setUpdatedAt(LocalDateTime.now()); // Solo se hai bisogno di un timestamp
+        cashRegisterLogRepository.save(log);
     }
 
     public List<CashRegister> getAllByBusinessId(Long id) {

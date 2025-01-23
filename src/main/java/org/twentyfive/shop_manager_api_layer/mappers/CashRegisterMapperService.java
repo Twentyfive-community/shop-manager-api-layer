@@ -22,8 +22,7 @@ public class CashRegisterMapperService {
         res.setRefTime(cashRegister.getRefTime());
         res.setClosedBy(cashRegister.getClosedBy().getFullName());
 
-        if(cashRegister.getUpdatedBy() != null && cashRegister.getUpdatedTime() != null) {
-            res.setUpdatedTime(cashRegister.getUpdatedTime());
+        if(cashRegister.getUpdatedBy() != null) {
             res.setUpdatedBy(cashRegister.getUpdatedBy().getFullName());
         }
 

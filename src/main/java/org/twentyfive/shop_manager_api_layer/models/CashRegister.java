@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.twentyfive.shop_manager_api_layer.auditable.Auditable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,7 +19,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CashRegister {
+public class CashRegister extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id") //ID dell'attività, generata automaticamente
@@ -49,9 +49,6 @@ public class CashRegister {
     @ManyToOne
     @JoinColumn(name = "updated_by_id") // Dipendente che ha fatto l'ultima modifica della chiusura cassa, può essere null
     private Worker updatedBy;
-
-    @Column(name ="update_time")
-    private LocalDateTime updatedTime; //tempo ultima chiusura o update della chiusura cassa
 
     @OneToMany(mappedBy="cashRegister")
     private List<CashRegisterLog> logs; //log delle chiusura casse
