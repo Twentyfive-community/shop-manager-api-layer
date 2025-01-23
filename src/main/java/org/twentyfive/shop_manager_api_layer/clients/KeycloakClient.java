@@ -38,7 +38,8 @@ public interface KeycloakClient {
     ResponseEntity<UserRepresentation> update(@RequestHeader("Authorization") String accessToken, @PathVariable("id") String id,@RequestBody UserRepresentation user);
     @RequestMapping(method = RequestMethod.DELETE, value = "/admin/realms/${keycloak.realm}/users/{id}", produces = "application/json")
     ResponseEntity<Object> delete(@RequestHeader("Authorization") String accessToken, @PathVariable String id);
-
+    @RequestMapping(method = RequestMethod.PUT, value = "/admin/realms/${keycloak.realm}/users/{userId}/execute-actions-email", produces = "application/json")
+    ResponseEntity<Object> resetPassword(@RequestHeader("Authorization") String accessToken, @PathVariable("userId") String userId, @RequestBody List<String> actions);
     @RequestMapping(method = RequestMethod.PUT, value = "/admin/realms/${keycloak.realm}/users/{id}/reset-password", produces = "application/json")
     ResponseEntity<Object> updatePassword(@RequestHeader("Authorization") String accessToken, @PathVariable String id, @RequestBody PasswordUpdateKeycloak newPassword);
     @RequestMapping(method = RequestMethod.GET, value ="admin/realms/${keycloak.realm}/roles")

@@ -62,7 +62,6 @@ public class WorkerService {
         Worker workerDB = workerRepository.save(newWorker);
 
         createBusinessWorkerFromAdd(business,workerDB,addWorkerReq.getRole());
-
         return true;
     }
 
