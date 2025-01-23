@@ -7,6 +7,7 @@ import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +34,7 @@ public class DailyActivityMapperService {
 
     private DailyActivities mapDailyActivitiesFromTimeSlots(Long id,List<SimpleTimeSlot> timeSlots, LocalDate dateRef) {
         DailyActivities dailyActivity = new DailyActivities();
-        dailyActivity.setDate(dateRef);
-
+        dailyActivity.setRawDate(dateRef);
         List<DailyCashRegister> dailyCashRegisters = new ArrayList<>();
         for (SimpleTimeSlot timeSlot : timeSlots) {
             Optional<CashRegister> optCashRegister = cashRegisterRepository.findByBusiness_IdAndTimeSlot_NameAndRefTime(id, timeSlot.getName(), dateRef);
