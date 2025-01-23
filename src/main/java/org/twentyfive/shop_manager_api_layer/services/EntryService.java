@@ -16,6 +16,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleEntryClosur
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -80,5 +81,15 @@ public class EntryService {
         List<Entry> entries = entryRepository.findAll();
         List<ComposedEntry> composedEntries = composedEntryRepository.findAll();
         return entryMapperService.mapTotalEntriesToDTO(entries,composedEntries);
+    }
+
+    public void updateAndRemoveEntryClosure(List<SimpleEntryClosure> entries, CashRegister updatedCashRegister) {
+        for (SimpleEntryClosure entry : entries) {
+            updateOrRemoveEntry(entry,updatedCashRegister);
+        }
+
+    }
+
+    private void updateOrRemoveEntry(SimpleEntryClosure entry, CashRegister updatedCashRegister) {
     }
 }

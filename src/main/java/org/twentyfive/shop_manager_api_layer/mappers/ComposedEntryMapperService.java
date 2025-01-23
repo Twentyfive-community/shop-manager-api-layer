@@ -45,7 +45,6 @@ public class ComposedEntryMapperService {
 
         simpleComposedEntryClosure.setComposedLabelEntry(composedEntryClosure.getId().getComposedEntry().getLabel());
         simpleComposedEntryClosure.setLabelAndValues(composedEntryClosure.getValue());
-        simpleComposedEntryClosure.setTotalValue(composedEntryClosure.getTotalValue());
 
         return simpleComposedEntryClosure;
     }

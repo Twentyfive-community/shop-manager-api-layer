@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.twentyfive.shop_manager_api_layer.auditable.Auditable;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.Report;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -53,5 +54,22 @@ public class CashRegister extends Auditable {
     @OneToMany(mappedBy="cashRegister")
     private List<CashRegisterLog> logs; //log delle chiusura casse
 
-
+    public Report getReport(){
+        Report report = new Report();
+        for (EntryClosure entryClosure : entryClosures) {
+            if (entryClosure.getId().getEntry().getOperation().getSymbol().equals("+")){
+                report.setTotalRevenue(report.getTotalRevenue()+entryClosure.getValue());
+            } else if (entryClosure.getId().getEntry().getOperation().getSymbol().equals("-")){
+                report.setTotalCost(report.getTotalCost()+entryClosure.getValue());
+            }
+        }
+        for (ComposedEntryClosure composedEntryClosure : composedEntryClosures) {
+            if (composedEntryClosure.getId().getComposedEntry().getOperation().getSymbol().equals("+")){
+                report.setTotalRevenue(report.getTotalRevenue()+ composedEntryClosure.getTotalValue());
+            } else if (composedEntryClosure.getId().getComposedEntry().getOperation().getSymbol().equals("-")){
+                report.setTotalCost(report.getTotalCost() + composedEntryClosure.getTotalValue());
+            }
+        }
+        return report;
+    }
 }

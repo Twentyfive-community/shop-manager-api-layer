@@ -15,4 +15,7 @@ public interface CashRegisterRepository extends JpaRepository<CashRegister, Long
     Boolean existsByRefTimeAndTimeSlot_Id(LocalDate refTime, Long timeSlotId);
 
     Optional<CashRegister> findByBusiness_IdAndTimeSlot_NameAndRefTime(Long id, String timeSlotName,LocalDate refTime);
+
+    List<CashRegister> findAllByRefTimeBetween(LocalDate startDate, LocalDate endDate);
+
 }
