@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCashRegisterReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotReq;
+import org.twentyfive.shop_manager_api_layer.dtos.responses.GetCashRegisterByDateAndTimeSlotRes;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.services.CashRegisterService;
 
@@ -19,6 +21,11 @@ public class CashRegisterController {
     @GetMapping("/getAllByBusinessId/{id}")
     public ResponseEntity<List<CashRegister>> getAllByBusinessId(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(cashRegisterService.getAllByBusinessId(id));
+    }
+
+    @PostMapping("/getByDateAndTimeSlot/{id}")
+    public ResponseEntity<GetCashRegisterByDateAndTimeSlotRes> getByDateAndTimeSlot(@PathVariable("id") Long id, @RequestBody GetByDateAndTimeSlotReq request){
+        return ResponseEntity.ok().body(cashRegisterService.getByDateAndTimeSlot(id,request));
     }
 
     @PostMapping("/add")

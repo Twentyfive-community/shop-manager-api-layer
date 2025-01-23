@@ -49,4 +49,8 @@ public class Worker {
     @OneToMany(mappedBy = "updatedBy")
     private List<CashRegister> updatedRegisters;
 
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
 }

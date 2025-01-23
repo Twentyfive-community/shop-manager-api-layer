@@ -3,6 +3,10 @@ package org.twentyfive.shop_manager_api_layer.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCashRegisterReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotReq;
+import org.twentyfive.shop_manager_api_layer.dtos.responses.GetCashRegisterByDateAndTimeSlotRes;
+import org.twentyfive.shop_manager_api_layer.exceptions.CashRegisterNotFoundException;
+import org.twentyfive.shop_manager_api_layer.mappers.CashRegisterMapperService;
 import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.models.TimeSlot;
@@ -23,6 +27,8 @@ public class CashRegisterService {
     private final TimeSlotService timeSlotService;
     private final EntryService entryService;
     private final ComposedEntryService composedEntryService;
+
+    private final CashRegisterMapperService cashRegisterMapperService;
 
     public Boolean add(AddCashRegisterReq addCashRegisterReq) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
@@ -46,5 +52,13 @@ public class CashRegisterService {
 
     public List<CashRegister> getAllByBusinessId(Long id) {
         return cashRegisterRepository.findAllByBusiness_Id(id);
+    }
+
+    public GetCashRegisterByDateAndTimeSlotRes getByDateAndTimeSlot(Long id, GetByDateAndTimeSlotReq request) {
+
+        CashRegister cashRegister = cashRegisterRepository.findByBusiness_IdAndTimeSlot_NameAndRefTime(id, request.getTimeSlotName(),request.getRefTime()).orElseThrow(() -> new CashRegisterNotFoundException("Can't find cash register with this businessId: " +id+ " and this time slot name: " +request.getTimeSlotName()));
+
+        return cashRegisterMapperService.getByDateAndTimeSlotFromCashRegister(cashRegister);
+
     }
 }

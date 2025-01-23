@@ -52,6 +52,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(CashRegisterNotFoundException.class)
+    public ResponseEntity<ApiError> handleComposedEntryNotFoundException(CashRegisterNotFoundException ex) {
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
     @Data
     @AllArgsConstructor
     public static class ApiError {

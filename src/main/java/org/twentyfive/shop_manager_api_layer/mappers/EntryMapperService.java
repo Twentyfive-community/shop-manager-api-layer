@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetAllTotalEntriesReq;
 import org.twentyfive.shop_manager_api_layer.models.ComposedEntry;
 import org.twentyfive.shop_manager_api_layer.models.Entry;
+import org.twentyfive.shop_manager_api_layer.models.EntryClosure;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleEntryClosure;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
 
 import java.util.ArrayList;
@@ -45,5 +47,25 @@ public class EntryMapperService {
         }
 
         return totalEntries;
+    }
+
+    public List<SimpleEntryClosure> mapListEntryClosureToDTO(List<EntryClosure> entries) {
+        List<SimpleEntryClosure> simpleEntries = new ArrayList<>();
+
+        for(EntryClosure entryClosure : entries){
+            SimpleEntryClosure simpleEntryClosure = mapEntryClosureToSimpleEntryClosure(entryClosure);
+            simpleEntries.add(simpleEntryClosure);
+        }
+
+        return simpleEntries;
+    }
+
+    private SimpleEntryClosure mapEntryClosureToSimpleEntryClosure(EntryClosure entryClosure) {
+        SimpleEntryClosure simpleEntryClosure = new SimpleEntryClosure();
+
+        simpleEntryClosure.setLabel(entryClosure.getId().getEntry().getLabel());
+        simpleEntryClosure.setValue(entryClosure.getValue());
+
+        return simpleEntryClosure;
     }
 }

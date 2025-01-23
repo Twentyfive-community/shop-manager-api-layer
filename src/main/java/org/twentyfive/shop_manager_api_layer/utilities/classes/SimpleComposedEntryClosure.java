@@ -12,4 +12,5 @@ import java.util.List;
 public class SimpleComposedEntryClosure {
     private String composedLabelEntry;
     private List<LabelAndValue> labelAndValues;
+    private double totalValue;
 }
