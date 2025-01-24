@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Operation;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class Entry {
     @Column(name ="operation", nullable = false)
     private Operation operation;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "id.entry")  // mappedBy si riferisce al campo 'entry' in EntryClosureId, chiave composta
     private List<EntryClosure> entryClosures;

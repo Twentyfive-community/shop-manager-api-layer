@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.twentyfive.shop_manager_api_layer.auditable.Auditable;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.Report;
 
@@ -23,25 +24,25 @@ import java.util.List;
 public class CashRegister extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id") //ID dell'attività, generata automaticamente
+    @Column(name = "id") // ID dell'attività, generata automaticamente
     private Long id;
 
-    @Column(name = "ref_time") //tempo di riferimento di quella chiusura cassa
+    @Column(name = "ref_time") // Tempo di riferimento di quella chiusura cassa
     private LocalDate refTime;
 
     @ManyToOne
     @JoinColumn(name = "business_id")
-    private Business business; //Una chiusura cassa è associata a una ed una sola attività
+    private Business business; // Una chiusura cassa è associata a una ed una sola attività
 
-    @OneToMany(mappedBy = "id.cashRegister")
-    private List<EntryClosure> entryClosures; //lista delle voci presente nella ChiusuraCassa
+    @OneToMany(mappedBy = "id.cashRegister", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EntryClosure> entryClosures; // Lista delle voci presente nella ChiusuraCassa
 
-    @OneToMany(mappedBy ="id.cashRegister")
-    private List<ComposedEntryClosure> composedEntryClosures; //lista delle voci composte presenti nella chiusura cassa
+    @OneToMany(mappedBy ="id.cashRegister", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ComposedEntryClosure> composedEntryClosures; // Lista delle voci composte presenti nella chiusura cassa
 
     @ManyToOne
     @JoinColumn(name= "time_slot_id")
-    private TimeSlot timeSlot; //fascia scelta per quella chiusura cassa
+    private TimeSlot timeSlot; // Fascia scelta per quella chiusura cassa
 
     @ManyToOne
     @JoinColumn(name = "closed_by_id") // Dipendente che ha fatto la chiusura cassa
@@ -51,8 +52,9 @@ public class CashRegister extends Auditable {
     @JoinColumn(name = "updated_by_id") // Dipendente che ha fatto l'ultima modifica della chiusura cassa, può essere null
     private Worker updatedBy;
 
-    @OneToMany(mappedBy="cashRegister")
-    private List<CashRegisterLog> logs; //log delle chiusura casse
+    @ToString.Exclude
+    @OneToMany(mappedBy="cashRegister", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CashRegisterLog> logs; // Log delle chiusura casse
 
     public Report getReport(){
         Report report = new Report();

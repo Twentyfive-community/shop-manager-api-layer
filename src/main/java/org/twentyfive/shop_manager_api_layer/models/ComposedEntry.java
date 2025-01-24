@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Operation;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class ComposedEntry {
     @Column(name ="operation", nullable = false)
     private Operation operation;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "id.composedEntry")  // mappedBy si riferisce al campo 'entry' in EntryClosureId, chiave composta
     private List<ComposedEntryClosure> composedEntryClosures;

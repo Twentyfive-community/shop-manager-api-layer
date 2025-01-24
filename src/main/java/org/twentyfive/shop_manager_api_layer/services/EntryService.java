@@ -2,15 +2,14 @@ package org.twentyfive.shop_manager_api_layer.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.AddEntryClosureReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddEntryReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetAllTotalEntriesReq;
 import org.twentyfive.shop_manager_api_layer.exceptions.EntryNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.EntryMapperService;
 import org.twentyfive.shop_manager_api_layer.models.*;
 import org.twentyfive.shop_manager_api_layer.models.ids.EntryClosureId;
-import org.twentyfive.shop_manager_api_layer.repositories.ComposedEntryRepository;
-import org.twentyfive.shop_manager_api_layer.repositories.EntryClosureRepository;
-import org.twentyfive.shop_manager_api_layer.repositories.EntryRepository;
+import org.twentyfive.shop_manager_api_layer.repositories.*;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleEntryClosure;
 
@@ -18,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +29,8 @@ public class EntryService {
     private final ComposedEntryRepository composedEntryRepository;
 
     private final EntryMapperService entryMapperService;
+    private final ComposedEntryClosureRepository composedEntryClosureRepository;
+    private final CashRegisterRepository cashRegisterRepository;
 
     public List<SimpleGenericEntry> getAll() {
         List<Entry> entries = entryRepository.findAll();
@@ -55,13 +57,13 @@ public class EntryService {
     }
 
 
-    public void createAndAddListOfEntryClosure(List<SimpleEntryClosure> simpleEntries, CashRegister cashRegister) {
-        for (SimpleEntryClosure simpleEntryClosure : simpleEntries) {
+    public void createAndAddListOfEntryClosure(List<AddEntryClosureReq> simpleEntries, CashRegister cashRegister) {
+        for (AddEntryClosureReq simpleEntryClosure : simpleEntries) {
             createAndAddEntryClosure(simpleEntryClosure, cashRegister);
         }
     }
 
-    private void createAndAddEntryClosure(SimpleEntryClosure simpleEntryClosure, CashRegister cashRegister){
+    private void createAndAddEntryClosure(AddEntryClosureReq simpleEntryClosure, CashRegister cashRegister){
         Entry entry = getByLabel(simpleEntryClosure.getLabel());
 
         EntryClosureId entryClosureId = new EntryClosureId(entry, cashRegister);
@@ -83,13 +85,14 @@ public class EntryService {
         return entryMapperService.mapTotalEntriesToDTO(entries,composedEntries);
     }
 
-    public void updateAndRemoveEntryClosure(List<SimpleEntryClosure> entries, CashRegister updatedCashRegister) {
-        for (SimpleEntryClosure entry : entries) {
-            updateOrRemoveEntry(entry,updatedCashRegister);
-        }
+    public void updateAndRemoveEntryClosure(List<AddEntryClosureReq> entries, CashRegister updatedCashRegister) {
+        // Estrapolazione della lista di label
+        List<EntryClosure> delComposedEntries = updatedCashRegister.getEntryClosures();
 
-    }
+        delComposedEntries.clear();
+        cashRegisterRepository.save(updatedCashRegister);
 
-    private void updateOrRemoveEntry(SimpleEntryClosure entry, CashRegister updatedCashRegister) {
+        createAndAddListOfEntryClosure(entries, updatedCashRegister);
+
     }
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -35,11 +36,13 @@ public class TimeSlot {
     @Column(name = "end_time")
     private LocalTime end; //Orario fine fascia
 
+    @ToString.Exclude
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "business_id")
     private Business business; //Una fascia è associata a una ed una sola attività
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "timeSlot")
     private List<CashRegister> cashRegisters; //Una fascia è associata a più chiusure cassa

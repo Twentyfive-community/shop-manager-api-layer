@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Set;
@@ -37,14 +38,17 @@ public class Worker {
     @Column(name = "phone_number") //telefono
     private String phoneNumber;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "id.worker", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BusinessWorker> businessRoles; // Ruoli del worker nei business
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "closedBy")
     private List<CashRegister> closedRegisters;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "updatedBy")
     private List<CashRegister> updatedRegisters;

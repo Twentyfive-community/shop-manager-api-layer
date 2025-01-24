@@ -3,6 +3,7 @@ package org.twentyfive.shop_manager_api_layer.models;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.twentyfive.shop_manager_api_layer.models.ids.ComposedEntryClosureId;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.LabelAndValue;
@@ -13,10 +14,12 @@ import java.util.List;
 @Entity
 @Table(name ="composed_entry_closures")
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class ComposedEntryClosure {
 
+    @EqualsAndHashCode.Include
     @EmbeddedId
     private ComposedEntryClosureId id;  // Chiave primaria composta
 

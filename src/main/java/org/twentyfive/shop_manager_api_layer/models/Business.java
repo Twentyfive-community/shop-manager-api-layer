@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ public class Business {
     @Column(name = "name", nullable = false) //nome dell'attività
     private String name;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "id.business", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BusinessWorker> workersWithRoles; // Workers associati con ruoli
@@ -37,14 +39,18 @@ public class Business {
     )
     private Set<Supplier> suppliers;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "business")
     private Set<CashRegister> cashRegisters;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TimeSlot> timeSlots;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "business")
     private Set<Expense> expenses;
 }

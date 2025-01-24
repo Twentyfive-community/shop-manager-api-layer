@@ -7,6 +7,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.models.ComposedEntry;
 
@@ -28,6 +29,26 @@ public class ComposedEntryClosureId implements Serializable {
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     @JoinColumn(name = "register_id")
     private CashRegister cashRegister;  // Associazione a CashRegister
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ComposedEntryClosureId that = (ComposedEntryClosureId) o;
+
+        return composedEntry.equals(that.composedEntry) &&
+                cashRegister.equals(that.cashRegister);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = composedEntry.hashCode();
+        result = 31 * result + cashRegister.hashCode();
+        return result;
+    }
+
 }

@@ -16,7 +16,7 @@ public class AddCashRegisterReq {
     private Long businessId;
     private String timeSlotName;
     private LocalDate cashRegisterDate;
-    private List<SimpleEntryClosure> entries;
-    private List<SimpleComposedEntryClosure> composedEntries;
+    private List<AddEntryClosureReq> entries;
+    private List<AddComposedEntryClosureReq> composedEntries;
 
 }

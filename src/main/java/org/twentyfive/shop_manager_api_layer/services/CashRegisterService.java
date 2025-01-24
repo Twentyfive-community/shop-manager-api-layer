@@ -83,7 +83,7 @@ public class CashRegisterService {
 
             // Aggiorna le voci Entry e Composed Entry
             entryService.updateAndRemoveEntryClosure(addCashRegisterReq.getEntries(), updatedCashRegister);
-            //composedEntryService.updateListOfComposedEntryClosure(addCashRegisterReq.getComposedEntries(), updatedCashRegister);
+            composedEntryService.updateAndRemoveComposedEntryClosure(addCashRegisterReq.getComposedEntries(), updatedCashRegister);
 
             // Crea il log per l'aggiornamento
             createLog(cashRegister);
@@ -95,6 +95,9 @@ public class CashRegisterService {
     private void createLog(CashRegister cashRegister) {
         CashRegisterLog log = new CashRegisterLog();
         log.setCashRegister(cashRegister);
+
+        log.setRefTime(cashRegister.getRefTime());
+        log.setTimeSlotName(cashRegister.getTimeSlot().getName());
 
         log.setClosedBy(cashRegister.getClosedBy().getFullName());
         log.setCreatedAt(LocalDateTime.now());
