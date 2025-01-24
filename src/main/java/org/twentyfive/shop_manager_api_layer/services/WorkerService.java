@@ -40,10 +40,10 @@ public class WorkerService {
         return workerRepository.findByKeycloakId(keycloakId).orElseThrow(() -> new WorkerNotFoundException("Worker not found with keycloakId: " + keycloakId));
     }
 
-    public SimpleWorker getSimpleWorkerFromToken() throws IOException {
+    public SimpleWorker getSimpleWorkerFromToken(Long id) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
         Worker worker = getByKeycloakId(keycloakId);
-        return workerMapperService.mapSimpleWorkerFromWorker(worker);
+        return workerMapperService.mapSimpleWorkerFromWorker(worker,id);
     }
 
     public Boolean add(AddWorkerReq addWorkerReq) {

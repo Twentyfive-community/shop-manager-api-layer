@@ -25,9 +25,9 @@ public class WorkerController {
         return ResponseEntity.ok().body(workerService.getAllByBusinessId(id));
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<SimpleWorker> getInfoFromToken() throws IOException {
-        return ResponseEntity.ok().body(workerService.getSimpleWorkerFromToken());
+    @GetMapping("/get/{id}")
+    public ResponseEntity<SimpleWorker> getInfoFromToken(@RequestParam("id") Long id) throws IOException {
+        return ResponseEntity.ok().body(workerService.getSimpleWorkerFromToken(id));
     }
 
     @PostMapping("/add")
