@@ -22,4 +22,9 @@ public class BusinessController {
     public ResponseEntity<Boolean> add(@RequestBody AddBusinessReq addBusinessReq) {
         return ResponseEntity.ok().body(businessService.add(addBusinessReq));
     }
+
+    @GetMapping("/getAllPaymentMethod")
+    public ResponseEntity<List<String>> getAllPaymentMethod() {
+        return ResponseEntity.ok().body(businessService.getAllPaymentMethod());
+    }
 }

@@ -25,20 +25,15 @@ public class SupplierService {
         return supplierMapperService.createSupplierFromNameAndAddressAndBusiness(addSupplierReq.getName(), addSupplierReq.getAddress(), business) != null;
     }
 
-    public SuppliersAndPaymentMethods getAllSuppliersAndPaymentMethod(Long id) {
-        SuppliersAndPaymentMethods response = new SuppliersAndPaymentMethods();
-
-        response.setSuppliers(supplierRepository.findSupplierNamesByBusinessId(id));
-        response.setPaymentMethods(PaymentMethod.getValues());
-
-        return response;
-    }
-
     public Boolean addList(Long id,List<AddSupplierReq> addSupplierReqList) {
         Business business = businessService.getById(id);
         for (AddSupplierReq addSupplierReq : addSupplierReqList) {
             supplierMapperService.createSupplierFromNameAndAddressAndBusiness(addSupplierReq.getName(), addSupplierReq.getAddress(), business);
         }
         return true;
+    }
+
+    public List<String> search(Long id, String value) {
+        return supplierRepository.findSupplierNamesByBusinessIdAndValue(id,value);
     }
 }
