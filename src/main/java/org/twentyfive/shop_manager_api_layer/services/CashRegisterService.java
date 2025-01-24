@@ -21,7 +21,6 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.DateRange;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleTimeSlot;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;

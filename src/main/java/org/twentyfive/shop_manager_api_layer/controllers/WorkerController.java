@@ -26,7 +26,7 @@ public class WorkerController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<SimpleWorker> getInfoFromToken(@RequestParam("id") Long id) throws IOException {
+    public ResponseEntity<SimpleWorker> getInfoFromToken(@PathVariable("id") Long id) throws IOException {
         return ResponseEntity.ok().body(workerService.getSimpleWorkerFromToken(id));
     }
 
