@@ -18,7 +18,6 @@ import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +53,7 @@ public class ExpenseService {
         expense.setWorker(businessWorker);
         expense.setSupplier(supplier);
 
+        expense.setRefTime(addExpenseReq.getRefTime());
         expense.setPaymentMethod(PaymentMethod.fromValue(addExpenseReq.getPaymentMethod()));
         expense.setValue(addExpenseReq.getValue());
 
@@ -61,4 +61,13 @@ public class ExpenseService {
 
         return expense;
     }
+
+    public Boolean delete(Long id) {
+        if(!expenseRepository.existsById(id)) {
+            throw new ExpenseNotFoundException("Non esiste una spesa con questo id: "+id);
+        }
+        expenseRepository.deleteById(id);
+        return true;
+    }
+
 }

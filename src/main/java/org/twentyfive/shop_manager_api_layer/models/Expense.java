@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.PaymentMethod;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,6 +22,9 @@ public class Expense {
 
     @Column(name = "value") //valore della spesa
     private double value;
+
+    @Column(name = "ref_time")
+    private LocalDate refTime;
 
     @Column(name = "buy_time") //data della spesa
     private LocalDateTime buyTime;

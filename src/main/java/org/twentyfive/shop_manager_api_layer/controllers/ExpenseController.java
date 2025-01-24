@@ -25,4 +25,9 @@ public class ExpenseController {
     public ResponseEntity<Boolean> update(@RequestBody UpdateExpenseReq updateExpenseReq) throws IOException {
         return ResponseEntity.ok().body(expenseService.update(updateExpenseReq));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable Long id){
+        return ResponseEntity.ok().body(expenseService.delete(id));
+    }
 }
