@@ -3,6 +3,7 @@ package org.twentyfive.shop_manager_api_layer.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddBusinessReq;
+import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAllPaymentMethodRes;
 import org.twentyfive.shop_manager_api_layer.exceptions.BusinessNotFoundException;
 import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.repositories.BusinessRepository;
@@ -33,7 +34,7 @@ public class BusinessService {
         return true;
     }
 
-    public List<String> getAllPaymentMethod() {
-        return PaymentMethod.getValues();
+    public GetAllPaymentMethodRes getAllPaymentMethod() {
+        return new GetAllPaymentMethodRes(PaymentMethod.getValues());
     }
 }

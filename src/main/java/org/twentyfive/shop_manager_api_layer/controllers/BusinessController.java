@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddBusinessReq;
+import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAllPaymentMethodRes;
 import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.services.BusinessService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.CheckCashRegister;
@@ -24,7 +25,7 @@ public class BusinessController {
     }
 
     @GetMapping("/getAllPaymentMethod")
-    public ResponseEntity<List<String>> getAllPaymentMethod() {
+    public ResponseEntity<GetAllPaymentMethodRes> getAllPaymentMethod() {
         return ResponseEntity.ok().body(businessService.getAllPaymentMethod());
     }
 }
