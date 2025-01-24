@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class SimpleWorker {
     private String firstName;
     private String lastName;
+    private String role;
     private String email;
     private String phoneNumber;
 
