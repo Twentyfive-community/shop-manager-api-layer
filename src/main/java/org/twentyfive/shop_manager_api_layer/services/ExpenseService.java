@@ -1,23 +1,31 @@
 package org.twentyfive.shop_manager_api_layer.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddExpenseReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateExpenseReq;
 import org.twentyfive.shop_manager_api_layer.exceptions.BusinessWorkerNotFoundException;
 import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
 import org.twentyfive.shop_manager_api_layer.exceptions.SupplierNotFoundException;
+import org.twentyfive.shop_manager_api_layer.mappers.ExpenseMapperService;
 import org.twentyfive.shop_manager_api_layer.models.BusinessWorker;
 import org.twentyfive.shop_manager_api_layer.models.Expense;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.ExpenseRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.DateRange;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.ExpenseDTO;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.PaymentMethod;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +34,8 @@ public class ExpenseService {
     private final SupplierRepository supplierRepository;
     private final ExpenseRepository expenseRepository;
     private final BusinessWorkerRepository businessWorkerRepository;
+
+    private final ExpenseMapperService expenseMapperService;
 
     public Boolean add(AddExpenseReq addExpenseReq) throws IOException {
         Expense expense = createExpenseFromAddExpenseReq(addExpenseReq);
@@ -70,4 +80,12 @@ public class ExpenseService {
         return true;
     }
 
+    public Page<ExpenseDTO> getPeriodExpenses(Long id, int page, int size, DateRange dateRange) {
+        List<Expense> expenses = expenseRepository.findByWorker_Id_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(id, dateRange.getStart(), dateRange.getEnd());
+        List<ExpenseDTO> expenseDTOS = expenseMapperService.mapListExpensesToListExpensesDTO(expenses);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return PageUtility.convertListToPage(expenseDTOS, pageable);
+    }
 }

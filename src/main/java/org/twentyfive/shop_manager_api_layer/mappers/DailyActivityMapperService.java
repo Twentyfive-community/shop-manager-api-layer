@@ -7,7 +7,6 @@ import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

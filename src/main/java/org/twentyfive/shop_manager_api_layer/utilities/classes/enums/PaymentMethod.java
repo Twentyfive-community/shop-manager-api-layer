@@ -1,5 +1,8 @@
 package org.twentyfive.shop_manager_api_layer.utilities.classes.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum PaymentMethod {
     CONTANTI("Contanti"),
     CARTA_DI_CREDITO("Carta di Credito"),
@@ -25,5 +28,11 @@ public enum PaymentMethod {
             }
         }
         throw new IllegalArgumentException("Nessuna modalità di pagamento trovata per il valore: " + value);
+    }
+
+    public static List<String> getValues() {
+        return Arrays.stream(PaymentMethod.values())
+                .map(PaymentMethod::getValue)
+                .toList();
     }
 }

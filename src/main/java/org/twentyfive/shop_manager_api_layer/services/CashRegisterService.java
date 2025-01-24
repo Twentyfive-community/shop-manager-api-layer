@@ -31,7 +31,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CashRegisterService {
 
-    private final BusinessWorkerRepository businessWorkerRepository;
+    private final BusinessWorkerService businessWorkerService;
     private final CashRegisterRepository cashRegisterRepository;
     private final CashRegisterLogRepository cashRegisterLogRepository;
 
@@ -47,9 +47,7 @@ public class CashRegisterService {
     public Boolean add(AddCashRegisterReq addCashRegisterReq) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
 
-        if(!businessWorkerRepository.existsById_Business_IdAndId_Worker_KeycloakId(addCashRegisterReq.getBusinessId(), keycloakId)) {
-            throw new BusinessWorkerNotFoundException("KeycloakId " +keycloakId+ " non associato a questo business id: " +addCashRegisterReq.getBusinessId());
-        }
+        businessWorkerService.existsByKeycloakIdAndBusinessId(keycloakId, addCashRegisterReq.getBusinessId());
 
         // Recupera il business associato
         Business business = businessService.getById(addCashRegisterReq.getBusinessId());
