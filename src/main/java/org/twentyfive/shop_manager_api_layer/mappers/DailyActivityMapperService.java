@@ -22,12 +22,12 @@ public class DailyActivityMapperService {
                                                                      List<SimpleTimeSlot> timeSlots,
                                                                      DateRange dateRange) {
         List<DailyActivities> dailyActivities = new ArrayList<>();
-        LocalDate dateRef = dateRange.getStart();
+        LocalDate dateRef = dateRange.getEnd();
 
-        while(dateRef.isBefore(dateRange.getEnd()) || dateRef.isEqual(dateRange.getEnd())) {
+        while(dateRef.isAfter(dateRange.getStart()) || dateRef.isEqual(dateRange.getStart())) {
             DailyActivities dailyActivity = mapDailyActivitiesFromTimeSlots(id,timeSlots,dateRef);
             dailyActivities.add(dailyActivity);
-            dateRef = dateRef.plusDays(1);
+            dateRef = dateRef.minusDays(1);
         }
         return dailyActivities;
     }
