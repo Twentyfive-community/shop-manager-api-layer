@@ -2,7 +2,6 @@ package org.twentyfive.shop_manager_api_layer.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddBusinessReq;
 import org.twentyfive.shop_manager_api_layer.models.Business;
@@ -16,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/business")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ROLE_admin')")
 public class BusinessController {
     private final BusinessService businessService;
 

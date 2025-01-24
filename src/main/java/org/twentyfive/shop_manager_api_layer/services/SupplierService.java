@@ -9,6 +9,8 @@ import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SuppliersAndPaymentMethods;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.PaymentMethod;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class SupplierService {
@@ -18,8 +20,8 @@ public class SupplierService {
     private final SupplierMapperService supplierMapperService;
     private final SupplierRepository supplierRepository;
 
-    public boolean add(AddSupplierReq addSupplierReq) {
-        Business business = businessService.getById(addSupplierReq.getBusinessId());
+    public boolean add(Long id,AddSupplierReq addSupplierReq) {
+        Business business = businessService.getById(id);
         return supplierMapperService.createSupplierFromNameAndAddressAndBusiness(addSupplierReq.getName(), addSupplierReq.getAddress(), business) != null;
     }
 
@@ -30,5 +32,13 @@ public class SupplierService {
         response.setPaymentMethods(PaymentMethod.getValues());
 
         return response;
+    }
+
+    public Boolean addList(Long id,List<AddSupplierReq> addSupplierReqList) {
+        Business business = businessService.getById(id);
+        for (AddSupplierReq addSupplierReq : addSupplierReqList) {
+            supplierMapperService.createSupplierFromNameAndAddressAndBusiness(addSupplierReq.getName(), addSupplierReq.getAddress(), business);
+        }
+        return true;
     }
 }

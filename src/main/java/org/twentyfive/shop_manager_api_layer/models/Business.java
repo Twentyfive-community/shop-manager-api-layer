@@ -35,7 +35,8 @@ public class Business {
     @JoinTable(
             name = "business_suppliers",  // Nome della tabella di JOIN
             joinColumns = @JoinColumn(name = "business_id"),  // La colonna che si riferisce alla chiave primaria di attività
-            inverseJoinColumns = @JoinColumn(name = "supplier_id") //La colonna che si riferisce alla chiave primaria di fornitore
+            inverseJoinColumns = @JoinColumn(name = "supplier_id"), //La colonna che si riferisce alla chiave primaria di fornitore
+            uniqueConstraints = @UniqueConstraint(columnNames = {"business_id", "supplier_id"})
     )
     private Set<Supplier> suppliers;
 

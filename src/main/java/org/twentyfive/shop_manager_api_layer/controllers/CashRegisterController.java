@@ -3,7 +3,6 @@ package org.twentyfive.shop_manager_api_layer.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCashRegisterReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotReq;
@@ -19,7 +18,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/cash-register")
-@PreAuthorize("hasRole('ROLE_boss') or hasRole('ROLE_employee')")
 public class CashRegisterController {
     private final CashRegisterService cashRegisterService;
 
