@@ -121,7 +121,7 @@ public class CashRegisterService {
 
     public CashRegisterDTO getByDateAndTimeSlot(Long id, GetByDateAndTimeSlotReq request) {
 
-        CashRegister cashRegister = cashRegisterRepository.findByBusiness_IdAndTimeSlot_NameAndRefTime(id, request.getTimeSlotName(),request.getRefTime()).orElseThrow(() -> new CashRegisterNotFoundException("Can't find cash register with this businessId: " +id+ " and this time slot name: " +request.getTimeSlotName()));
+        CashRegister cashRegister = cashRegisterRepository.findByBusiness_IdAndTimeSlot_NameAndRefTime(id, request.getTimeSlotName(),request.getRefTime()).orElse(null);
 
         return cashRegisterMapperService.mapCashRegisterDTOFromCashRegister(cashRegister);
 
