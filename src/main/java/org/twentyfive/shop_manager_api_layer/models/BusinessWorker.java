@@ -1,10 +1,14 @@
 package org.twentyfive.shop_manager_api_layer.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.twentyfive.shop_manager_api_layer.models.ids.BusinessWorkerId;
+
+import java.util.List;
 
 @Entity
 @Table(name = "business_workers")
@@ -17,4 +21,14 @@ public class BusinessWorker {
 
     @Column(name = "role", nullable = false)
     private String role; // Ruolo specifico del Worker nel Business
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "worker")
+    private List<Expense> expenses;
+
+    public BusinessWorker(BusinessWorkerId businessWorkerId, String role) {
+        this.id = businessWorkerId;
+        this.role = role;
+    }
 }

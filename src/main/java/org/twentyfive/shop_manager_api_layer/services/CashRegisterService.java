@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCashRegisterReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotReq;
+import org.twentyfive.shop_manager_api_layer.exceptions.BusinessWorkerNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.DailyActivityMapperService;
+import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.CashRegisterDTO;
 import org.twentyfive.shop_manager_api_layer.exceptions.CashRegisterNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.CashRegisterMapperService;
@@ -28,6 +30,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CashRegisterService {
+
+    private final BusinessWorkerRepository businessWorkerRepository;
     private final CashRegisterRepository cashRegisterRepository;
     private final CashRegisterLogRepository cashRegisterLogRepository;
 
@@ -42,6 +46,10 @@ public class CashRegisterService {
 
     public Boolean add(AddCashRegisterReq addCashRegisterReq) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
+
+        if(!businessWorkerRepository.existsById_Business_IdAndId_Worker_KeycloakId(addCashRegisterReq.getBusinessId(), keycloakId)) {
+            throw new BusinessWorkerNotFoundException("KeycloakId " +keycloakId+ " non associato a questo business id: " +addCashRegisterReq.getBusinessId());
+        }
 
         // Recupera il business associato
         Business business = businessService.getById(addCashRegisterReq.getBusinessId());

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.PaymentMethod;
 
 import java.time.LocalDateTime;
 
@@ -18,21 +19,24 @@ public class Expense {
     @Column(name = "id") //ID della spesa, generata automaticamente
     private Long id;
 
-    @Column(name = "description") //descrizione della spesa
-    private String description;
-
     @Column(name = "value") //valore della spesa
     private double value;
 
     @Column(name = "buy_time") //data della spesa
     private LocalDateTime buyTime;
 
-    @ManyToOne
-    @JoinColumn(name = "business_id")
-    private Business business;
+    @Column(name = "payment_method")
+    private PaymentMethod paymentMethod;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
+
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "business_id", referencedColumnName = "business_id"),
+            @JoinColumn(name = "worker_id", referencedColumnName = "worker_id")
+    })
+    private BusinessWorker worker;
 
 }

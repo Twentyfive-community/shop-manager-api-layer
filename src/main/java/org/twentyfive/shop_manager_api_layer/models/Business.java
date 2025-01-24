@@ -49,8 +49,5 @@ public class Business {
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TimeSlot> timeSlots;
 
-    @ToString.Exclude
-    @JsonIgnore
-    @OneToMany(mappedBy = "business")
-    private Set<Expense> expenses;
+
 }
