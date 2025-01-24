@@ -3,6 +3,7 @@ package org.twentyfive.shop_manager_api_layer.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
+import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAllSupplierNameRes;
 import org.twentyfive.shop_manager_api_layer.mappers.SupplierMapperService;
 import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
@@ -33,7 +34,7 @@ public class SupplierService {
         return true;
     }
 
-    public List<String> search(Long id, String value) {
-        return supplierRepository.findSupplierNamesByBusinessIdAndValue(id,value);
+    public GetAllSupplierNameRes search(Long id, String value) {
+        return new GetAllSupplierNameRes(supplierRepository.findSupplierNamesByBusinessIdAndValue(id,value));
     }
 }

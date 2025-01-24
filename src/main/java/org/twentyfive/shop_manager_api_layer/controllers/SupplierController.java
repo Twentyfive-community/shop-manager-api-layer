@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
+import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAllSupplierNameRes;
 import org.twentyfive.shop_manager_api_layer.services.SupplierService;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class SupplierController {
     }
 
     @GetMapping("/search/{id}")
-    public ResponseEntity<List<String>> search(@RequestParam("id")Long id,@RequestParam(value ="value",defaultValue = "") String value){
+    public ResponseEntity<GetAllSupplierNameRes> search(@RequestParam("id")Long id, @RequestParam(value ="value",defaultValue = "") String value){
         return ResponseEntity.ok().body(supplierService.search(id,value));
     }
 }
