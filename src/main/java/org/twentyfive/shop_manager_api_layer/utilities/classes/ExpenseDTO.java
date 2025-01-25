@@ -25,6 +25,6 @@ public class ExpenseDTO {
     }
 
     public void setValue(double value){
-        this.value = "€ "+String.format("%.2f", value);
+        this.value = String.format("%.2f", value);
     }
 }
