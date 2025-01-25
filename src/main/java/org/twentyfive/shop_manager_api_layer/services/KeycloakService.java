@@ -81,12 +81,13 @@ public class KeycloakService {
         keycloakClient.addRoleToUser(bearerToken, keycloakId, keycloakRoles);
     }
 
-    public void sendPasswordResetEmail(String keycloakId) {
+    public boolean sendPasswordResetEmail(String keycloakId) {
         String bearerToken = getAdminBearerToken();
         // Define the actions to be executed, in this case, UPDATE_PASSWORD
         List<String> actions = Collections.singletonList("UPDATE_PASSWORD");
 
         // Call the Feign client method to send the reset email
         keycloakClient.resetPassword(bearerToken, keycloakId, actions);
+        return true;
     }
 }
