@@ -14,8 +14,8 @@
     <artifactId>shop_manager_api_layer</artifactId>
     <version>0.0.1</version>
 
-    <name>shop_manager_api_layer</name>
-    <description>shop_manager_api_layer</description>
+    <name>shop_manager-api-layer</name>
+    <description>shop-manager-api-layer</description>
 
     <packaging>war</packaging>
 
@@ -100,7 +100,7 @@
     </repositories>
 
     <build>
-        <finalName>shop_manager_api_layer</finalName>
+        <finalName>shop-manager-api-layer</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
