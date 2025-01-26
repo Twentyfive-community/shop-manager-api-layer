@@ -11,13 +11,10 @@ import org.twentyfive.shop_manager_api_layer.models.*;
 import org.twentyfive.shop_manager_api_layer.models.ids.EntryClosureId;
 import org.twentyfive.shop_manager_api_layer.repositories.*;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleEntryClosure;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -80,8 +77,8 @@ public class EntryService {
     }
 
     public List<GetAllTotalEntriesReq> getAllTotalEntries() {
-        List<Entry> entries = entryRepository.findAll();
-        List<ComposedEntry> composedEntries = composedEntryRepository.findAll();
+        List<Entry> entries = entryRepository.findAllByOrderByIdAsc();
+        List<ComposedEntry> composedEntries = composedEntryRepository.findAllByOrderByIdAsc();
         return entryMapperService.mapTotalEntriesToDTO(entries,composedEntries);
     }
 
