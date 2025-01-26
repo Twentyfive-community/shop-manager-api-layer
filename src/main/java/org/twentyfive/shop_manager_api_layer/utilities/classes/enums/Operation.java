@@ -2,7 +2,8 @@ package org.twentyfive.shop_manager_api_layer.utilities.classes.enums;
 
 public enum Operation {
     ADDITION("+"),
-    SUBSTRACTION("-");
+    SUBSTRACTION("-"),
+    NEUTRAL("~");
 
     private final String symbol;
 
