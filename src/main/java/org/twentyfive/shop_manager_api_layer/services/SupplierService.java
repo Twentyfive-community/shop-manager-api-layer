@@ -34,7 +34,7 @@ public class SupplierService {
         return true;
     }
 
-    public GetAllSupplierNameRes search(Long id, String value) {
-        return new GetAllSupplierNameRes(supplierRepository.findSupplierNamesByBusinessIdAndValue(id,value));
+    public List<String> search(Long id, String value) {
+        return supplierRepository.findSupplierNamesByBusinessIdAndValue(id,value);
     }
 }
