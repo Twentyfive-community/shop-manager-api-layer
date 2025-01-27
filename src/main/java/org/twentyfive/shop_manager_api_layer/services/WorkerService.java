@@ -40,6 +40,10 @@ public class WorkerService {
         return workerRepository.findByKeycloakId(keycloakId).orElseThrow(() -> new WorkerNotFoundException("Worker not found with keycloakId: " + keycloakId));
     }
 
+    public String getKeycloakIdFromEmail(String email) {
+        return workerRepository.findKeycloakIdByEmail(email).orElseThrow(() -> new WorkerNotFoundException("Worker not found with email: " + email));
+    }
+
     public SimpleWorker getSimpleWorkerFromToken(Long id) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
         Worker worker = getByKeycloakId(keycloakId);

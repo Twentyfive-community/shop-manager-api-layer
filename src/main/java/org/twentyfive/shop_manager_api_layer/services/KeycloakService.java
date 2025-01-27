@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.clients.KeycloakClient;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
+import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.KeycloakUtility;
@@ -20,6 +21,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class KeycloakService {
+    private final WorkerService workerService;
     @Value("${keycloak.clientId}")
     private String clientId;
     @Value("${keycloak.credentials.secret}")
@@ -88,6 +90,12 @@ public class KeycloakService {
 
         // Call the Feign client method to send the reset email
         keycloakClient.resetPassword(bearerToken, keycloakId, actions);
+        return true;
+    }
+
+    public Boolean resetPasswordFromEmail(String email) {
+        String keycloakId = workerService.getKeycloakIdFromEmail(email);
+        sendPasswordResetEmail(keycloakId);
         return true;
     }
 }

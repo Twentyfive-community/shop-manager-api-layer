@@ -57,4 +57,5 @@ public interface KeycloakClient {
                                             @RequestBody List<RoleRepresentation> roles);
     @RequestMapping(method = RequestMethod.GET, value = "/admin/realms/${keycloak.realm}/users/{id}/role-mappings", produces = "application/json")
     ResponseEntity<MappingsRepresentation> getUserRole(@RequestHeader("Authorization") String accessToken, @PathVariable String id);
+
 }

@@ -18,8 +18,8 @@ public class KeycloakController {
         return keycloakService.getAccessToken(tokenRequest.getClient_id(), tokenRequest.getClient_secret(), tokenRequest.getUsername(), tokenRequest.getPassword());
     }
 
-    @PatchMapping("/reset-password/{keycloakId}")
-    public ResponseEntity<Boolean> resetPassword(@PathVariable("keycloakId") String keycloakId) {
-        return ResponseEntity.ok().body(keycloakService.sendPasswordResetEmail(keycloakId));
+    @PatchMapping("/reset-password/{email}")
+    public ResponseEntity<Boolean> resetPasswordFromEmail(@PathVariable("email") String email) {
+        return ResponseEntity.ok().body(keycloakService.resetPasswordFromEmail(email));
     }
 }
