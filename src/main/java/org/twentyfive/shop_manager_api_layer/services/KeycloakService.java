@@ -21,7 +21,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class KeycloakService {
-    private final WorkerService workerService;
+    private final WorkerRepository workerRepository;
     @Value("${keycloak.clientId}")
     private String clientId;
     @Value("${keycloak.credentials.secret}")
@@ -94,7 +94,7 @@ public class KeycloakService {
     }
 
     public Boolean resetPasswordFromEmail(String email) {
-        String keycloakId = workerService.getKeycloakIdFromEmail(email);
+        String keycloakId = workerRepository.findKeycloakIdByEmail(email).orElseThrow(() -> new RuntimeException("keycloakId not found with this email: " + email));
         sendPasswordResetEmail(keycloakId);
         return true;
     }
