@@ -4,9 +4,7 @@ import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.models.ComposedEntry;
 import org.twentyfive.shop_manager_api_layer.models.ComposedEntryClosure;
 import org.twentyfive.shop_manager_api_layer.models.Entry;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.LabelAndValue;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleComposedEntryClosure;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +37,24 @@ public class ComposedEntryMapperService {
 
         return composedSimpleEntries;
     }
+    public List<ComposedEntryClosureDetails> mapComposedEntryClosureToDetailsDTO(List<ComposedEntryClosure> composedEntryClosures) {
+        List<ComposedEntryClosureDetails> entryClosureDetails = new ArrayList<>();
+
+        for (ComposedEntryClosure composedEntryClosure : composedEntryClosures) {
+            ComposedEntryClosureDetails composedEntryClosureDetail = mapComposedEntryClosureToDetailsComposedEntryClosure(composedEntryClosure);
+            entryClosureDetails.add(composedEntryClosureDetail);
+        }
+        return entryClosureDetails;
+    }
+
+    private ComposedEntryClosureDetails mapComposedEntryClosureToDetailsComposedEntryClosure(ComposedEntryClosure composedEntryClosure) {
+        ComposedEntryClosureDetails composedEntryClosureDetail = new ComposedEntryClosureDetails();
+
+        composedEntryClosureDetail.setLabel(composedEntryClosure.getId().getComposedEntry().getLabel());
+        composedEntryClosureDetail.setLabelAndValues(composedEntryClosure.getValue());
+
+        return composedEntryClosureDetail;
+    }
 
     private SimpleComposedEntryClosure mapComposedEntryClosureToSimpleComposedEntryClosure(ComposedEntryClosure composedEntryClosure) {
         SimpleComposedEntryClosure simpleComposedEntryClosure = new SimpleComposedEntryClosure();
@@ -48,4 +64,5 @@ public class ComposedEntryMapperService {
 
         return simpleComposedEntryClosure;
     }
+
 }

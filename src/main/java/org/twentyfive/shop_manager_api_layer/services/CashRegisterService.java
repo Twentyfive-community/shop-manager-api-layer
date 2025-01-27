@@ -7,18 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCashRegisterReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotReq;
-import org.twentyfive.shop_manager_api_layer.exceptions.BusinessWorkerNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.DailyActivityMapperService;
-import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.CashRegisterDTO;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 import org.twentyfive.shop_manager_api_layer.exceptions.CashRegisterNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.CashRegisterMapperService;
 import org.twentyfive.shop_manager_api_layer.models.*;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterLogRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.DailyActivities;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.DateRange;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleTimeSlot;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 import java.io.IOException;
@@ -61,7 +56,7 @@ public class CashRegisterService {
             cashRegister.setBusiness(business);
             cashRegister.setTimeSlot(timeSlot);
             cashRegister.setClosedBy(worker);
-
+            cashRegister.setUpdatedBy(worker);
             CashRegister savedCashRegister = cashRegisterRepository.save(cashRegister);
 
             // Crea voci Entry e Composed Entry
@@ -81,7 +76,6 @@ public class CashRegisterService {
             cashRegister.setTimeSlot(timeSlot);
 
             cashRegister.setUpdatedBy(worker); // Aggiorna il campo updatedBy
-            cashRegister.setUpdatedAt(LocalDateTime.now());
 
             // Salva la CashRegister aggiornata
             CashRegister updatedCashRegister = cashRegisterRepository.save(cashRegister);
@@ -135,4 +129,9 @@ public class CashRegisterService {
     }
 
 
+    public CashRegisterDetails getDetailsById(Long id) {
+        CashRegister cashRegister = cashRegisterRepository.findById(id).orElseThrow(() -> new CashRegisterNotFoundException("Cash Register not found with id: " + id));
+        return cashRegisterMapperService.mapCashRegisterDetailsFromCashRegister(cashRegister);
+
+    }
 }

@@ -5,6 +5,7 @@ import org.twentyfive.shop_manager_api_layer.dtos.requests.GetAllTotalEntriesReq
 import org.twentyfive.shop_manager_api_layer.models.ComposedEntry;
 import org.twentyfive.shop_manager_api_layer.models.Entry;
 import org.twentyfive.shop_manager_api_layer.models.EntryClosure;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.EntryClosureDetails;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleEntryClosure;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
 
@@ -61,6 +62,24 @@ public class EntryMapperService {
 
         return simpleEntries;
     }
+    public List<EntryClosureDetails> mapEntryClosureToDetailsDTO(List<EntryClosure> entryClosures) {
+        List<EntryClosureDetails> entryClosureDetails = new ArrayList<>();
+
+        for(EntryClosure entryClosure : entryClosures){
+            EntryClosureDetails detailsEntryClosure = mapEntryClosureToDetailsEntryClosure(entryClosure);
+            entryClosureDetails.add(detailsEntryClosure);
+        }
+        return entryClosureDetails;
+    }
+
+    private EntryClosureDetails mapEntryClosureToDetailsEntryClosure(EntryClosure entryClosure) {
+        EntryClosureDetails entryClosureDetail = new EntryClosureDetails();
+
+        entryClosureDetail.setLabel(entryClosure.getId().getEntry().getLabel());
+        entryClosureDetail.setValue(entryClosure.getValue());
+
+        return entryClosureDetail;
+    }
 
     private SimpleEntryClosure mapEntryClosureToSimpleEntryClosure(EntryClosure entryClosure) {
         SimpleEntryClosure simpleEntryClosure = new SimpleEntryClosure();
@@ -70,4 +89,6 @@ public class EntryMapperService {
 
         return simpleEntryClosure;
     }
+
+
 }

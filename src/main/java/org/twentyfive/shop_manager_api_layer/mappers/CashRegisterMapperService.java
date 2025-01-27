@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.CashRegisterDTO;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.CashRegisterDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,5 +40,23 @@ public class CashRegisterMapperService {
             cashRegisterDTOs.add(cashRegisterDTO);
         }
         return cashRegisterDTOs;
+    }
+
+    public CashRegisterDetails mapCashRegisterDetailsFromCashRegister(CashRegister cashRegister) {
+        CashRegisterDetails cashRegisterDetails = new CashRegisterDetails();
+
+        cashRegisterDetails.setId(cashRegister.getId());
+        cashRegisterDetails.setRefTime(cashRegister.getRefTime());
+
+        cashRegisterDetails.setFirstModifiedWorker(cashRegister.getClosedBy().getFullName());
+        cashRegisterDetails.setFirstModifiedDate(cashRegister.getCreatedAt());
+
+        cashRegisterDetails.setLastModifiedWorker(cashRegister.getUpdatedBy().getFullName());
+        cashRegisterDetails.setLastModifiedDate(cashRegister.getUpdatedAt());
+
+        cashRegisterDetails.setEntryClosureDetails(entryMapperService.mapEntryClosureToDetailsDTO(cashRegister.getEntryClosures()));
+        cashRegisterDetails.setComposedEntryClosureDetails(composedEntryMapperService.mapComposedEntryClosureToDetailsDTO(cashRegister.getComposedEntryClosures()));
+
+        return cashRegisterDetails;
     }
 }
