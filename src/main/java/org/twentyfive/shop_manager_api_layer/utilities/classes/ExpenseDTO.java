@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Data
 @NoArgsConstructor
@@ -25,6 +28,8 @@ public class ExpenseDTO {
     }
 
     public void setValue(double value){
-        this.value = String.format("%.2f", value);
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ITALY);
+        DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
+        this.value = df.format(value);
     }
 }

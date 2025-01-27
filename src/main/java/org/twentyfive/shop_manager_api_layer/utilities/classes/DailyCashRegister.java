@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,15 +20,22 @@ public class DailyCashRegister {
     private boolean done;
 
     public void setTotalRevenue(double totalRevenue) {
-        this.totalRevenue = "€ "+String.format("%.2f", totalRevenue);
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ITALY);
+        DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
+        this.totalRevenue = df.format(totalRevenue);
     }
 
     public void setTotalCost(double totalCost) {
-        this.totalCost = "€ "+String.format("%.2f", totalCost);
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ITALY);
+        DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
+        this.totalCost = df.format(totalCost);
     }
 
     public void setTotal(double totalRevenue, double totalCost) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ITALY);
+        DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
         double totalNumber = totalRevenue - totalCost;
-        this.total = "€ "+String.format("%.2f", totalNumber);
+        this.total = df.format(totalNumber);
     }
+
 }
