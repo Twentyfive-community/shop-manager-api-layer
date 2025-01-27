@@ -63,6 +63,8 @@ public class CashRegister extends Auditable {
                 report.setTotalRevenue(report.getTotalRevenue()+entryClosure.getValue());
             } else if (entryClosure.getId().getEntry().getOperation().getSymbol().equals("-")){
                 report.setTotalCost(report.getTotalCost()+entryClosure.getValue());
+            } else if (entryClosure.getId().getEntry().getOperation().getSymbol().equals("'")) {
+                report.setTotalRevenue(report.getTotalRevenue()-entryClosure.getValue());
             }
         }
         for (ComposedEntryClosure composedEntryClosure : composedEntryClosures) {
