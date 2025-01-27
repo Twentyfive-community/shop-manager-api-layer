@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetAllTotalEntriesReq {
     private String label;
+    private boolean required;
     private boolean multiple;
 }

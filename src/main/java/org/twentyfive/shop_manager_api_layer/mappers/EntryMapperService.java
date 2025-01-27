@@ -35,6 +35,7 @@ public class EntryMapperService {
         for(Entry entry : entries){
             GetAllTotalEntriesReq getAllTotalEntriesReq = new GetAllTotalEntriesReq();
             getAllTotalEntriesReq.setLabel(entry.getLabel());
+            getAllTotalEntriesReq.setRequired(entry.getRequired());
             getAllTotalEntriesReq.setMultiple(false);
             totalEntries.add(getAllTotalEntriesReq);
         }
@@ -42,6 +43,7 @@ public class EntryMapperService {
         for(ComposedEntry composedEntry : composedEntries){
             GetAllTotalEntriesReq getAllTotalEntriesReq = new GetAllTotalEntriesReq();
             getAllTotalEntriesReq.setLabel(composedEntry.getLabel());
+            getAllTotalEntriesReq.setRequired(composedEntry.getRequired());
             getAllTotalEntriesReq.setMultiple(true);
             totalEntries.add(getAllTotalEntriesReq);
         }

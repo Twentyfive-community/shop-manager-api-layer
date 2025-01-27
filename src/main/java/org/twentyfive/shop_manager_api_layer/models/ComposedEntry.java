@@ -30,6 +30,9 @@ public class ComposedEntry {
     @Column(name ="operation", nullable = false)
     private Operation operation;
 
+    @Column(name ="required")
+    private Boolean required;
+
     @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "id.composedEntry")  // mappedBy si riferisce al campo 'entry' in EntryClosureId, chiave composta
