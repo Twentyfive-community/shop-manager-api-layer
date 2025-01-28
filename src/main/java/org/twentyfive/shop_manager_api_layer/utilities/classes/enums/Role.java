@@ -23,7 +23,9 @@ public enum Role {
         }
         throw new IllegalArgumentException("Ruolo sconosciuto: " + role);
     }
-
+    public static String getKeycloakRole(Role role){
+        return getKeycloakRole(role.getRole());
+    }
     public static String getKeycloakRole(String role){
         switch (role){
             case "Super capo" -> {

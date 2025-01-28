@@ -21,7 +21,7 @@ public class WorkerMapperService {
     public List<SimpleWorker> mapListSimpleWorkersFromBusinessWorkers (List<BusinessWorker> businessWorkers) {
         List<SimpleWorker> simpleWorkers = new ArrayList<>();
         for (BusinessWorker businessWorker : businessWorkers) {
-            SimpleWorker simpleWorker = mapSimpleWorkerFromBusinessWorker(businessWorker.getId().getWorker());
+            SimpleWorker simpleWorker = mapSimpleWorkerFromBusinessWorker(businessWorker.getId().getWorker(),businessWorker.getRole().getRole());
             simpleWorkers.add(simpleWorker);
         }
         return simpleWorkers;
@@ -33,15 +33,16 @@ public class WorkerMapperService {
         simpleWorker.setFirstName(worker.getFirstName());
         simpleWorker.setLastName(worker.getLastName());
         simpleWorker.setEmail(worker.getEmail());
-        simpleWorker.setRole(businessWorkerRepository.findRoleByWorkerIdAndBusinessId(worker.getId(), id).getRole());
+        simpleWorker.setRole(Role.getKeycloakRole(businessWorkerRepository.findRoleByWorkerIdAndBusinessId(worker.getId(), id)));
         simpleWorker.setPhoneNumber(worker.getPhoneNumber());
         return simpleWorker;
     }
 
-    private SimpleWorker mapSimpleWorkerFromBusinessWorker(Worker worker) {
+    private SimpleWorker mapSimpleWorkerFromBusinessWorker(Worker worker,String role) {
         SimpleWorker simpleWorker = new SimpleWorker();
         simpleWorker.setFirstName(worker.getFirstName());
         simpleWorker.setLastName(worker.getLastName());
+        simpleWorker.setRole(role);
         simpleWorker.setEmail(worker.getEmail());
         simpleWorker.setPhoneNumber(worker.getPhoneNumber());
         return simpleWorker;
