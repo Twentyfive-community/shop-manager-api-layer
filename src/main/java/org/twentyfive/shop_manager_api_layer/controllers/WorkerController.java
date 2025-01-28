@@ -1,6 +1,7 @@
 package org.twentyfive.shop_manager_api_layer.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddInExistentBusinessReq;
@@ -21,8 +22,11 @@ public class WorkerController {
     private final WorkerService workerService;
 
     @GetMapping("/getAllByBusinessId/{id}")
-    public ResponseEntity<List<SimpleWorker>> getAllByBusinessId(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(workerService.getAllByBusinessId(id));
+    public ResponseEntity<Page<SimpleWorker>> getAllByBusinessId(
+            @PathVariable("id") Long id,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "25") int size){
+        return ResponseEntity.ok().body(workerService.getAllByBusinessId(id,page, size));
     }
 
     @GetMapping("/get/{id}")

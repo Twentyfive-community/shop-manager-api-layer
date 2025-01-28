@@ -1,6 +1,9 @@
 package org.twentyfive.shop_manager_api_layer.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddInExistentBusinessReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddWorkerReq;
@@ -15,6 +18,7 @@ import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleComposedEntryClosure;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Role;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 
 import java.io.IOException;
@@ -70,9 +74,13 @@ public class WorkerService {
     }
 
 
-    public List<SimpleWorker> getAllByBusinessId(Long id){
+    public Page<SimpleWorker> getAllByBusinessId(Long id,int page, int size){
         List<BusinessWorker> businessWorkers = businessWorkerRepository.findById_Business_Id(id);
-        return workerMapperService.mapListSimpleWorkersFromBusinessWorkers(businessWorkers);
+        List<SimpleWorker> simpleWorkers = workerMapperService.mapListSimpleWorkersFromBusinessWorkers(businessWorkers);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return PageUtility.convertListToPage(simpleWorkers, pageable);
     }
 
     public Boolean AddInExistentBusiness(AddInExistentBusinessReq addInExistentBusinessReq) {
