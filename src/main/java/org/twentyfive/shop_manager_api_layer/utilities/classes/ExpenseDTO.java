@@ -18,7 +18,7 @@ public class ExpenseDTO {
     private String refTime;
     private String paymentMethod;
     private String doneBy;
-
+    private boolean paid;
     private String supplier;
     private String value;
 

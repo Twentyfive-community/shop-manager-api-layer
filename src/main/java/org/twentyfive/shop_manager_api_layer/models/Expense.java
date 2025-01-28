@@ -32,6 +32,9 @@ public class Expense {
     @Column(name = "payment_method")
     private PaymentMethod paymentMethod;
 
+    @Column(name = "paid")
+    private boolean paid;
+
     @ManyToOne
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;

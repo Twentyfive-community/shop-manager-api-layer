@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.twentyfive.shop_manager_api_layer.models.ids.BusinessWorkerId;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Role;
 
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class BusinessWorker {
     @EmbeddedId
     private BusinessWorkerId id; // ID della relazione
 
-    @Column(name = "role", nullable = false)
-    private String role; // Ruolo specifico del Worker nel Business
+    @Column(name = "role",nullable = false)
+    private Role role;
 
     @JsonIgnore
     @ToString.Exclude
@@ -29,6 +30,6 @@ public class BusinessWorker {
 
     public BusinessWorker(BusinessWorkerId businessWorkerId, String role) {
         this.id = businessWorkerId;
-        this.role = role;
+        this.role = Role.fromString(role);
     }
 }

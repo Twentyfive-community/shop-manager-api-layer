@@ -25,6 +25,7 @@ public class ExpenseMapperService {
         expenseDTO.setId(expense.getId());
         expenseDTO.setRefTime(expense.getRefTime());
         expenseDTO.setDoneBy(expense.getWorker().getId().getWorker().getFullName());
+        expenseDTO.setPaid(expense.isPaid());
         expenseDTO.setPaymentMethod(expense.getPaymentMethod().getValue());
         expenseDTO.setSupplier(expense.getSupplier().getName());
         expenseDTO.setValue(expense.getValue());

@@ -6,6 +6,7 @@ import org.twentyfive.shop_manager_api_layer.models.BusinessWorker;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class WorkerMapperService {
         simpleWorker.setFirstName(worker.getFirstName());
         simpleWorker.setLastName(worker.getLastName());
         simpleWorker.setEmail(worker.getEmail());
-        simpleWorker.setRole(businessWorkerRepository.findRoleByWorkerIdAndBusinessId(worker.getId(), id));
+        simpleWorker.setRole(businessWorkerRepository.findRoleByWorkerIdAndBusinessId(worker.getId(), id).getRole());
         simpleWorker.setPhoneNumber(worker.getPhoneNumber());
         return simpleWorker;
     }

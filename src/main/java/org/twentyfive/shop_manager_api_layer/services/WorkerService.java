@@ -14,6 +14,7 @@ import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerReposito
 import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleComposedEntryClosure;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Role;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 
 import java.io.IOException;
@@ -61,11 +62,10 @@ public class WorkerService {
                 return false;
             }
         }
-
-        keycloakService.addEmployeeToRealm(newWorker, addWorkerReq.getRole());
+        keycloakService.addEmployeeToRealm(newWorker, Role.getKeycloakRole(addWorkerReq.getWorker().getRole()));
         Worker workerDB = workerRepository.save(newWorker);
 
-        createBusinessWorkerFromAdd(business,workerDB,addWorkerReq.getRole());
+        createBusinessWorkerFromAdd(business,workerDB,addWorkerReq.getWorker().getRole());
         return true;
     }
 

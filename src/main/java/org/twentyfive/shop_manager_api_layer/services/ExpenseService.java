@@ -66,7 +66,7 @@ public class ExpenseService {
         expense.setRefTime(addExpenseReq.getRefTime());
         expense.setPaymentMethod(PaymentMethod.fromValue(addExpenseReq.getPaymentMethod()));
         expense.setValue(addExpenseReq.getValue());
-
+        expense.setPaid(addExpenseReq.isPaid());
         expense.setBuyTime(LocalDateTime.now());
 
         return expense;

@@ -36,7 +36,7 @@ public class EntryMapperService {
         for(Entry entry : entries){
             GetAllTotalEntriesReq getAllTotalEntriesReq = new GetAllTotalEntriesReq();
             getAllTotalEntriesReq.setLabel(entry.getLabel());
-            getAllTotalEntriesReq.setRequired(entry.getRequired());
+            getAllTotalEntriesReq.setRequired(entry.isRequired());
             getAllTotalEntriesReq.setMultiple(false);
             totalEntries.add(getAllTotalEntriesReq);
         }

@@ -10,6 +10,5 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
 @AllArgsConstructor
 public class AddWorkerReq {
     private Long businessId;
-    private String role;
     private SimpleWorker worker;
 }

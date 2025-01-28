@@ -13,7 +13,9 @@ public class AddExpenseReq {
 
     private LocalDate refTime;
     private String paymentMethod;
+
     private double value;
+    private boolean paid;
 
     private Long businessId;
     private String supplierName;

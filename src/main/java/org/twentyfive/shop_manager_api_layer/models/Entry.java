@@ -32,7 +32,7 @@ public class Entry {
     private Operation operation;
 
     @Column(name ="required")
-    private Boolean required;
+    private boolean required;
 
     @ToString.Exclude
     @JsonIgnore
