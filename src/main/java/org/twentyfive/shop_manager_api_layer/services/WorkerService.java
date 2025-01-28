@@ -106,4 +106,7 @@ public class WorkerService {
         return businessWorker;
     }
 
+    public List<String> getRoles() {
+        return Role.getPossibleRoles();
+    }
 }

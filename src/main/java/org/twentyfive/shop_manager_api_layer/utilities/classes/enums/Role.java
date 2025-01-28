@@ -1,5 +1,8 @@
 package org.twentyfive.shop_manager_api_layer.utilities.classes.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum Role {
     SUPER_BOSS("Super capo"),
     BOSS("Capo"),
@@ -41,5 +44,15 @@ public enum Role {
                 return "unknown";
             }
         }
+    }
+
+    public static List<String> getPossibleRoles() {
+        List<String> roles = new ArrayList<>();
+        for (Role role : Role.values()) {
+            if (role != SUPER_BOSS) {
+                roles.add(role.getRole());
+            }
+        }
+        return roles;
     }
 }

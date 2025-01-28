@@ -43,6 +43,9 @@ public class WorkerController {
     public ResponseEntity<Boolean> addInExistentBusiness(@RequestBody AddInExistentBusinessReq addInExistentBusinessReq) {
         return ResponseEntity.ok().body(workerService.AddInExistentBusiness(addInExistentBusinessReq));
     }
-
+    @GetMapping("/getRoles")
+    public ResponseEntity<List<String>> getRoles() {
+        return ResponseEntity.ok().body(workerService.getRoles());
+    }
 
 }
