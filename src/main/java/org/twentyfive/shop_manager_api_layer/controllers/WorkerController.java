@@ -3,6 +3,7 @@ package org.twentyfive.shop_manager_api_layer.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddInExistentBusinessReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddWorkerReq;
@@ -21,6 +22,7 @@ public class WorkerController {
 
     private final WorkerService workerService;
 
+    @PreAuthorize("hasRole('ROLE_super-boss')")
     @GetMapping("/getAllByBusinessId/{id}")
     public ResponseEntity<Page<SimpleWorker>> getAllByBusinessId(
             @PathVariable("id") Long id,
