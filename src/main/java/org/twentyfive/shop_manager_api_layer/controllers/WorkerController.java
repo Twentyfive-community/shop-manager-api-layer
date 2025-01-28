@@ -22,7 +22,6 @@ public class WorkerController {
 
     private final WorkerService workerService;
 
-    @PreAuthorize("hasRole('ROLE_super-boss')")
     @GetMapping("/getAllByBusinessId/{id}")
     public ResponseEntity<Page<SimpleWorker>> getAllByBusinessId(
             @PathVariable("id") Long id,
