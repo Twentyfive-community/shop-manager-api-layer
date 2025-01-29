@@ -49,6 +49,10 @@ public class CashRegisterMapperService {
         cashRegisterDetails.setTimeSlotName(cashRegister.getTimeSlot().getName());
         cashRegisterDetails.setRefTime(cashRegister.getRefTime());
 
+        cashRegisterDetails.setTotalRevenue(cashRegister.getReport().getTotalRevenue());
+        cashRegisterDetails.setTotalCost(cashRegister.getReport().getTotalCost());
+        cashRegisterDetails.setTotal(cashRegister.getReport().getTotalRevenue(),cashRegister.getReport().getTotalCost());
+
         cashRegisterDetails.setFirstModifiedWorker(cashRegister.getClosedBy().getFullName());
         cashRegisterDetails.setFirstModifiedDate(cashRegister.getCreatedAt());
 
