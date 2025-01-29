@@ -88,8 +88,9 @@ public class EntryService {
 
         delComposedEntries.clear();
         cashRegisterRepository.save(updatedCashRegister);
-
-        createAndAddListOfEntryClosure(entries, updatedCashRegister);
+        if (updatedCashRegister.getEntryClosures() != null) {
+            createAndAddListOfEntryClosure(entries, updatedCashRegister);
+        }
 
     }
 }
