@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CashRegisterDetails {
     private Long id;
+    private String timeSlotName;
     private String refTime;
 
     private List<EntryClosureDetails> entryClosureDetails;

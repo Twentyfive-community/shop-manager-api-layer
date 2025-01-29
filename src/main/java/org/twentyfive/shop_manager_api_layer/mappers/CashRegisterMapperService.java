@@ -46,6 +46,7 @@ public class CashRegisterMapperService {
         CashRegisterDetails cashRegisterDetails = new CashRegisterDetails();
 
         cashRegisterDetails.setId(cashRegister.getId());
+        cashRegisterDetails.setTimeSlotName(cashRegister.getTimeSlot().getName());
         cashRegisterDetails.setRefTime(cashRegister.getRefTime());
 
         cashRegisterDetails.setFirstModifiedWorker(cashRegister.getClosedBy().getFullName());
