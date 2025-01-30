@@ -71,7 +71,7 @@ public class ComposedEntryService {
 
         delComposedEntries.clear();
         cashRegisterRepository.save(updatedCashRegister);
-        if(updatedCashRegister.getComposedEntryClosures() != null) {
+        if(composedEntries != null) {
             createAndAddListOfComposedEntryClosure(composedEntries, updatedCashRegister);
         }
     }
