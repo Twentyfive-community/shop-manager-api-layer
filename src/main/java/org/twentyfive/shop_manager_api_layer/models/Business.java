@@ -30,15 +30,10 @@ public class Business {
     @OneToMany(mappedBy = "id.business", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BusinessWorker> workersWithRoles; // Workers associati con ruoli
 
-    // Relazione ManyToMany con i fornitori
-    @ManyToMany
-    @JoinTable(
-            name = "business_suppliers",  // Nome della tabella di JOIN
-            joinColumns = @JoinColumn(name = "business_id"),  // La colonna che si riferisce alla chiave primaria di attività
-            inverseJoinColumns = @JoinColumn(name = "supplier_id"), //La colonna che si riferisce alla chiave primaria di fornitore
-            uniqueConstraints = @UniqueConstraint(columnNames = {"business_id", "supplier_id"})
-    )
-    private Set<Supplier> suppliers;
+    @ToString.Exclude
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.business", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BusinessSupplier> businessSuppliers;
 
     @ToString.Exclude
     @JsonIgnore

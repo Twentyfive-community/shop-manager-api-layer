@@ -15,6 +15,6 @@ public class BusinessSupplier {
     private BusinessSupplierId id;
 
     @Column(name = "disabled")
-    private boolean disabled;
+    private boolean disabled = false;
 }
 

@@ -8,6 +8,7 @@ import org.twentyfive.shop_manager_api_layer.models.BusinessSupplier;
 import org.twentyfive.shop_manager_api_layer.models.ids.BusinessSupplierId;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BusinessSupplierRepository extends JpaRepository<BusinessSupplier, BusinessSupplierId> {
@@ -23,5 +24,7 @@ public interface BusinessSupplierRepository extends JpaRepository<BusinessSuppli
             "WHERE bs.id.business.id = :businessId AND bs.disabled = false " + // Filtro businessId e disabled
             "AND LOWER(s.name) LIKE LOWER(CONCAT('%', :value, '%'))")  // Filtra per valore nel nome
     List<String> findSupplierNamesByBusinessIdAndValueAndDisabledFalse(@Param("businessId") Long businessId, @Param("value") String value);
+
+    Optional<BusinessSupplier> findById_Business_IdAndId_Supplier_Name(Long businessId, String supplierName);
 
 }

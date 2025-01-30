@@ -23,7 +23,7 @@ public class BusinessWorker {
     @Column(name = "role",nullable = false)
     private Role role;
     @Column(name ="disabled")
-    private boolean disabled;
+    private boolean disabled = false;
     @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "worker")

@@ -11,9 +11,11 @@ import org.twentyfive.shop_manager_api_layer.exceptions.BusinessWorkerNotFoundEx
 import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
 import org.twentyfive.shop_manager_api_layer.exceptions.SupplierNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.ExpenseMapperService;
+import org.twentyfive.shop_manager_api_layer.models.BusinessSupplier;
 import org.twentyfive.shop_manager_api_layer.models.BusinessWorker;
 import org.twentyfive.shop_manager_api_layer.models.Expense;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
+import org.twentyfive.shop_manager_api_layer.repositories.BusinessSupplierRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.ExpenseRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
@@ -32,6 +34,7 @@ import java.util.List;
 public class ExpenseService {
 
     private final SupplierRepository supplierRepository;
+    private final BusinessSupplierRepository businessSupplierRepository;
     private final ExpenseRepository expenseRepository;
     private final BusinessWorkerRepository businessWorkerRepository;
 
@@ -56,12 +59,12 @@ public class ExpenseService {
 
         BusinessWorker businessWorker = businessWorkerRepository.findById_Business_IdAndId_Worker_KeycloakIdAndDisabledFalse(addExpenseReq.getBusinessId(), keycloakId).
                 orElseThrow(() -> new BusinessWorkerNotFoundException("KeycloakId " +keycloakId+ " disabilitato per questo business id: " +addExpenseReq.getBusinessId()));
-        Supplier supplier = supplierRepository.findByNameAndWorkFor_Id(addExpenseReq.getSupplierName(), addExpenseReq.getBusinessId()).
+        BusinessSupplier businessSupplier = businessSupplierRepository.findById_Business_IdAndId_Supplier_Name(addExpenseReq.getBusinessId(),addExpenseReq.getSupplierName()).
                 orElseThrow(() -> new SupplierNotFoundException("Non esiste questo fornitore " +addExpenseReq.getSupplierName()+" associato a questo businessId: " +addExpenseReq.getBusinessId()));
         Expense expense = new Expense();
 
         expense.setWorker(businessWorker);
-        expense.setSupplier(supplier);
+        expense.setSupplier(businessSupplier.getId().getSupplier());
 
         expense.setRefTime(addExpenseReq.getRefTime());
         expense.setPaymentMethod(PaymentMethod.fromValue(addExpenseReq.getPaymentMethod()));

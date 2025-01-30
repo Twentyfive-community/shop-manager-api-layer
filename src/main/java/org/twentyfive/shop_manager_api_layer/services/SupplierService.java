@@ -20,7 +20,6 @@ public class SupplierService {
     private final BusinessService businessService;
 
     private final SupplierMapperService supplierMapperService;
-    private final SupplierRepository supplierRepository;
 
     public boolean add(Long id,AddSupplierReq addSupplierReq) {
         Business business = businessService.getById(id);

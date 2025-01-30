@@ -17,24 +17,21 @@ import java.util.Set;
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id") //ID del fornitore, generata automaticamente
+    @Column(name = "id") // ID del fornitore, generata automaticamente
     private Long id;
 
-    @Column(name = "name", nullable = false) //nome del fornitore
+    @Column(name = "name", nullable = false) // nome del fornitore
     private String name;
 
-    @Column(name = "address") //via del fornitore
+    @Column(name = "address") // indirizzo del fornitore
     private String address;
 
-    @ManyToMany(mappedBy = "suppliers")
-    private Set<Business> workFor;
-
-    @OneToMany(mappedBy ="supplier")
-    private Set<Expense> expenses;
-
+    // Rimosso @ManyToMany perché ora la relazione passa tramite la tabella di join
     @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "id.supplier", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BusinessSupplier> businessSuppliers;
 
+    @OneToMany(mappedBy = "supplier")
+    private Set<Expense> expenses;
 }
