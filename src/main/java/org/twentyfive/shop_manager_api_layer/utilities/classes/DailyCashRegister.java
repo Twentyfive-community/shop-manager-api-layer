@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.List;
 import java.util.Locale;
 
 @Data
@@ -18,6 +19,9 @@ public class DailyCashRegister {
     private String totalCost;
     private String total;
     private boolean done;
+
+    private List<EntryClosureDetails> entryClosureDetails;
+    private List<ComposedEntryClosureDetails> composedEntryClosureDetails;
 
     public void setTotalRevenue(double totalRevenue) {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ITALY);

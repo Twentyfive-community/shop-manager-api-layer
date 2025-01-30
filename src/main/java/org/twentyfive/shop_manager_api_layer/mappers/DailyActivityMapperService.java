@@ -17,6 +17,9 @@ public class DailyActivityMapperService {
 
     private final CashRegisterRepository cashRegisterRepository;
 
+    private final EntryMapperService entryMapperService;
+    private final ComposedEntryMapperService composedEntryMapperService;
+
     public List<DailyActivities> mapListDailyActivitiesFromTimeSlots(Long id,
                                                                      List<SimpleTimeSlot> timeSlots,
                                                                      DateRange dateRange) {
@@ -53,6 +56,10 @@ public class DailyActivityMapperService {
             dailyCashRegister.setTotalRevenue(cashRegister.getReport().getTotalRevenue());
             dailyCashRegister.setTotalCost(cashRegister.getReport().getTotalCost());
             dailyCashRegister.setTotal(cashRegister.getReport().getTotalRevenue(),cashRegister.getReport().getTotalCost());
+
+            dailyCashRegister.setEntryClosureDetails(entryMapperService.mapEntryClosureToDetailsDTO(cashRegister.getEntryClosures()));
+            dailyCashRegister.setComposedEntryClosureDetails(composedEntryMapperService.mapComposedEntryClosureToDetailsDTO(cashRegister.getComposedEntryClosures()));
+
             dailyCashRegister.setDone(true);
         } else {
             dailyCashRegister.setId(-1L);
