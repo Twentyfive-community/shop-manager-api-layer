@@ -12,6 +12,10 @@ import org.twentyfive.shop_manager_api_layer.services.BusinessWorkerService;
 public class BusinessWorkerController {
     private final BusinessWorkerService businessWorkerService;
 
+    @PatchMapping("/toggleStatus/{id}")
+    public ResponseEntity<Boolean> toggleStatus(@PathVariable("id") Long id,@RequestParam("email") String email){
+        return ResponseEntity.ok().body(businessWorkerService.toggleStatus(id,email));
+    }
     @PatchMapping("/changeRole/{id}")
     public ResponseEntity<Boolean> changeRole(@PathVariable("id") Long id, @RequestBody ChangeRoleReq changeRoleReq){
         return ResponseEntity.ok().body(businessWorkerService.changeRole(id,changeRoleReq));

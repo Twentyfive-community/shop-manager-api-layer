@@ -18,7 +18,7 @@ public interface BusinessWorkerRepository extends JpaRepository<BusinessWorker, 
 
     Optional<BusinessWorker> findById_Business_IdAndId_Worker_Email(Long id, String email);
 
-    boolean existsById_Business_IdAndId_Worker_KeycloakId(Long id, String keycloakId);
+    boolean existsById_Business_IdAndId_Worker_KeycloakIdAndDisabledTrue(Long id, String keycloakId);
 
     @Query("SELECT bw.role FROM BusinessWorker bw WHERE bw.id.worker.id = :workerId AND bw.id.business.id = :businessId")
     Role findRoleByWorkerIdAndBusinessId(@Param("workerId") Long workerId, @Param("businessId") Long businessId);

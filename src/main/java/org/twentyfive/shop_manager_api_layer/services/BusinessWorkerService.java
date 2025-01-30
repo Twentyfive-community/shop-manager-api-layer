@@ -23,8 +23,8 @@ public class BusinessWorkerService {
     private final BusinessWorkerRepository businessWorkerRepository;
 
     public boolean existsByKeycloakIdAndBusinessId(String keycloakId, Long businessId) {
-        if(!businessWorkerRepository.existsById_Business_IdAndId_Worker_KeycloakId(businessId, keycloakId)) {
-            throw new BusinessWorkerNotFoundException("KeycloakId " +keycloakId+ " non associato a questo business id: " +businessId);
+        if(!businessWorkerRepository.existsById_Business_IdAndId_Worker_KeycloakIdAndDisabledTrue(businessId, keycloakId)) {
+            throw new BusinessWorkerNotFoundException("KeycloakId " +keycloakId+ " not associated or suspended at business id: " +businessId);
         }
         return true;
     }
@@ -60,5 +60,12 @@ public class BusinessWorkerService {
             return true;
         }
         throw new RoleNotFoundException("this role +" +changeRoleReq.getRole() + "doesn't exist or it's not applicable!");
+    }
+
+    public Boolean toggleStatus(Long id, String email) {
+        BusinessWorker businessWorker = getByEmailAndBusinessId(email, id);
+        businessWorker.setDisabled(!businessWorker.isDisabled());
+        return businessWorkerRepository.save(businessWorker) != null;
+
     }
 }
