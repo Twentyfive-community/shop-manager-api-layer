@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddInExistentBusinessReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddWorkerReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.ChangeRoleReq;
+import org.twentyfive.shop_manager_api_layer.exceptions.RoleNotFoundException;
 import org.twentyfive.shop_manager_api_layer.exceptions.WorkerNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.WorkerMapperService;
 import org.twentyfive.shop_manager_api_layer.models.Business;
@@ -15,7 +17,6 @@ import org.twentyfive.shop_manager_api_layer.models.ids.BusinessWorkerId;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleComposedEntryClosure;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Role;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
@@ -44,9 +45,9 @@ public class WorkerService {
     public Worker getByKeycloakId(String keycloakId) {
         return workerRepository.findByKeycloakId(keycloakId).orElseThrow(() -> new WorkerNotFoundException("Worker not found with keycloakId: " + keycloakId));
     }
-
-    public String getKeycloakIdFromEmail(String email) {
-        return workerRepository.findKeycloakIdByEmail(email).orElseThrow(() -> new WorkerNotFoundException("Worker not found with email: " + email));
+    public BusinessWorker getByEmailAndBusinessId(String email, Long businessId) {
+        return businessWorkerRepository.findById_Business_IdAndId_Worker_Email(businessId, email).orElseThrow(() -> new WorkerNotFoundException("Worker not found with email: " + email +
+                " or with this business id: " + businessId));
     }
 
     public SimpleWorker getSimpleWorkerFromToken(Long id) throws IOException {
@@ -108,5 +109,22 @@ public class WorkerService {
 
     public List<String> getRoles() {
         return Role.getPossibleRoles();
+    }
+
+    public Boolean changeRole(Long id, ChangeRoleReq changeRoleReq) {
+        BusinessWorker businessWorker = getByEmailAndBusinessId(changeRoleReq.getEmail(), id);
+        if(getRoles().contains(changeRoleReq.getRole())) {
+            String bearerToken = keycloakService.getAdminBearerToken();
+            String keycloakId = businessWorker.getId().getWorker().getKeycloakId();
+            String role = Role.getKeycloakRole(businessWorker.getRole().getRole());
+
+            keycloakService.removeRoleFromUser(bearerToken,keycloakId,role);
+            businessWorker.setRole(Role.fromString(changeRoleReq.getRole()));
+            keycloakService.addRoleToUser(bearerToken,keycloakId,Role.getKeycloakRole(changeRoleReq.getRole()));
+            businessWorkerRepository.save(businessWorker);
+
+            return true;
+        }
+        throw new RoleNotFoundException("this role +" +changeRoleReq.getRole() + "doesn't exist or it's not applicable!");
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddInExistentBusinessReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddWorkerReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.ChangeRoleReq;
 import org.twentyfive.shop_manager_api_layer.services.KeycloakService;
 import org.twentyfive.shop_manager_api_layer.services.WorkerService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
@@ -29,7 +30,10 @@ public class WorkerController {
             @RequestParam(value = "size", defaultValue = "25") int size){
         return ResponseEntity.ok().body(workerService.getAllByBusinessId(id,page, size));
     }
-
+    @PatchMapping("/changeRole/{id}")
+    public ResponseEntity<Boolean> changeRole(@PathVariable("id") Long id, @RequestBody ChangeRoleReq changeRoleReq){
+        return ResponseEntity.ok().body(workerService.changeRole(id,changeRoleReq));
+    }
     @GetMapping("/get/{id}")
     public ResponseEntity<SimpleWorker> getInfoFromToken(@PathVariable("id") Long id) throws IOException {
         return ResponseEntity.ok().body(workerService.getSimpleWorkerFromToken(id));

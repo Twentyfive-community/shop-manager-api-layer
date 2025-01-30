@@ -55,7 +55,7 @@ public class KeycloakService {
         return (String) responseMap.get("access_token");
     }
 
-    private String getAdminBearerToken() {
+    public String getAdminBearerToken() {
         return "Bearer " + getAccessToken(clientId, clientSecret, username, password);
     }
 
@@ -74,13 +74,22 @@ public class KeycloakService {
         worker.setKeycloakId(keycloakId);
     }
 
-    private void addRoleToUser(String bearerToken, String keycloakId,String role) {
+    public void addRoleToUser(String bearerToken, String keycloakId,String role) {
         List<LinkedHashMap<String, String>> rawRoles = keycloakClient.getRoles(bearerToken);
         List<RoleRepresentation> keycloakRoles = rawRoles.stream()
                 .map(KeycloakUtility::convertToRoleRepresentation)
                 .filter(keycloakRole -> keycloakRole.getName().equals(role)) // Filtra il ruolo specifico
                 .toList();
         keycloakClient.addRoleToUser(bearerToken, keycloakId, keycloakRoles);
+    }
+
+    public void removeRoleFromUser(String bearerToken, String keycloakId,String role) {
+        List<LinkedHashMap<String, String>> rawRoles = keycloakClient.getRoles(bearerToken);
+        List<RoleRepresentation> keycloakRoles = rawRoles.stream()
+                .map(KeycloakUtility::convertToRoleRepresentation)
+                .filter(keycloakRole -> keycloakRole.getName().equals(role)) // Filtra il ruolo specifico
+                .toList();
+        keycloakClient.removeRoleFromUser(bearerToken, keycloakId, keycloakRoles);
     }
 
     public boolean sendPasswordResetEmail(String keycloakId) {

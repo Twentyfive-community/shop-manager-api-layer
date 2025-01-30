@@ -49,6 +49,10 @@ public interface KeycloakClient {
     ResponseEntity<Object> addRoleToUser(@RequestHeader("Authorization") String accessToken,
                                          @PathVariable String id,
                                          @RequestBody List<RoleRepresentation> roles);
+    @RequestMapping(method = RequestMethod.DELETE, value = "/admin/realms/${keycloak.realm}/users/{id}/role-mappings/realm", produces = "application/json")
+    ResponseEntity<Object> removeRoleFromUser(@RequestHeader("Authorization") String accessToken,
+                                              @PathVariable String id,
+                                              @RequestBody List<RoleRepresentation> roles);
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/admin/realms/${keycloak.realm}/users/{id}/role-mappings/clients/{clientIdRole}", produces = "application/json")
     ResponseEntity<Object> deleteRoleToUser(@RequestHeader("Authorization") String accessToken,
