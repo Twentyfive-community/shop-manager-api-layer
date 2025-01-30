@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
+import org.twentyfive.shop_manager_api_layer.services.BusinessSupplierService;
 import org.twentyfive.shop_manager_api_layer.services.SupplierService;
 
 import java.util.List;
@@ -14,13 +15,14 @@ import java.util.List;
 @RequestMapping("/supplier")
 public class SupplierController {
 
+    private final BusinessSupplierService businessSupplierService;
     private final SupplierService supplierService;
 
     @GetMapping("/getAll/{id}")
     public ResponseEntity<Page<String>> getAll(@PathVariable Long id,
                                                        @RequestParam(value = "page", defaultValue = "0") int page,
                                                        @RequestParam(value = "size", defaultValue = "25") int size) {
-        return ResponseEntity.ok().body(supplierService.getAll(id,page,size));
+        return ResponseEntity.ok().body(businessSupplierService.getAll(id, page, size));
 
     }
     @PostMapping("/addList/{id}")
@@ -35,6 +37,6 @@ public class SupplierController {
 
     @GetMapping("/search/{id}")
     public ResponseEntity<List<String>> search(@PathVariable("id")Long id, @RequestParam(value ="value",defaultValue = "") String value){
-        return ResponseEntity.ok().body(supplierService.search(id,value));
+        return ResponseEntity.ok().body(businessSupplierService.search(id,value));
     }
 }

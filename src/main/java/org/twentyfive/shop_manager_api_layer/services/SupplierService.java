@@ -35,16 +35,4 @@ public class SupplierService {
         return true;
     }
 
-    public List<String> search(Long id, String value) {
-        return supplierRepository.findSupplierNamesByBusinessIdAndValue(id,value);
-    }
-
-    public Page<String> getAll(Long id, int page, int size) {
-        List<String> supplierNames = supplierRepository.findSupplierNamesByBusinessId(id);
-
-        Pageable pageable = PageRequest.of(page, size);
-
-        return PageUtility.convertListToPage(supplierNames, pageable);
-
-    }
 }

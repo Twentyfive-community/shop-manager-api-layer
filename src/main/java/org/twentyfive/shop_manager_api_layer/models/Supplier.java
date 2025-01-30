@@ -1,11 +1,12 @@
 package org.twentyfive.shop_manager_api_layer.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,5 +31,10 @@ public class Supplier {
 
     @OneToMany(mappedBy ="supplier")
     private Set<Expense> expenses;
+
+    @ToString.Exclude
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BusinessSupplier> businessSuppliers;
 
 }
