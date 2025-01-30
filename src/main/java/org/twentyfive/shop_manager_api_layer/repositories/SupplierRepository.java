@@ -17,4 +17,7 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
     @Query("SELECT s.name FROM Business b JOIN b.suppliers s WHERE b.id = :businessId AND LOWER(s.name) LIKE LOWER(CONCAT('%', :value, '%'))")
     List<String> findSupplierNamesByBusinessIdAndValue(@Param("businessId") Long businessId, @Param("value") String value);
 
+    @Query("SELECT s.name FROM Business b JOIN b.suppliers s WHERE b.id = :businessId")
+    List<String> findSupplierNamesByBusinessId(@Param("businessId") Long businessId);
+
 }
