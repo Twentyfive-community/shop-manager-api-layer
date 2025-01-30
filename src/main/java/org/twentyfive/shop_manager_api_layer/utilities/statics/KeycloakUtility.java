@@ -8,7 +8,7 @@ import twentyfive.twentyfiveadapter.dto.keycloakDto.KeycloakUser;
 import java.util.*;
 
 public class KeycloakUtility {
-    public static KeycloakUser addEmployeeToRealm(Worker worker) {
+    public static KeycloakUser createOrUpdateWorkerToRealm(Worker worker) {
         KeycloakUser user = new KeycloakUser();
         user.setEmail(worker.getEmail());
         user.setFirstName(worker.getFirstName());

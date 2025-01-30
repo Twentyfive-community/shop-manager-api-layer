@@ -1,20 +1,14 @@
-package org.twentyfive.shop_manager_api_layer.utilities.classes;
+package org.twentyfive.shop_manager_api_layer.dtos.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class SimpleWorker {
+@AllArgsConstructor
+public class UpdateWorkerReq {
     private String firstName;
     private String lastName;
-
-    private boolean disabled;
-    private String role;
-
-    private String email;
     private String phoneNumber;
-
 }

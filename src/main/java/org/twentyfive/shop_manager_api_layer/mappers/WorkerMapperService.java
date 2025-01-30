@@ -42,6 +42,7 @@ public class WorkerMapperService {
         SimpleWorker simpleWorker = new SimpleWorker();
         simpleWorker.setFirstName(worker.getFirstName());
         simpleWorker.setLastName(worker.getLastName());
+        simpleWorker.setDisabled(simpleWorker.isDisabled());
         simpleWorker.setRole(role);
         simpleWorker.setEmail(worker.getEmail());
         simpleWorker.setPhoneNumber(worker.getPhoneNumber());

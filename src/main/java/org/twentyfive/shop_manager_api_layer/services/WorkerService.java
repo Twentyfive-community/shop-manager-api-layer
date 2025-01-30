@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddInExistentBusinessReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddWorkerReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.ChangeRoleReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateWorkerReq;
 import org.twentyfive.shop_manager_api_layer.exceptions.RoleNotFoundException;
 import org.twentyfive.shop_manager_api_layer.exceptions.WorkerNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.WorkerMapperService;
@@ -31,8 +32,7 @@ import java.util.Objects;
 public class WorkerService {
 
     private final WorkerRepository workerRepository;
-    private final BusinessWorkerRepository businessWorkerRepository;
-
+    private final BusinessWorkerService businessWorkerService;
     private final BusinessService businessService;
     private final KeycloakService keycloakService;
 
@@ -45,10 +45,7 @@ public class WorkerService {
     public Worker getByKeycloakId(String keycloakId) {
         return workerRepository.findByKeycloakId(keycloakId).orElseThrow(() -> new WorkerNotFoundException("Worker not found with keycloakId: " + keycloakId));
     }
-    public BusinessWorker getByEmailAndBusinessId(String email, Long businessId) {
-        return businessWorkerRepository.findById_Business_IdAndId_Worker_Email(businessId, email).orElseThrow(() -> new WorkerNotFoundException("Worker not found with email: " + email +
-                " or with this business id: " + businessId));
-    }
+
 
     public SimpleWorker getSimpleWorkerFromToken(Long id) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
@@ -67,16 +64,16 @@ public class WorkerService {
                 return false;
             }
         }
-        keycloakService.addEmployeeToRealm(newWorker, Role.getKeycloakRole(addWorkerReq.getWorker().getRole()));
+        keycloakService.addWorkerToRealm(newWorker, Role.getKeycloakRole(addWorkerReq.getWorker().getRole()));
         Worker workerDB = workerRepository.save(newWorker);
 
-        createBusinessWorkerFromAdd(business,workerDB,addWorkerReq.getWorker().getRole());
+        businessWorkerService.createBusinessWorkerFromAdd(business,workerDB,addWorkerReq.getWorker().getRole());
         return true;
     }
 
 
     public Page<SimpleWorker> getAllByBusinessId(Long id,int page, int size){
-        List<BusinessWorker> businessWorkers = businessWorkerRepository.findById_Business_Id(id);
+        List<BusinessWorker> businessWorkers = businessWorkerService.getAllBusinessWorkersById(id);
         List<SimpleWorker> simpleWorkers = workerMapperService.mapListSimpleWorkersFromBusinessWorkers(businessWorkers);
 
         Pageable pageable = PageRequest.of(page, size);
@@ -87,7 +84,7 @@ public class WorkerService {
     public Boolean AddInExistentBusiness(AddInExistentBusinessReq addInExistentBusinessReq) {
         Business business = businessService.getById(addInExistentBusinessReq.getBusinessId());
         Worker worker = getById(addInExistentBusinessReq.getWorkerId());
-        createBusinessWorkerFromAdd(business,worker,addInExistentBusinessReq.getRole());
+        businessWorkerService.createBusinessWorkerFromAdd(business,worker,addInExistentBusinessReq.getRole());
         return true;
     }
 
@@ -100,31 +97,18 @@ public class WorkerService {
         return worker;
     }
 
-    private BusinessWorker createBusinessWorkerFromAdd(Business business, Worker worker, String role) {
-        BusinessWorkerId businessWorkerId = new BusinessWorkerId(business, worker);
-        BusinessWorker businessWorker = new BusinessWorker(businessWorkerId,role);
-        businessWorkerRepository.save(businessWorker);
-        return businessWorker;
-    }
-
     public List<String> getRoles() {
         return Role.getPossibleRoles();
     }
 
-    public Boolean changeRole(Long id, ChangeRoleReq changeRoleReq) {
-        BusinessWorker businessWorker = getByEmailAndBusinessId(changeRoleReq.getEmail(), id);
-        if(getRoles().contains(changeRoleReq.getRole())) {
-            String bearerToken = keycloakService.getAdminBearerToken();
-            String keycloakId = businessWorker.getId().getWorker().getKeycloakId();
-            String role = Role.getKeycloakRole(businessWorker.getRole().getRole());
+    public Boolean update(UpdateWorkerReq updateWorkerReq) throws IOException {
+        Worker worker = getByKeycloakId(JwtUtility.getIdKeycloak());
 
-            keycloakService.removeRoleFromUser(bearerToken,keycloakId,role);
-            businessWorker.setRole(Role.fromString(changeRoleReq.getRole()));
-            keycloakService.addRoleToUser(bearerToken,keycloakId,Role.getKeycloakRole(changeRoleReq.getRole()));
-            businessWorkerRepository.save(businessWorker);
+        worker.setFirstName(updateWorkerReq.getFirstName());
+        worker.setLastName(updateWorkerReq.getLastName());
+        worker.setPhoneNumber(updateWorkerReq.getPhoneNumber());
 
-            return true;
-        }
-        throw new RoleNotFoundException("this role +" +changeRoleReq.getRole() + "doesn't exist or it's not applicable!");
+        keycloakService.updateWorkerToRealm(worker);
+        return workerRepository.save(worker) != null;
     }
 }

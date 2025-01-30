@@ -64,14 +64,20 @@ public class KeycloakService {
         return keycloakClient.getUserById(getAdminBearerToken(), idKeycloak);
     }
 
-    public void addEmployeeToRealm(Worker worker, String role){
+    public void addWorkerToRealm(Worker worker, String role){
         String bearerToken = getAdminBearerToken();
-        KeycloakUser keycloakUser = KeycloakUtility.addEmployeeToRealm(worker);
+        KeycloakUser keycloakUser = KeycloakUtility.createOrUpdateWorkerToRealm(worker);
         ResponseEntity<Object> response = keycloakClient.add(bearerToken, keycloakUser);
         String keycloakId = KeycloakUtility.getKeycloakIdFromResponse(response);
         addRoleToUser(bearerToken,keycloakId,role);
         sendPasswordResetEmail(keycloakId);
         worker.setKeycloakId(keycloakId);
+    }
+
+    public void updateWorkerToRealm(Worker worker){
+        String bearerToken = getAdminBearerToken();
+        KeycloakUser keycloakUser = KeycloakUtility.createOrUpdateWorkerToRealm(worker);
+        keycloakClient.update(bearerToken, worker.getKeycloakId(),keycloakUser);
     }
 
     public void addRoleToUser(String bearerToken, String keycloakId,String role) {

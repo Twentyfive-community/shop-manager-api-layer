@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface BusinessWorkerRepository extends JpaRepository<BusinessWorker, Long> {
     List<BusinessWorker> findById_Business_Id(Long id);
 
-    Optional<BusinessWorker> findById_Business_IdAndId_Worker_KeycloakId(Long id, String keycloakId);
+    Optional<BusinessWorker> findById_Business_IdAndId_Worker_KeycloakIdAndDisabledFalse(Long id, String keycloakId);
 
     Optional<BusinessWorker> findById_Business_IdAndId_Worker_Email(Long id, String email);
 

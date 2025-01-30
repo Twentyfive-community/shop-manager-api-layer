@@ -54,8 +54,8 @@ public class ExpenseService {
     private Expense createExpenseFromAddExpenseReq(AddExpenseReq addExpenseReq) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
 
-        BusinessWorker businessWorker = businessWorkerRepository.findById_Business_IdAndId_Worker_KeycloakId(addExpenseReq.getBusinessId(), keycloakId).
-                orElseThrow(() -> new BusinessWorkerNotFoundException("KeycloakId " +keycloakId+ " non associato a questo business id: " +addExpenseReq.getBusinessId()));
+        BusinessWorker businessWorker = businessWorkerRepository.findById_Business_IdAndId_Worker_KeycloakIdAndDisabledFalse(addExpenseReq.getBusinessId(), keycloakId).
+                orElseThrow(() -> new BusinessWorkerNotFoundException("KeycloakId " +keycloakId+ " disabilitato per questo business id: " +addExpenseReq.getBusinessId()));
         Supplier supplier = supplierRepository.findByNameAndWorkFor_Id(addExpenseReq.getSupplierName(), addExpenseReq.getBusinessId()).
                 orElseThrow(() -> new SupplierNotFoundException("Non esiste questo fornitore " +addExpenseReq.getSupplierName()+" associato a questo businessId: " +addExpenseReq.getBusinessId()));
         Expense expense = new Expense();
