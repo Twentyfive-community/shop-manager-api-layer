@@ -23,7 +23,7 @@ public class BusinessWorkerService {
     private final BusinessWorkerRepository businessWorkerRepository;
 
     public boolean existsByKeycloakIdAndBusinessId(String keycloakId, Long businessId) {
-        if(!businessWorkerRepository.existsById_Business_IdAndId_Worker_KeycloakIdAndDisabledTrue(businessId, keycloakId)) {
+        if(!businessWorkerRepository.existsById_Business_IdAndId_Worker_KeycloakIdAndDisabledFalse(businessId, keycloakId)) {
             throw new BusinessWorkerNotFoundException("KeycloakId " +keycloakId+ " not associated or suspended at business id: " +businessId);
         }
         return true;
