@@ -33,7 +33,11 @@ public class Supplier {
     @JoinColumn(name = "business_id", nullable = false)
     private Business business;
 
+    @ManyToOne
+    @JoinColumn(name ="group_id")
+    private SupplierGroup group;
 
     @OneToMany(mappedBy = "supplier")
     private Set<Expense> expenses;
+
 }
