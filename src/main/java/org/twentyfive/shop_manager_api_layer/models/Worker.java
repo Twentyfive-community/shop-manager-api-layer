@@ -54,7 +54,7 @@ public class Worker {
     private List<CashRegister> updatedRegisters;
 
     public String getFullName() {
-        return firstName + " " + lastName;
+        return lastName + " " + firstName;
     }
 
 }
