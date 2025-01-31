@@ -7,16 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddInExistentBusinessReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddWorkerReq;
-import org.twentyfive.shop_manager_api_layer.dtos.requests.ChangeRoleReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateWorkerReq;
-import org.twentyfive.shop_manager_api_layer.exceptions.RoleNotFoundException;
 import org.twentyfive.shop_manager_api_layer.exceptions.WorkerNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.WorkerMapperService;
 import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.BusinessWorker;
-import org.twentyfive.shop_manager_api_layer.models.ids.BusinessWorkerId;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
-import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Role;
@@ -74,6 +70,19 @@ public class WorkerService {
 
     public Page<SimpleWorker> getAllByBusinessId(Long id,int page, int size){
         List<BusinessWorker> businessWorkers = businessWorkerService.getAllBusinessWorkersById(id);
+
+        //Sorting con compare personalizzato
+        businessWorkers.sort((w1, w2) -> {
+            // Ordina per Ruolo
+            int ruoloComparison = Role.compareRole(w1.getRole(), w2.getRole());
+            if (ruoloComparison != 0) {
+                return ruoloComparison;
+            }
+            // Se i ruoli sono uguali, ordina per nome
+            return w1.getId().getWorker().getLastName().compareTo(w2.getId().getWorker().getLastName());
+        });
+
+
         List<SimpleWorker> simpleWorkers = workerMapperService.mapListSimpleWorkersFromBusinessWorkers(businessWorkers);
 
         Pageable pageable = PageRequest.of(page, size);

@@ -55,4 +55,14 @@ public enum Role {
         }
         return roles;
     }
+
+    public static int compareRole(Role role1, Role role2) {
+        // Definisce l'ordine personalizzato per Ruolo
+        if (role1 == Role.SUPER_BOSS && role2 != Role.SUPER_BOSS) return -1;
+        if (role1 == Role.BOSS && role2 == Role.EMPLOYEE) return -1;
+        if (role1 == Role.EMPLOYEE && role2 == Role.SUPER_BOSS) return 1;
+        if (role1 == Role.EMPLOYEE && role2 == Role.BOSS) return 1;
+        if (role1 == role2) return 0;
+        return 1;
+    }
 }
