@@ -13,6 +13,7 @@ import org.twentyfive.shop_manager_api_layer.mappers.SupplierMapperService;
 import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplier;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 
 import java.util.List;
@@ -47,10 +48,11 @@ public class SupplierService {
         return true;
     }
 
-    public Page<String> getAll(Long id,int page, int size) {
-        List<String> supplierNames = supplierRepository.findSupplierNamesByBusinessIdAndDisabledFalse(id);
+    public Page<SimpleSupplier> getAll(Long id, int page, int size) {
+        List<Supplier> suppliers = supplierRepository.findByBusinessIdAndDisabledFalseOrderByNameAsc(id);
+        List<SimpleSupplier> simpleSuppliers = supplierMapperService.mapListSupplierToListSimpleSupplier(suppliers);
         Pageable pageable = PageRequest.of(page, size);
-        return PageUtility.convertListToPage(supplierNames,pageable);
+        return PageUtility.convertListToPage(simpleSuppliers,pageable);
     }
 
     public List<String> search(Long id, String value){

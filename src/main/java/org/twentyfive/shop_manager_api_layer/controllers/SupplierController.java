@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateSupplierReq;
 import org.twentyfive.shop_manager_api_layer.services.SupplierService;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplier;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class SupplierController {
     private final SupplierService supplierService;
 
     @GetMapping("/getAll/{id}")
-    public ResponseEntity<Page<String>> getAll(@PathVariable Long id,
+    public ResponseEntity<Page<SimpleSupplier>> getAll(@PathVariable Long id,
                                                        @RequestParam(value = "page", defaultValue = "0") int page,
                                                        @RequestParam(value = "size", defaultValue = "25") int size) {
         return ResponseEntity.ok().body(supplierService.getAll(id,page,size));

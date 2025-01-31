@@ -16,16 +16,11 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     @Query("SELECT s.name FROM Supplier s " +
             "WHERE s.business.id = :businessId " +
             "AND s.disabled = false " +
-            "ORDER BY s.name ASC")
-    List<String> findSupplierNamesByBusinessIdAndDisabledFalse(@Param("businessId") Long businessId);
-
-    @Query("SELECT s.name FROM Supplier s " +
-            "WHERE s.business.id = :businessId " +
-            "AND s.disabled = false " +
             "AND LOWER(s.name) LIKE LOWER(CONCAT('%', :value, '%')) " +
             "ORDER BY s.name ASC")
     List<String> findSupplierNamesByBusinessIdAndValueAndDisabledFalse(@Param("businessId") Long businessId, @Param("value") String value);
 
+    List<Supplier> findByBusinessIdAndDisabledFalseOrderByNameAsc(Long businessId);
     Optional<Supplier> findByBusinessIdAndName(Long businessId, String name);
 
     boolean existsByBusinessIdAndName(Long businessId, String name);
