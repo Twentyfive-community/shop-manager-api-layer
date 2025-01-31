@@ -8,8 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SimpleWorker {
+
     private String firstName;
     private String lastName;
+    private String fullName;
 
     private boolean enabled;
     private String role;
