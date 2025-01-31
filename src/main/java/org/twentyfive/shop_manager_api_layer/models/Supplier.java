@@ -1,16 +1,16 @@
 package org.twentyfive.shop_manager_api_layer.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.Set;
 
 @Entity
-@Table(name ="suppliers")
+@Table(name ="suppliers",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name", "business_id"})
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,11 +26,13 @@ public class Supplier {
     @Column(name = "address") // indirizzo del fornitore
     private String address;
 
-    // Rimosso @ManyToMany perché ora la relazione passa tramite la tabella di join
-    @ToString.Exclude
-    @JsonIgnore
-    @OneToMany(mappedBy = "id.supplier", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<BusinessSupplier> businessSuppliers;
+    @Column(name = "disabled")
+    private boolean disabled = false;
+
+    @ManyToOne
+    @JoinColumn(name = "business_id", nullable = false)
+    private Business business;
+
 
     @OneToMany(mappedBy = "supplier")
     private Set<Expense> expenses;

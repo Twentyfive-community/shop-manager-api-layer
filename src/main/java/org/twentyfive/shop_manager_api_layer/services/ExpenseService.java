@@ -11,11 +11,9 @@ import org.twentyfive.shop_manager_api_layer.exceptions.BusinessWorkerNotFoundEx
 import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
 import org.twentyfive.shop_manager_api_layer.exceptions.SupplierNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.ExpenseMapperService;
-import org.twentyfive.shop_manager_api_layer.models.BusinessSupplier;
 import org.twentyfive.shop_manager_api_layer.models.BusinessWorker;
 import org.twentyfive.shop_manager_api_layer.models.Expense;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
-import org.twentyfive.shop_manager_api_layer.repositories.BusinessSupplierRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.ExpenseRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
@@ -33,12 +31,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpenseService {
 
-    private final SupplierRepository supplierRepository;
-    private final BusinessSupplierRepository businessSupplierRepository;
     private final ExpenseRepository expenseRepository;
-    private final BusinessWorkerRepository businessWorkerRepository;
 
     private final ExpenseMapperService expenseMapperService;
+    private final BusinessWorkerService businessWorkerService;
+    private final SupplierService supplierService;
 
     public Boolean add(AddExpenseReq addExpenseReq) throws IOException {
         Expense expense = createExpenseFromAddExpenseReq(addExpenseReq);
@@ -57,14 +54,12 @@ public class ExpenseService {
     private Expense createExpenseFromAddExpenseReq(AddExpenseReq addExpenseReq) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
 
-        BusinessWorker businessWorker = businessWorkerRepository.findById_Business_IdAndId_Worker_KeycloakIdAndDisabledFalse(addExpenseReq.getBusinessId(), keycloakId).
-                orElseThrow(() -> new BusinessWorkerNotFoundException("KeycloakId " +keycloakId+ " disabilitato per questo business id: " +addExpenseReq.getBusinessId()));
-        BusinessSupplier businessSupplier = businessSupplierRepository.findById_Business_IdAndId_Supplier_Name(addExpenseReq.getBusinessId(),addExpenseReq.getSupplierName()).
-                orElseThrow(() -> new SupplierNotFoundException("Non esiste questo fornitore " +addExpenseReq.getSupplierName()+" associato a questo businessId: " +addExpenseReq.getBusinessId()));
+        BusinessWorker businessWorker = businessWorkerService.getByBusinessIdAndKeycloakId(addExpenseReq.getBusinessId(), keycloakId);
+        Supplier supplier = supplierService.getByIdAndName(addExpenseReq.getBusinessId(), addExpenseReq.getSupplierName());
         Expense expense = new Expense();
 
         expense.setWorker(businessWorker);
-        expense.setSupplier(businessSupplier.getId().getSupplier());
+        expense.setSupplier(supplier);
 
         expense.setRefTime(addExpenseReq.getRefTime());
         expense.setPaymentMethod(PaymentMethod.fromValue(addExpenseReq.getPaymentMethod()));

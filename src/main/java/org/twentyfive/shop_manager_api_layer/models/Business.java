@@ -32,8 +32,8 @@ public class Business {
 
     @ToString.Exclude
     @JsonIgnore
-    @OneToMany(mappedBy = "id.business", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<BusinessSupplier> businessSuppliers;
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Supplier> suppliers;
 
     @ToString.Exclude
     @JsonIgnore

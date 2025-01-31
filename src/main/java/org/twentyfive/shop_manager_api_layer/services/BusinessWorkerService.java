@@ -68,4 +68,8 @@ public class BusinessWorkerService {
         return businessWorkerRepository.save(businessWorker) != null;
 
     }
+    public BusinessWorker getByBusinessIdAndKeycloakId(Long businessId, String keycloakId){
+        return businessWorkerRepository.findById_Business_IdAndId_Worker_KeycloakIdAndDisabledFalse(businessId, keycloakId).
+                orElseThrow(() -> new BusinessWorkerNotFoundException("KeycloakId " +keycloakId+ " disabilitato per questo business id: " +businessId));
+    }
 }
