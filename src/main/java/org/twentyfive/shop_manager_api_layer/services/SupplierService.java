@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateSupplierReq;
+import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
 import org.twentyfive.shop_manager_api_layer.exceptions.SupplierNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.SupplierMapperService;
 import org.twentyfive.shop_manager_api_layer.models.Business;
@@ -55,6 +57,11 @@ public class SupplierService {
         return supplierRepository.findSupplierNamesByBusinessIdAndValueAndDisabledFalse(id, value);
     }
 
+    public Supplier getById(Long id){
+        return supplierRepository.findById(id).
+                orElseThrow(() -> new SupplierNotFoundException("Supplier with id " + id + " not found"));
+    }
+
     public Supplier getByIdAndName(Long businessId, String name){
         return supplierRepository.findByBusinessIdAndName(businessId,name).
                 orElseThrow(() -> new SupplierNotFoundException("Supplier not found with this businessId: "+businessId+" and name: "+name));
@@ -68,5 +75,21 @@ public class SupplierService {
 
     private Boolean existsByBusinessIdAndName(Long id, String name) {
         return supplierRepository.existsByBusinessIdAndName(id,name);
+    }
+
+    private Boolean existsByBusinessIdAndSupplierId(Long businessId, Long id) {
+        return supplierRepository.existsByBusinessIdAndId(businessId,id);
+    }
+
+    public Boolean update(Long id, UpdateSupplierReq updateSupplierReq) {
+        if (existsByBusinessIdAndSupplierId(id,updateSupplierReq.getId())){
+            Supplier supplier = getById(updateSupplierReq.getId());
+
+            supplier.setName(updateSupplierReq.getName());
+            supplier.setAddress(updateSupplierReq.getAddress());
+
+            return supplierRepository.save(supplier) != null;
+        }
+        throw new ExpenseNotFoundException("Supplier not found with this id: " +updateSupplierReq.getId()+" or it's not associated to this businessId: "+id);
     }
 }

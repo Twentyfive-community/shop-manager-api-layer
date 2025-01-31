@@ -29,4 +29,6 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     Optional<Supplier> findByBusinessIdAndName(Long businessId, String name);
 
     boolean existsByBusinessIdAndName(Long businessId, String name);
+
+    Boolean existsByBusinessIdAndId(Long businessId, Long id);
 }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateSupplierReq;
 import org.twentyfive.shop_manager_api_layer.services.SupplierService;
 
 import java.util.List;
@@ -32,7 +33,11 @@ public class SupplierController {
     public ResponseEntity<Boolean> add(@PathVariable("id")Long id, @RequestBody AddSupplierReq addSupplierReq) {
         return ResponseEntity.ok().body(supplierService.add(id,addSupplierReq));
     }
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<Boolean> update(@PathVariable("id")Long id, @RequestBody UpdateSupplierReq updateSupplierReq) {
+        return ResponseEntity.ok().body(supplierService.update(id,updateSupplierReq));
 
+    }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> deleteByName(@PathVariable("id")Long id, @RequestParam("name") String name) {
         return ResponseEntity.ok().body(supplierService.deleteByName(id,name));
