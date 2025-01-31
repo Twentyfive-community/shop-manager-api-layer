@@ -11,7 +11,7 @@ public class SimpleWorker {
     private String firstName;
     private String lastName;
 
-    private boolean disabled;
+    private boolean enabled;
     private String role;
 
     private String email;

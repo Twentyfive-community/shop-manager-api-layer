@@ -21,7 +21,7 @@ public class WorkerMapperService {
     public List<SimpleWorker> mapListSimpleWorkersFromBusinessWorkers (List<BusinessWorker> businessWorkers) {
         List<SimpleWorker> simpleWorkers = new ArrayList<>();
         for (BusinessWorker businessWorker : businessWorkers) {
-            SimpleWorker simpleWorker = mapSimpleWorkerFromBusinessWorker(businessWorker.getId().getWorker(),businessWorker.getRole().getRole());
+            SimpleWorker simpleWorker = mapSimpleWorkerFromBusinessWorker(businessWorker);
             simpleWorkers.add(simpleWorker);
         }
         return simpleWorkers;
@@ -38,14 +38,14 @@ public class WorkerMapperService {
         return simpleWorker;
     }
 
-    private SimpleWorker mapSimpleWorkerFromBusinessWorker(Worker worker,String role) {
+    private SimpleWorker mapSimpleWorkerFromBusinessWorker(BusinessWorker businessWorker) {
         SimpleWorker simpleWorker = new SimpleWorker();
-        simpleWorker.setFirstName(worker.getFirstName());
-        simpleWorker.setLastName(worker.getLastName());
-        simpleWorker.setDisabled(simpleWorker.isDisabled());
-        simpleWorker.setRole(role);
-        simpleWorker.setEmail(worker.getEmail());
-        simpleWorker.setPhoneNumber(worker.getPhoneNumber());
+        simpleWorker.setFirstName(businessWorker.getId().getWorker().getFirstName());
+        simpleWorker.setLastName(businessWorker.getId().getWorker().getLastName());
+        simpleWorker.setEnabled(!(businessWorker.isDisabled()));
+        simpleWorker.setRole(businessWorker.getRole().getRole());
+        simpleWorker.setEmail(businessWorker.getId().getWorker().getEmail());
+        simpleWorker.setPhoneNumber(businessWorker.getId().getWorker().getPhoneNumber());
         return simpleWorker;
     }
 
