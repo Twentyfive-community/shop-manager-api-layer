@@ -25,30 +25,48 @@ public class SupplierService {
     private final SupplierRepository supplierRepository;
 
     public boolean add(Long id,AddSupplierReq addSupplierReq) {
+
+        if (existsByBusinessIdAndName(id, addSupplierReq.getName())){
+            Supplier supplier = getByIdAndName(id, addSupplierReq.getName());
+            supplier.setDisabled(false);
+            return supplierRepository.save(supplier) != null;
+        }
+
         Business business = businessService.getById(id);
         return supplierMapperService.createSupplierFromNameAndAddressAndBusiness(addSupplierReq.getName(), addSupplierReq.getAddress(), business) != null;
     }
 
     public Boolean addList(Long id,List<AddSupplierReq> addSupplierReqList) {
-        Business business = businessService.getById(id);
+
         for (AddSupplierReq addSupplierReq : addSupplierReqList) {
-            supplierMapperService.createSupplierFromNameAndAddressAndBusiness(addSupplierReq.getName(), addSupplierReq.getAddress(), business);
+            add(id,addSupplierReq);
         }
+
         return true;
     }
 
     public Page<String> getAll(Long id,int page, int size) {
-        List<String> supplierNames = supplierRepository.findSupplierNamesByBusinessId(id);
+        List<String> supplierNames = supplierRepository.findSupplierNamesByBusinessIdAndDisabledFalse(id);
         Pageable pageable = PageRequest.of(page, size);
         return PageUtility.convertListToPage(supplierNames,pageable);
     }
-    public List<String> search(Long id, String value){
-        return supplierRepository.findSupplierNamesByBusinessIdAndValue(id, value);
 
+    public List<String> search(Long id, String value){
+        return supplierRepository.findSupplierNamesByBusinessIdAndValueAndDisabledFalse(id, value);
     }
 
     public Supplier getByIdAndName(Long businessId, String name){
         return supplierRepository.findByBusinessIdAndName(businessId,name).
                 orElseThrow(() -> new SupplierNotFoundException("Supplier not found with this businessId: "+businessId+" and name: "+name));
+    }
+
+    public Boolean deleteByName(Long id, String name) {
+        Supplier supplier = getByIdAndName(id, name);
+        supplier.setDisabled(true);
+        return supplierRepository.save(supplier) != null;
+    }
+
+    private Boolean existsByBusinessIdAndName(Long id, String name) {
+        return supplierRepository.existsByBusinessIdAndName(id,name);
     }
 }

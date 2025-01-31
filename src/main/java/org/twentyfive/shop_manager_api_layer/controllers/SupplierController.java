@@ -33,6 +33,11 @@ public class SupplierController {
         return ResponseEntity.ok().body(supplierService.add(id,addSupplierReq));
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteByName(@PathVariable("id")Long id, @RequestParam("name") String name) {
+        return ResponseEntity.ok().body(supplierService.deleteByName(id,name));
+    }
+
     @GetMapping("/search/{id}")
     public ResponseEntity<List<String>> search(@PathVariable("id")Long id, @RequestParam(value ="value",defaultValue = "") String value){
         return ResponseEntity.ok().body(supplierService.search(id, value));
