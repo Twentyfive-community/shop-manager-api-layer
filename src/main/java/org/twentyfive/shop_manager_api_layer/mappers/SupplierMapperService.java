@@ -42,7 +42,7 @@ public class SupplierMapperService {
     }
 
     private SimpleSupplier mapSupplierToSimpleSupplier(Supplier supplier) {
-        return new SimpleSupplier(supplier.getId(), supplier.getName(),supplier.getGroup().getName() != null ? supplier.getGroup().getName() : "-");
+        return new SimpleSupplier(supplier.getId(), supplier.getName(),supplier.getGroup() != null ? supplier.getGroup().getName() : "-");
     }
 
     public SupplierGroup mapSupplierGroupFromBusinessAndSuppliers(String name,Business business, List<Supplier> suppliers) {
