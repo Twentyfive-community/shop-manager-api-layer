@@ -17,9 +17,6 @@ import java.util.Optional;
 public class DailyActivityMapperService {
 
     private final CashRegisterRepository cashRegisterRepository;
-
-    private final ExpenseService expenseService;
-
     private final EntryMapperService entryMapperService;
     private final ComposedEntryMapperService composedEntryMapperService;
 
@@ -31,7 +28,6 @@ public class DailyActivityMapperService {
 
         while(dateRef.isAfter(dateRange.getStart()) || dateRef.isEqual(dateRange.getStart())) {
             DailyActivities dailyActivity = mapDailyActivitiesFromTimeSlots(id,timeSlots,dateRef);
-            dailyActivity.setDailyCost(expenseService.getTotalExpensesByDate(id,dateRef));
             dailyActivities.add(dailyActivity);
             dateRef = dateRef.minusDays(1);
         }
