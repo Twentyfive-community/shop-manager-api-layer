@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository;
+import org.twentyfive.shop_manager_api_layer.services.ExpenseService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 
 import java.time.LocalDate;
@@ -17,6 +18,8 @@ public class DailyActivityMapperService {
 
     private final CashRegisterRepository cashRegisterRepository;
 
+    private final ExpenseService expenseService;
+
     private final EntryMapperService entryMapperService;
     private final ComposedEntryMapperService composedEntryMapperService;
 
@@ -28,6 +31,7 @@ public class DailyActivityMapperService {
 
         while(dateRef.isAfter(dateRange.getStart()) || dateRef.isEqual(dateRange.getStart())) {
             DailyActivities dailyActivity = mapDailyActivitiesFromTimeSlots(id,timeSlots,dateRef);
+            dailyActivity.setDailyCost(expenseService.getTotalExpensesByDate(id,dateRef));
             dailyActivities.add(dailyActivity);
             dateRef = dateRef.minusDays(1);
         }

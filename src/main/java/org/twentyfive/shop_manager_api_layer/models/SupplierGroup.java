@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,7 +28,7 @@ public class SupplierGroup {
     @OneToMany(mappedBy = "group")
     @JsonIgnore
     @ToString.Exclude
-    private Set<Supplier> suppliers;
+    private List<Supplier> suppliers;
 
     @ManyToOne
     @JoinColumn(name = "business_id", nullable = false)

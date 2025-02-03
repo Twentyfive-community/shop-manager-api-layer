@@ -16,6 +16,8 @@ import java.util.Locale;
 @NoArgsConstructor
 public class DailyActivities {
     private LocalDate rawDate;
+    private String dailyCost;
+    private String dailyTotalRevenue;
     private List<DailyCashRegister> cashRegisters;
     //TODO lista della spesa
 
@@ -24,7 +26,7 @@ public class DailyActivities {
         return rawDate.format(formatter);
     }
 
-    public String getDailyTotalRevenue(){
+    public String getDailyTotalRevenue() {
         double sum = cashRegisters.stream()
                 .mapToDouble(register -> {
                     try {
@@ -33,15 +35,37 @@ public class DailyActivities {
                         DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
                         return df.parse(register.getTotal()).doubleValue();
                     } catch (Exception e) {
-                        // Gestione errori nel parsing (ad esempio se `total` è null o malformattato)
                         e.printStackTrace();
                         return 0.0;
                     }
                 })
                 .sum();
-        // Formatta il risultato e assegna a `dailyTotalRevenue`
+
+        // Converte dailyCost in double (se non è null)
+        double cost = 0.0;
+        if (dailyCost != null && !dailyCost.isEmpty()) {
+            try {
+                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ITALY);
+                DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
+                cost = df.parse(dailyCost).doubleValue();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Calcola il totale netto
+        double netTotal = sum - cost;
+
+        // Formatta il risultato
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ITALY);
         DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
-        return df.format(sum);
+        return df.format(netTotal);
+    }
+
+
+    public void setDailyCost(double dailyCost) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ITALY);
+        DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
+        this.dailyCost = df.format(dailyCost);
     }
 }

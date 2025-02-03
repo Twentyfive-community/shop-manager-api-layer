@@ -15,4 +15,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
             LocalDate startDate,
             LocalDate endDate
     );
+
+    List<Expense> findByWorker_Id_Business_IdAndRefTime(Long id, LocalDate date);
 }

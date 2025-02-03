@@ -8,6 +8,7 @@ import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierGroupReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateSupplierReq;
 import org.twentyfive.shop_manager_api_layer.services.SupplierService;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplierGroup;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplier;
 
 import java.util.List;
@@ -31,6 +32,10 @@ public class SupplierController {
         return ResponseEntity.ok().body(supplierService.addList(id,addSupplierReq));
     }
 
+    @GetMapping("/searchGroups/{id}")
+    public ResponseEntity<List<String>> searchGroups(@PathVariable("id")Long id, @RequestParam(value ="value",defaultValue = "") String value){
+        return ResponseEntity.ok().body(supplierService.searchGroups(id, value));
+    }
     @PostMapping("/add/{id}")
     public ResponseEntity<Boolean> add(@PathVariable("id")Long id, @RequestBody AddSupplierReq addSupplierReq) {
         return ResponseEntity.ok().body(supplierService.add(id,addSupplierReq));
@@ -38,6 +43,12 @@ public class SupplierController {
     @PostMapping("/addGroup/{id}")
     public ResponseEntity<Boolean> addGroup(@PathVariable("id")Long id, @RequestBody AddSupplierGroupReq addSupplierGroupReq) {
         return ResponseEntity.ok().body(supplierService.addGroup(id,addSupplierGroupReq));
+    }
+    @PostMapping("/getAllGroups/{id}")
+    public ResponseEntity<Page<SimpleSupplierGroup>> getAllGroups(@PathVariable Long id,
+                                                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                  @RequestParam(value = "size", defaultValue = "25") int size) {
+        return ResponseEntity.ok().body(supplierService.getAllGroups(id,page,size));
     }
     @DeleteMapping("/deleteGroup/{id}")
     public ResponseEntity<Boolean> deleteGroupById(@PathVariable("id")Long id,@RequestParam("name") String name) {

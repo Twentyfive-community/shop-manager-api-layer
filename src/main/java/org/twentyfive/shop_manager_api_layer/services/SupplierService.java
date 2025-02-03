@@ -17,6 +17,7 @@ import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.models.SupplierGroup;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierGroupRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplierGroup;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplier;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 
@@ -54,11 +55,11 @@ public class SupplierService {
     public Boolean addGroup(Long id, AddSupplierGroupReq addSupplierGroupReq) {
         Business business = businessService.getById(id);
         SupplierGroup supplierGroup;
-        Set<Supplier> suppliers = getAllByBusinessIdAndNameList(id, addSupplierGroupReq.getSupplierNames());
+        List<Supplier> suppliers = getAllByBusinessIdAndNameList(id, addSupplierGroupReq.getSupplierNames());
 
         if (supplierGroupService.existsByBusinessIdAndName(id, addSupplierGroupReq.getName())){
             supplierGroup = supplierGroupService.findByBusinessIdAndName(id, addSupplierGroupReq.getName());
-            Set<Supplier> oldSuppliers = supplierGroup.getSuppliers();
+            List<Supplier> oldSuppliers = supplierGroup.getSuppliers();
 
             for (Supplier supplier : oldSuppliers) {
                 supplier.setGroup(null);
@@ -95,11 +96,16 @@ public class SupplierService {
         return PageUtility.convertListToPage(simpleSuppliers,pageable);
     }
 
-    public Set<Supplier> getAllByBusinessIdAndNameList(Long businessId, List<String> supplierNames){
+    public List<Supplier> getAllByBusinessIdAndNameList(Long businessId, List<String> supplierNames){
         return supplierRepository.findAllByBusinessIdAndNameInAndDisabledFalse(businessId, supplierNames);
     }
     public List<String> search(Long id, String value){
         return supplierRepository.findSupplierNamesByBusinessIdAndValueAndDisabledFalse(id, value);
+    }
+
+
+    public List<String> searchGroups(Long id, String value) {
+        return null;
     }
 
     public Supplier getById(Long id){
@@ -153,7 +159,7 @@ public class SupplierService {
 
         SupplierGroup group = supplierGroupService.findByBusinessIdAndName(id,name);
 
-        Set<Supplier> suppliers = group.getSuppliers();
+        List<Supplier> suppliers = group.getSuppliers();
         for (Supplier supplier : suppliers) {
             supplier.setGroup(null);
         }
@@ -164,4 +170,15 @@ public class SupplierService {
 
         return true;
     }
+
+    public Page<SimpleSupplierGroup> getAllGroups(Long id, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        List<SupplierGroup> supplierGroups = supplierGroupRepository.findAllByBusiness_Id(id);
+
+        List<SimpleSupplierGroup> simpleSupplierGroups = supplierMapperService.mapListSimpleSupplierGroupFromListSupplierGroup(supplierGroups);
+
+        return PageUtility.convertListToPage(simpleSupplierGroups,pageable);
+    }
+
 }

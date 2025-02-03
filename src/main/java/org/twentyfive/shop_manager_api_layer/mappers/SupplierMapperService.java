@@ -6,7 +6,9 @@ import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.models.SupplierGroup;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
+import org.twentyfive.shop_manager_api_layer.services.SupplierService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplier;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplierGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class SupplierMapperService {
+
     private final SupplierRepository supplierRepository;
 
     public Supplier createSupplierFromAddSupplierReq(String name, SupplierGroup supplierGroup,Business business) {
@@ -39,14 +42,34 @@ public class SupplierMapperService {
     }
 
     private SimpleSupplier mapSupplierToSimpleSupplier(Supplier supplier) {
-        return new SimpleSupplier(supplier.getId(), supplier.getName(),supplier.getGroup().getName());
+        return new SimpleSupplier(supplier.getId(), supplier.getName(),supplier.getGroup().getName() != null ? supplier.getGroup().getName() : "-");
     }
 
-    public SupplierGroup mapSupplierGroupFromBusinessAndSuppliers(String name,Business business, Set<Supplier> suppliers) {
+    public SupplierGroup mapSupplierGroupFromBusinessAndSuppliers(String name,Business business, List<Supplier> suppliers) {
         SupplierGroup supplierGroup = new SupplierGroup();
         supplierGroup.setBusiness(business);
         supplierGroup.setName(name);
         supplierGroup.setSuppliers(suppliers);
         return supplierGroup;
+    }
+
+    public List<SimpleSupplierGroup> mapListSimpleSupplierGroupFromListSupplierGroup(List<SupplierGroup> supplierGroups) {
+        List<SimpleSupplierGroup> simpleSupplierGroups = new ArrayList<>();
+
+        for (SupplierGroup supplierGroup : supplierGroups) {
+            SimpleSupplierGroup simpleSupplierGroup = mapSimpleSupplierGroupFromSupplierGroup(supplierGroup);
+            simpleSupplierGroups.add(simpleSupplierGroup);
+        }
+        return simpleSupplierGroups;
+    }
+
+    private SimpleSupplierGroup mapSimpleSupplierGroupFromSupplierGroup(SupplierGroup supplierGroup) {
+        SimpleSupplierGroup simpleSupplierGroup = new SimpleSupplierGroup();
+
+        simpleSupplierGroup.setName(supplierGroup.getName());
+        simpleSupplierGroup.setSuppliers(mapListSupplierToListSimpleSupplier(supplierGroup.getSuppliers()));
+
+        return simpleSupplierGroup;
+
     }
 }

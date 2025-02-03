@@ -7,16 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddExpenseReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateExpenseReq;
-import org.twentyfive.shop_manager_api_layer.exceptions.BusinessWorkerNotFoundException;
 import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
-import org.twentyfive.shop_manager_api_layer.exceptions.SupplierNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.ExpenseMapperService;
 import org.twentyfive.shop_manager_api_layer.models.BusinessWorker;
 import org.twentyfive.shop_manager_api_layer.models.Expense;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
-import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.ExpenseRepository;
-import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.DateRange;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.ExpenseDTO;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.PaymentMethod;
@@ -24,6 +20,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtili
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -49,6 +46,18 @@ public class ExpenseService {
         expense.setId(updateExpenseReq.getId());
 
         return expenseRepository.save(expense) != null;
+    }
+
+    public List<Expense> getAllByDate(Long id,LocalDate date) {
+        return expenseRepository.findByWorker_Id_Business_IdAndRefTime(id,date);
+    }
+
+    public double getTotalExpensesByDate(Long id,LocalDate date) {
+        List<Expense> expenses = getAllByDate(id, date);
+
+        return expenses.stream().mapToDouble(Expense::getValue).sum();
+
+
     }
 
     private Expense createExpenseFromAddExpenseReq(AddExpenseReq addExpenseReq) throws IOException {

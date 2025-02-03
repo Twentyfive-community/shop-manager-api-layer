@@ -28,5 +28,5 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
     Boolean existsByBusinessIdAndId(Long businessId, Long id);
 
-    Set<Supplier> findAllByBusinessIdAndNameInAndDisabledFalse(Long businessId, List<String> supplierNames);
+    List<Supplier> findAllByBusinessIdAndNameInAndDisabledFalse(Long businessId, List<String> supplierNames);
 }
