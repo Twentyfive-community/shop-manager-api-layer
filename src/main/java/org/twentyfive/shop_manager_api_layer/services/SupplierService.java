@@ -105,7 +105,7 @@ public class SupplierService {
 
 
     public List<String> searchGroups(Long id, String value) {
-        return null;
+        return supplierGroupRepository.findSupplierGroupNamesByBusinessIdAndValue(id,value);
     }
 
     public Supplier getById(Long id){
