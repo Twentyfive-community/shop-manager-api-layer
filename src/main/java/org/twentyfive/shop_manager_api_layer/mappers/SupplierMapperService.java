@@ -68,7 +68,6 @@ public class SupplierMapperService {
 
         simpleSupplierGroup.setName(supplierGroup.getName());
         simpleSupplierGroup.setSuppliers(mapListSupplierToListSimpleSupplier(supplierGroup.getSuppliers()));
-
         return simpleSupplierGroup;
 
     }

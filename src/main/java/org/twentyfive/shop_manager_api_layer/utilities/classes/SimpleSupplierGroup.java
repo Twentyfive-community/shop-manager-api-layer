@@ -14,4 +14,8 @@ public class SimpleSupplierGroup {
     private String name;
 
     private List<SimpleSupplier> suppliers;
+
+    public int setCountSupplier(){
+        return this.suppliers.size();
+    }
 }
