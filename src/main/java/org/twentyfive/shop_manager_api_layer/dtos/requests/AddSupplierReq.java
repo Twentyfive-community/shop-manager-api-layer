@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AddSupplierReq {
     private String name;
-    private String address;
+    private String groupName;
 }

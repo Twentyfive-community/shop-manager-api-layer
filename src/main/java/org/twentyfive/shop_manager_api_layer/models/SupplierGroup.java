@@ -1,25 +1,36 @@
 package org.twentyfive.shop_manager_api_layer.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
+@Entity
+@Table(name ="supplier_groups",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name", "business_id"})
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name ="supplier_groups")
+@EqualsAndHashCode(exclude = {"business", "suppliers"})
 public class SupplierGroup {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "name")
     private String name;
 
     @OneToMany(mappedBy = "group")
+    @JsonIgnore
+    @ToString.Exclude
     private Set<Supplier> suppliers;
 
-
+    @ManyToOne
+    @JoinColumn(name = "business_id", nullable = false)
+    private Business business;
 }
+

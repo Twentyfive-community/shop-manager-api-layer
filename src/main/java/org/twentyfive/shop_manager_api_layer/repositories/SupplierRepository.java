@@ -8,6 +8,7 @@ import org.twentyfive.shop_manager_api_layer.models.Supplier;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Repository
@@ -26,4 +27,6 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     boolean existsByBusinessIdAndName(Long businessId, String name);
 
     Boolean existsByBusinessIdAndId(Long businessId, Long id);
+
+    Set<Supplier> findAllByBusinessIdAndNameInAndDisabledFalse(Long businessId, List<String> supplierNames);
 }

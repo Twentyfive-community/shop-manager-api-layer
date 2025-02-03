@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierGroupReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateSupplierReq;
 import org.twentyfive.shop_manager_api_layer.services.SupplierService;
@@ -34,6 +35,15 @@ public class SupplierController {
     public ResponseEntity<Boolean> add(@PathVariable("id")Long id, @RequestBody AddSupplierReq addSupplierReq) {
         return ResponseEntity.ok().body(supplierService.add(id,addSupplierReq));
     }
+    @PostMapping("/addGroup/{id}")
+    public ResponseEntity<Boolean> addGroup(@PathVariable("id")Long id, @RequestBody AddSupplierGroupReq addSupplierGroupReq) {
+        return ResponseEntity.ok().body(supplierService.addGroup(id,addSupplierGroupReq));
+    }
+    @DeleteMapping("/deleteGroup/{id}")
+    public ResponseEntity<Boolean> deleteGroupById(@PathVariable("id")Long id,@RequestParam("name") String name) {
+        return ResponseEntity.ok().body(supplierService.deleteGroup(id, name));
+    }
+
     @PatchMapping("/update/{id}")
     public ResponseEntity<Boolean> update(@PathVariable("id")Long id, @RequestBody UpdateSupplierReq updateSupplierReq) {
         return ResponseEntity.ok().body(supplierService.update(id,updateSupplierReq));

@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateSupplierReq {
-    private Long id;
+public class AddSupplierGroupReq {
     private String name;
-    private String groupName;
+    private List<String> supplierNames;
 }

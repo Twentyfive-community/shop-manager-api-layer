@@ -1,9 +1,8 @@
 package org.twentyfive.shop_manager_api_layer.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
@@ -14,16 +13,17 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"business", "group", "expenses"})
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id") // ID del fornitore, generata automaticamente
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false) // nome del fornitore
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "address") // indirizzo del fornitore
+    @Column(name = "address")
     private String address;
 
     @Column(name = "disabled")
@@ -38,6 +38,8 @@ public class Supplier {
     private SupplierGroup group;
 
     @OneToMany(mappedBy = "supplier")
+    @JsonIgnore
+    @ToString.Exclude
     private Set<Expense> expenses;
-
 }
+

@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
+import org.twentyfive.shop_manager_api_layer.models.SupplierGroup;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -16,12 +18,12 @@ import java.util.List;
 public class SupplierMapperService {
     private final SupplierRepository supplierRepository;
 
-    public Supplier createSupplierFromNameAndAddressAndBusiness(String name, String address, Business business) {
+    public Supplier createSupplierFromAddSupplierReq(String name, SupplierGroup supplierGroup,Business business) {
         // Crea il fornitore
         Supplier supplier = new Supplier();
         supplier.setName(name);
-        supplier.setAddress(address);
         supplier.setBusiness(business);
+        supplier.setGroup(supplierGroup);
         Supplier supplierSaved = supplierRepository.save(supplier);
 
         return supplierSaved;
@@ -38,5 +40,13 @@ public class SupplierMapperService {
 
     private SimpleSupplier mapSupplierToSimpleSupplier(Supplier supplier) {
         return new SimpleSupplier(supplier.getId(), supplier.getName());
+    }
+
+    public SupplierGroup mapSupplierGroupFromBusinessAndSuppliers(String name,Business business, Set<Supplier> suppliers) {
+        SupplierGroup supplierGroup = new SupplierGroup();
+        supplierGroup.setBusiness(business);
+        supplierGroup.setName(name);
+        supplierGroup.setSuppliers(suppliers);
+        return supplierGroup;
     }
 }
