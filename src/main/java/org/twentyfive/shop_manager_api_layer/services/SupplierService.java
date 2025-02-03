@@ -1,6 +1,5 @@
 package org.twentyfive.shop_manager_api_layer.services;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
