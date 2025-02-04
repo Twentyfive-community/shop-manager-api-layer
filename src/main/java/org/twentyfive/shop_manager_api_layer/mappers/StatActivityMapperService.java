@@ -3,6 +3,7 @@ package org.twentyfive.shop_manager_api_layer.mappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
+import org.twentyfive.shop_manager_api_layer.models.EntryClosure;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
@@ -32,6 +33,31 @@ public class StatActivityMapperService {
             dateRef = dateRef.minusDays(1);
         }
         return dailyActivities;
+    }
+
+    public PeriodClosure mapPeriodClosureFromTimeSlots(Long id, List<SimpleTimeSlot> timeSlots, DateRange dateRange) {
+        double totalPosClosures = 0.0;
+        double totalClosingReceipts = 0.0;
+
+        for (SimpleTimeSlot timeSlot : timeSlots) {
+            List<CashRegister> cashRegisters = cashRegisterRepository.findAllByRefTimeBetweenAndTimeSlot_NameAndBusiness_Id(dateRange.getStart(), dateRange.getEnd(), timeSlot.getName(), id);
+
+            totalPosClosures += cashRegisters.stream()
+                    .flatMap(cashRegister -> cashRegister.getEntryClosures().stream())
+                    .filter(entryClosure -> "Chiusura POS".equals(entryClosure.getId().getEntry().getLabel()))
+                    .mapToDouble(EntryClosure::getValue)
+                    .sum();
+
+            if ("Cena".equals(timeSlot.getName())) {
+                totalClosingReceipts += cashRegisters.stream()
+                        .flatMap(cashRegister -> cashRegister.getEntryClosures().stream())
+                        .filter(entryClosure -> "Chiusura scontrini".equals(entryClosure.getId().getEntry().getLabel()))
+                        .mapToDouble(EntryClosure::getValue)
+                        .sum();
+            }
+        }
+        return new PeriodClosure(totalClosingReceipts,totalPosClosures,dateRange);
+
     }
 
     public List<PeriodStatCashRegister> mapListPeriodCashRegisterFromTimeSlots(Long id, List<SimpleTimeSlot> timeSlots, DateRange dateRange) {

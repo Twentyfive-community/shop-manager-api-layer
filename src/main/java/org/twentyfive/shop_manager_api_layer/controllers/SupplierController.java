@@ -45,7 +45,7 @@ public class SupplierController {
     public ResponseEntity<Boolean> addGroup(@PathVariable("id")Long id, @RequestBody AddSupplierGroupReq addSupplierGroupReq) {
         return ResponseEntity.ok().body(supplierService.addGroup(id,addSupplierGroupReq));
     }
-    @PostMapping("/getAllGroups/{id}")
+    @GetMapping("/getAllGroups/{id}")
     public ResponseEntity<Page<SimpleSupplierGroup>> getAllGroups(@PathVariable Long id,
                                                                   @RequestParam(value = "page", defaultValue = "0") int page,
                                                                   @RequestParam(value = "size", defaultValue = "25") int size) {

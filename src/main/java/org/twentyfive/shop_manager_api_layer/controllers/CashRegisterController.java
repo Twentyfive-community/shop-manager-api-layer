@@ -7,12 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCashRegisterReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotReq;
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetPeriodStatRes;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.CashRegisterDTO;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.services.CashRegisterService;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.CashRegisterDetails;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.DailyActivities;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.DateRange;
 
 import java.io.IOException;
 import java.util.List;
@@ -54,4 +51,12 @@ public class CashRegisterController {
                                                                           @RequestBody DateRange dateRange) {
         return ResponseEntity.ok().body(cashRegisterService.getPeriodDailyActivities(id,page,size,dateRange));
     }
+
+    @PostMapping("/getPeriodClosure/{id}")
+    public ResponseEntity<PeriodClosure> getPeriodClosure(@PathVariable("id") Long id,
+                                                          @RequestBody DateRange dateRange) {
+        return ResponseEntity.ok().body(cashRegisterService.getPeriodClosure(id,dateRange));
+    }
+
+
 }

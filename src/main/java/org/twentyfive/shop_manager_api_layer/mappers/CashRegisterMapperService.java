@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.CashRegisterDTO;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.CashRegisterDetails;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.DateRange;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.PeriodClosure;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
 
 import java.util.ArrayList;
 import java.util.List;
