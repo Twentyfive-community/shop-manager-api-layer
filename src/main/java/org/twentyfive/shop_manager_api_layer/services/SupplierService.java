@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierGroupReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateSupplierReq;
+import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAutoCompleteSupplierRes;
 import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
 import org.twentyfive.shop_manager_api_layer.exceptions.SupplierNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.SupplierMapperService;
@@ -22,6 +23,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSup
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -98,9 +100,25 @@ public class SupplierService {
     public List<Supplier> getAllByBusinessIdAndNameList(Long businessId, List<String> supplierNames){
         return supplierRepository.findAllByBusinessIdAndNameInAndDisabledFalse(businessId, supplierNames);
     }
-    public List<String> search(Long id, String value){
-        return supplierRepository.findSupplierNamesByBusinessIdAndValueAndDisabledFalse(id, value);
+
+    public List<GetAutoCompleteSupplierRes> search(Long businessId, String value) {
+        List<Supplier> suppliers = supplierRepository.findSuppliersByBusinessIdAndValueAndDisabledFalse(businessId, value);
+
+        return suppliers.stream()
+                .map(supplier -> {
+                    String groupName = (supplier.getGroup() != null && supplier.getGroup().getName() != null)
+                            ? supplier.getGroup().getName()
+                            : null;
+
+                    String formattedName = (groupName != null && !groupName.isEmpty())
+                            ? groupName + " - " + supplier.getName()
+                            : supplier.getName();
+
+                    return new GetAutoCompleteSupplierRes(formattedName, supplier.getName());
+                })
+                .collect(Collectors.toList());
     }
+
 
 
     public List<String> searchGroups(Long id, String value) {

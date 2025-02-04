@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierGroupReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateSupplierReq;
+import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAutoCompleteSupplierRes;
 import org.twentyfive.shop_manager_api_layer.services.SupplierService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplierGroup;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplier;
@@ -66,7 +67,7 @@ public class SupplierController {
     }
 
     @GetMapping("/search/{id}")
-    public ResponseEntity<List<String>> search(@PathVariable("id")Long id, @RequestParam(value ="value",defaultValue = "") String value){
+    public ResponseEntity<List<GetAutoCompleteSupplierRes>> search(@PathVariable("id")Long id, @RequestParam(value ="value",defaultValue = "") String value){
         return ResponseEntity.ok().body(supplierService.search(id, value));
     }
 }
