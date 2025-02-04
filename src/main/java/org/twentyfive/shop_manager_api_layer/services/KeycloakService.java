@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.clients.KeycloakClient;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleWorker;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.KeycloakUtility;
 import twentyfive.twentyfiveadapter.dto.keycloakDto.KeycloakUser;

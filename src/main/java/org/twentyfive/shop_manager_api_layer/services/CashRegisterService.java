@@ -15,6 +15,7 @@ import org.twentyfive.shop_manager_api_layer.mappers.CashRegisterMapperService;
 import org.twentyfive.shop_manager_api_layer.models.*;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterLogRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 import java.io.IOException;

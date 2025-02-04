@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddTimeSlotReq;
 import org.twentyfive.shop_manager_api_layer.services.TimeSlotService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.CheckCashRegister;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleTimeSlot;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
 
 import java.time.LocalDate;
 import java.util.List;

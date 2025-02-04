@@ -6,8 +6,8 @@ import org.twentyfive.shop_manager_api_layer.models.ComposedEntry;
 import org.twentyfive.shop_manager_api_layer.models.Entry;
 import org.twentyfive.shop_manager_api_layer.models.EntryClosure;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.EntryClosureDetails;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleEntryClosure;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleEntryClosure;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleGenericEntry;
 
 import java.util.ArrayList;
 import java.util.List;

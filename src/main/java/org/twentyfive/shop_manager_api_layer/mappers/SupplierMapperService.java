@@ -6,13 +6,11 @@ import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.models.SupplierGroup;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
-import org.twentyfive.shop_manager_api_layer.services.SupplierService;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplier;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplierGroup;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplier;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplierGroup;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @Service

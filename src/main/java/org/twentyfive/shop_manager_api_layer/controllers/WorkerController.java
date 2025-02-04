@@ -3,16 +3,12 @@ package org.twentyfive.shop_manager_api_layer.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddInExistentBusinessReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddWorkerReq;
-import org.twentyfive.shop_manager_api_layer.dtos.requests.ChangeRoleReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateWorkerReq;
-import org.twentyfive.shop_manager_api_layer.services.KeycloakService;
 import org.twentyfive.shop_manager_api_layer.services.WorkerService;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
-import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleWorker;
 
 import java.io.IOException;
 import java.util.List;

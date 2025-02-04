@@ -8,8 +8,8 @@ import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierGroupReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateSupplierReq;
 import org.twentyfive.shop_manager_api_layer.services.SupplierService;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplierGroup;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleSupplier;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplierGroup;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplier;
 
 import java.util.List;
 

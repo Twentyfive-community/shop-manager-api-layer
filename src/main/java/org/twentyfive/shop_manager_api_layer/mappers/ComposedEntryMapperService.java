@@ -3,8 +3,9 @@ package org.twentyfive.shop_manager_api_layer.mappers;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.models.ComposedEntry;
 import org.twentyfive.shop_manager_api_layer.models.ComposedEntryClosure;
-import org.twentyfive.shop_manager_api_layer.models.Entry;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleComposedEntryClosure;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleGenericEntry;
 
 import java.util.ArrayList;
 import java.util.List;

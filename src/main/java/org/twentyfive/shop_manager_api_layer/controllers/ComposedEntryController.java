@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddComposedEntryReq;
-import org.twentyfive.shop_manager_api_layer.models.ComposedEntry;
 import org.twentyfive.shop_manager_api_layer.services.ComposedEntryService;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleGenericEntry;
 
 import java.util.List;
 

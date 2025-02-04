@@ -2,7 +2,7 @@ package org.twentyfive.shop_manager_api_layer.mappers;
 
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.models.TimeSlot;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleTimeSlot;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
 
 import java.util.ArrayList;
 import java.util.List;

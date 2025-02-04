@@ -11,12 +11,9 @@ import org.twentyfive.shop_manager_api_layer.models.ids.ComposedEntryClosureId;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.ComposedEntryClosureRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.ComposedEntryRepository;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleComposedEntryClosure;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleGenericEntry;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

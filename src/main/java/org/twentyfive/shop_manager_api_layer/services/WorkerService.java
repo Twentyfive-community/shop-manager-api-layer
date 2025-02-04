@@ -14,7 +14,7 @@ import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.BusinessWorker;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleWorker;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Role;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;

@@ -7,13 +7,7 @@ import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAllPaymentMethodR
 import org.twentyfive.shop_manager_api_layer.exceptions.BusinessNotFoundException;
 import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.repositories.BusinessRepository;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.CheckCashRegister;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleTimeSlot;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.PaymentMethod;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

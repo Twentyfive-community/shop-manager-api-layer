@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.models.BusinessWorker;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleWorker;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Role;
 
 import java.util.ArrayList;

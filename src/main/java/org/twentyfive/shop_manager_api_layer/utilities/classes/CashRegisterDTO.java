@@ -3,8 +3,8 @@ package org.twentyfive.shop_manager_api_layer.utilities.classes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.twentyfive.shop_manager_api_layer.models.ComposedEntryClosure;
-import org.twentyfive.shop_manager_api_layer.models.EntryClosure;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleComposedEntryClosure;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleEntryClosure;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

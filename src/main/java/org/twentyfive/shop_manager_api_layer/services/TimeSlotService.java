@@ -10,7 +10,7 @@ import org.twentyfive.shop_manager_api_layer.models.TimeSlot;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.TimeSlotRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.CheckCashRegister;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleTimeSlot;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

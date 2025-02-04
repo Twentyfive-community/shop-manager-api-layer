@@ -10,7 +10,7 @@ import org.twentyfive.shop_manager_api_layer.mappers.EntryMapperService;
 import org.twentyfive.shop_manager_api_layer.models.*;
 import org.twentyfive.shop_manager_api_layer.models.ids.EntryClosureId;
 import org.twentyfive.shop_manager_api_layer.repositories.*;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleGenericEntry;
 
 import java.util.HashSet;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.twentyfive.shop_manager_api_layer.utilities.classes;
+package org.twentyfive.shop_manager_api_layer.utilities.classes.simples;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

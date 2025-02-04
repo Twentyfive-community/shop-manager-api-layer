@@ -7,8 +7,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleWorker;
-import twentyfive.twentyfiveadapter.dto.keycloakDto.KeycloakRole;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleWorker;
 import twentyfive.twentyfiveadapter.dto.keycloakDto.PasswordUpdateKeycloak;
 import twentyfive.twentyfiveadapter.dto.keycloakDto.TokenRequest;
 

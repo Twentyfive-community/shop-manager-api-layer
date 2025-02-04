@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddEntryReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetAllTotalEntriesReq;
 import org.twentyfive.shop_manager_api_layer.services.EntryService;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SimpleGenericEntry;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleGenericEntry;
 
 import java.util.List;
 
