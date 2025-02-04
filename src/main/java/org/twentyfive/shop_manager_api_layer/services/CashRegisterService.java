@@ -7,7 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCashRegisterReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotReq;
-import org.twentyfive.shop_manager_api_layer.mappers.DailyActivityMapperService;
+import org.twentyfive.shop_manager_api_layer.dtos.responses.GetPeriodStatRes;
+import org.twentyfive.shop_manager_api_layer.mappers.StatActivityMapperService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 import org.twentyfive.shop_manager_api_layer.exceptions.CashRegisterNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.CashRegisterMapperService;
@@ -36,7 +37,7 @@ public class CashRegisterService {
     private final ComposedEntryService composedEntryService;
 
     private final CashRegisterMapperService cashRegisterMapperService;
-    private final DailyActivityMapperService dailyActivityMapperService;
+    private final StatActivityMapperService statActivityMapperService;
 
     public Boolean add(AddCashRegisterReq addCashRegisterReq) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
@@ -124,8 +125,24 @@ public class CashRegisterService {
 
         List<SimpleTimeSlot> timeSlots = timeSlotService.getAllByBusinessId(id);
         Pageable pageable = PageRequest.of(page, size);
-        List<DailyActivities> dailyActivities = dailyActivityMapperService.mapListDailyActivitiesFromTimeSlots(id,timeSlots,dateRange);
+        List<DailyActivities> dailyActivities = statActivityMapperService.mapListDailyActivitiesFromTimeSlots(id,timeSlots,dateRange);
         return PageUtility.convertListToPage(dailyActivities,pageable);
+    }
+
+    public GetPeriodStatRes getPeriodStat(Long id, DateRange dateRange) {
+        GetPeriodStatRes res = new GetPeriodStatRes();
+
+        res.setPeriod(dateRange.getStart(), dateRange.getEnd());
+
+        List<SimpleTimeSlot> timeSlots = timeSlotService.getAllByBusinessId(id);
+
+        List<PeriodStatCashRegister> periodStatCashRegisters = statActivityMapperService.mapListPeriodCashRegisterFromTimeSlots(id,timeSlots,dateRange);
+
+        res.setPeriodStatCashRegisters(periodStatCashRegisters);
+
+        return res;
+
+
     }
 
 

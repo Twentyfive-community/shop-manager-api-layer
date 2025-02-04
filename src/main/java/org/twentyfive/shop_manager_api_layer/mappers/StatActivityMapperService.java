@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository;
-import org.twentyfive.shop_manager_api_layer.services.ExpenseService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 
 import java.time.LocalDate;
@@ -14,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class DailyActivityMapperService {
+public class StatActivityMapperService {
 
     private final CashRegisterRepository cashRegisterRepository;
     private final EntryMapperService entryMapperService;
@@ -32,6 +31,35 @@ public class DailyActivityMapperService {
             dateRef = dateRef.minusDays(1);
         }
         return dailyActivities;
+    }
+
+    public List<PeriodStatCashRegister> mapListPeriodCashRegisterFromTimeSlots(Long id, List<SimpleTimeSlot> timeSlots, DateRange dateRange) {
+        List<PeriodStatCashRegister> periodStatCashRegisters = new ArrayList<>();
+
+        for (SimpleTimeSlot timeSlot : timeSlots) {
+            PeriodStatCashRegister periodStatCashRegister = mapPeriodCashRegisterFromTimeSlotAndDateRange(id,timeSlot,dateRange);
+            periodStatCashRegisters.add(periodStatCashRegister);
+        }
+        return periodStatCashRegisters;
+    }
+
+    private PeriodStatCashRegister mapPeriodCashRegisterFromTimeSlotAndDateRange(Long id,SimpleTimeSlot timeSlot, DateRange dateRange) {
+        PeriodStatCashRegister periodStatCashRegister = new PeriodStatCashRegister();
+
+        periodStatCashRegister.setTimeSlot(timeSlot.getName());
+
+        List<CashRegister> cashRegisters = cashRegisterRepository.findAllByRefTimeBetweenAndTimeSlot_NameAndBusiness_Id(dateRange.getStart(), dateRange.getEnd(), timeSlot.getName(), id);
+
+        double totalRevenue = cashRegisters.stream()
+                .mapToDouble(cashRegister -> cashRegister.getReport().getTotalRevenue())
+                .sum();
+        double totalCost = cashRegisters.stream().mapToDouble(cashRegister -> cashRegister.getReport().getTotalCost()).sum();
+
+        periodStatCashRegister.setTotalRevenue(totalRevenue);
+        periodStatCashRegister.setTotalCost(totalCost);
+        periodStatCashRegister.setTotal(totalRevenue,totalCost);
+
+        return periodStatCashRegister;
     }
 
     private DailyActivities mapDailyActivitiesFromTimeSlots(Long id,List<SimpleTimeSlot> timeSlots, LocalDate dateRef) {
