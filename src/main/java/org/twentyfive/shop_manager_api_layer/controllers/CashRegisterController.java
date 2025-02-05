@@ -38,12 +38,6 @@ public class CashRegisterController {
         return ResponseEntity.ok().body(cashRegisterService.add(addCashRegisterReq));
     }
 
-    @PostMapping("/getPeriodStat/{id}")
-    public ResponseEntity<GetPeriodStatRes> getPeriodStat(@PathVariable("id") Long id,
-                                                          @RequestBody DateRange dateRange){
-        return ResponseEntity.ok().body(cashRegisterService.getPeriodStat(id,dateRange));
-    }
-
     @PostMapping("/getPeriodDailyActivities/{id}")
     public ResponseEntity<Page<DailyActivities>> getPeriodDailyActivities(@PathVariable("id") Long id,
                                                                           @RequestParam(value = "page", defaultValue = "0") int page,
@@ -52,11 +46,22 @@ public class CashRegisterController {
         return ResponseEntity.ok().body(cashRegisterService.getPeriodDailyActivities(id,page,size,dateRange));
     }
 
+    @PostMapping("/getPeriodStat/{id}")
+    public ResponseEntity<GetPeriodStatRes> getPeriodStat(@PathVariable("id") Long id,
+                                                          @RequestBody DateRange dateRange){
+        return ResponseEntity.ok().body(cashRegisterService.getPeriodStat(id,dateRange));
+    }
+
     @PostMapping("/getPeriodClosure/{id}")
     public ResponseEntity<PeriodClosure> getPeriodClosure(@PathVariable("id") Long id,
                                                           @RequestBody DateRange dateRange) {
         return ResponseEntity.ok().body(cashRegisterService.getPeriodClosure(id,dateRange));
     }
 
+    @PostMapping("/getPeriodFinancialSummary/{id}")
+    public ResponseEntity<PeriodFinancialSummary> getPeriodFinancialSummary(@PathVariable("id") Long id,
+                                                          @RequestBody DateRange dateRange) {
+        return ResponseEntity.ok().body(cashRegisterService.getPeriodFinancialSummary(id,dateRange));
+    }
 
 }

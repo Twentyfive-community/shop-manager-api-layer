@@ -51,7 +51,15 @@ public class ExpenseService {
     public List<Expense> getAllByDate(Long id,LocalDate date) {
         return expenseRepository.findByWorker_Id_Business_IdAndRefTime(id,date);
     }
-
+    public double getTotalExpensesInDateRange(Long id, DateRange dateRange) {
+        double totalCost = 0.0;
+        LocalDate dateRef = dateRange.getStart();
+        while (!dateRef.isAfter(dateRange.getEnd())) {
+            totalCost +=getTotalExpensesByDate(id, dateRef);
+            dateRef = dateRef.plusDays(1);
+        }
+        return totalCost;
+    }
     public double getTotalExpensesByDate(Long id,LocalDate date) {
         List<Expense> expenses = getAllByDate(id, date);
 

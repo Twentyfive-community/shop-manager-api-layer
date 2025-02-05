@@ -2,9 +2,12 @@ package org.twentyfive.shop_manager_api_layer.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.dtos.responses.GetPeriodStatRes;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.models.EntryClosure;
+import org.twentyfive.shop_manager_api_layer.models.Expense;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository;
+import org.twentyfive.shop_manager_api_layer.services.ExpenseService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
 
@@ -21,13 +24,15 @@ public class StatActivityMapperService {
     private final EntryMapperService entryMapperService;
     private final ComposedEntryMapperService composedEntryMapperService;
 
+    private final ExpenseService expenseService;
+
     public List<DailyActivities> mapListDailyActivitiesFromTimeSlots(Long id,
                                                                      List<SimpleTimeSlot> timeSlots,
                                                                      DateRange dateRange) {
         List<DailyActivities> dailyActivities = new ArrayList<>();
         LocalDate dateRef = dateRange.getEnd();
 
-        while(dateRef.isAfter(dateRange.getStart()) || dateRef.isEqual(dateRange.getStart())) {
+        while (!dateRef.isBefore(dateRange.getStart())) {
             DailyActivities dailyActivity = mapDailyActivitiesFromTimeSlots(id,timeSlots,dateRef);
             dailyActivities.add(dailyActivity);
             dateRef = dateRef.minusDays(1);
@@ -69,6 +74,22 @@ public class StatActivityMapperService {
         }
         return periodStatCashRegisters;
     }
+
+    public PeriodFinancialSummary mapPeriodFinancialSummaryFromTimeSlots(Long id, List<SimpleTimeSlot> timeSlots, DateRange dateRange) {
+        PeriodFinancialSummary periodFinancialSummary = new PeriodFinancialSummary();
+
+        GetPeriodStatRes getPeriodStatRes = new GetPeriodStatRes();
+        getPeriodStatRes.setPeriodStatCashRegisters(mapListPeriodCashRegisterFromTimeSlots(id,timeSlots,dateRange));
+
+        periodFinancialSummary.setPeriod(dateRange.getStart(), dateRange.getEnd());
+        periodFinancialSummary.setTotalRevenueCashRegisters(getPeriodStatRes.getPeriodTotalRevenue());
+        periodFinancialSummary.setTotalCostCashRegisters(getPeriodStatRes.getPeriodCost());
+
+
+        periodFinancialSummary.setTotalCostSuppliers(expenseService.getTotalExpensesInDateRange(id,dateRange));
+        return periodFinancialSummary;
+    }
+
 
     private PeriodStatCashRegister mapPeriodCashRegisterFromTimeSlotAndDateRange(Long id,SimpleTimeSlot timeSlot, DateRange dateRange) {
         PeriodStatCashRegister periodStatCashRegister = new PeriodStatCashRegister();
@@ -126,4 +147,5 @@ public class StatActivityMapperService {
         }
         return dailyCashRegister;
     }
+
 }

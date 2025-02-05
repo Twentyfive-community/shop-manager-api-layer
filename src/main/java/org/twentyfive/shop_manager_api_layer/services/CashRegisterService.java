@@ -158,4 +158,9 @@ public class CashRegisterService {
         return statActivityMapperService.mapPeriodClosureFromTimeSlots(id, timeSlots,dateRange);
 
     }
+
+    public PeriodFinancialSummary getPeriodFinancialSummary(Long id, DateRange dateRange) {
+        List<SimpleTimeSlot> timeSlots = timeSlotService.getAllByBusinessId(id);
+        return statActivityMapperService.mapPeriodFinancialSummaryFromTimeSlots(id, timeSlots,dateRange);
+    }
 }
