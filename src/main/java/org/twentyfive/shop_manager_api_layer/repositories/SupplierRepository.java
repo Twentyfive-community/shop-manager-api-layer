@@ -40,7 +40,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     List<String> findAllNamesByIdAndDisabledFalse(Long id);
 
     @Query("""
-    SELECT new org.twentyfive.shop_manager_api_layer.utilities.classes.SupplierWithGroup(
+    SELECT new org.twentyfive.shop_manager_api_layer.utilities.classes.SupplierAndGroupCheck(
          s.name,
          CASE 
              WHEN (:name IS NOT NULL AND g IS NOT NULL AND g.name = :name) THEN true 
