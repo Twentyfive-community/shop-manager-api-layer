@@ -19,7 +19,7 @@ import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.models.SupplierGroup;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierGroupRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SupplierWithGroup;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SupplierAndGroupCheck;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplierGroup;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplier;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
@@ -205,8 +205,8 @@ public class SupplierService {
 
 
     public GetSupplierWithoutGroupReq getSupplierWithoutGroup(Long id, String name) {
-        List<SupplierWithGroup> supplierWithGroups = supplierRepository.getAllNamesByBusiness_IdAndGroupNullOrNameAndDisabledFalse(id, name);
-        return new GetSupplierWithoutGroupReq(supplierWithGroups);
+        List<SupplierAndGroupCheck> supplierAndGroupChecks = supplierRepository.getAllNamesByBusiness_IdAndGroupNullOrNameAndDisabledFalse(id, name);
+        return new GetSupplierWithoutGroupReq(supplierAndGroupChecks);
 
     }
 }

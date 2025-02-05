@@ -3,7 +3,7 @@ package org.twentyfive.shop_manager_api_layer.dtos.requests;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SupplierWithGroup;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SupplierAndGroupCheck;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetSupplierWithoutGroupReq {
-    private List<SupplierWithGroup> suppliersWithGroup;
+    private List<SupplierAndGroupCheck> suppliersWithGroup;
 }

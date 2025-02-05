@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SupplierWithGroup {
+public class SupplierAndGroupCheck {
     private String name;
     private boolean checked;
 }

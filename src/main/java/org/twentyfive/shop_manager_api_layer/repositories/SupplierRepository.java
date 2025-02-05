@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.SupplierWithGroup;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SupplierAndGroupCheck;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,5 +61,5 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
          END,
          s.name ASC
 """)
-    List<SupplierWithGroup> getAllNamesByBusiness_IdAndGroupNullOrNameAndDisabledFalse(@Param("id") Long id, @Param("name") String name);
+    List<SupplierAndGroupCheck> getAllNamesByBusiness_IdAndGroupNullOrNameAndDisabledFalse(@Param("id") Long id, @Param("name") String name);
 }
