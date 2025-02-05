@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierGroupReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.GetSupplierWithoutGroupReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateSupplierReq;
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAutoCompleteSupplierRes;
 import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
@@ -18,6 +19,7 @@ import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.models.SupplierGroup;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierGroupRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.SupplierWithGroup;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplierGroup;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplier;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
@@ -202,4 +204,9 @@ public class SupplierService {
     }
 
 
+    public GetSupplierWithoutGroupReq getSupplierWithoutGroup(Long id, String name) {
+        List<SupplierWithGroup> supplierWithGroups = supplierRepository.getAllNamesByBusiness_IdAndGroupNullOrNameAndDisabledFalse(id, name);
+        return new GetSupplierWithoutGroupReq(supplierWithGroups);
+
+    }
 }
