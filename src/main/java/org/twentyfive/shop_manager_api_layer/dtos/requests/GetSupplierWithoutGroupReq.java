@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetSupplierWithoutGroupReq {
-    private List<SupplierAndGroupCheck> suppliersWithGroup;
+    private List<SupplierAndGroupCheck> supplierAndGroupCheck;
 }
