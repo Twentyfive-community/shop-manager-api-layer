@@ -70,4 +70,9 @@ public class SupplierController {
     public ResponseEntity<List<GetAutoCompleteSupplierRes>> search(@PathVariable("id")Long id, @RequestParam(value ="value",defaultValue = "") String value){
         return ResponseEntity.ok().body(supplierService.search(id, value));
     }
+
+    @GetMapping("/getAllNames/{id}")
+    public ResponseEntity<List<String>> getAllNames(@PathVariable("id")Long id){
+        return ResponseEntity.ok().body(supplierService.getAllNames(id));
+    }
 }

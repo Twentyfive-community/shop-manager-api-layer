@@ -119,6 +119,9 @@ public class SupplierService {
                 .collect(Collectors.toList());
     }
 
+    public List<String> getAllNames(Long id) {
+        return supplierRepository.findAllNamesByIdAndDisabledFalse(id);
+    }
 
 
     public List<String> searchGroups(Long id, String value) {
@@ -197,5 +200,6 @@ public class SupplierService {
 
         return PageUtility.convertListToPage(simpleSupplierGroups,pageable);
     }
+
 
 }

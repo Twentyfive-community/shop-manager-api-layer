@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAutoCompleteSupplierRes;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
 
 import java.util.List;
@@ -33,4 +32,9 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 """)
     List<Supplier> findSuppliersByBusinessIdAndValueAndDisabledFalse(@Param("businessId") Long businessId, @Param("value") String value);
 
+    @Query("SELECT s.name " +
+            "FROM Supplier s " +
+            "WHERE s.business.id = :id AND s.disabled = false " +
+            "ORDER BY s.name ASC")
+    List<String> findAllNamesByIdAndDisabledFalse(Long id);
 }
