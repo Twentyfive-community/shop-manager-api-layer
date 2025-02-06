@@ -2,6 +2,7 @@ package org.twentyfive.shop_manager_api_layer.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.exceptions.SupplierAlreadyExistsException;
 import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.models.SupplierGroup;
