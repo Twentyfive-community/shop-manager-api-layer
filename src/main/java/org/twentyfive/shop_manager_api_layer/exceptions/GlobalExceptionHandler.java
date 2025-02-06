@@ -82,6 +82,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(SupplierAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleSupplierAlreadyExistsException(SupplierAlreadyExistsException ex) {
+        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+    }
+
+
+
 
     @Data
     @AllArgsConstructor

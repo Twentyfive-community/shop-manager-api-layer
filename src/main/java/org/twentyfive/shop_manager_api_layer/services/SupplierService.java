@@ -43,7 +43,7 @@ public class SupplierService {
     public boolean add(Long id,AddSupplierReq addSupplierReq) {
         SupplierGroup supplierGroup = supplierGroupService.optFindByBusinessIdAndName(id, addSupplierReq.getGroupName()).orElse(null);
 
-        if (existsByBusinessIdAndName(id, addSupplierReq.getName())){
+        if (existsByBusinessIdAndNameAndDisabledTrue(id, addSupplierReq.getName())){
             Supplier supplier = getByIdAndName(id, addSupplierReq.getName());
             supplier.setGroup(supplierGroup);
             supplier.setDisabled(false);
@@ -151,8 +151,8 @@ public class SupplierService {
     }
 
 
-    private Boolean existsByBusinessIdAndName(Long id, String name) {
-        return supplierRepository.existsByBusinessIdAndName(id,name);
+    private Boolean existsByBusinessIdAndNameAndDisabledTrue(Long id, String name) {
+        return supplierRepository.existsByBusinessIdAndNameAndDisabledTrue(id,name);
     }
 
     private Boolean existsByBusinessIdAndSupplierId(Long businessId, Long id) {

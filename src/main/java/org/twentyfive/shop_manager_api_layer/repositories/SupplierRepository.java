@@ -17,7 +17,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     List<Supplier> findByBusinessIdAndDisabledFalseOrderByNameAsc(Long businessId);
     Optional<Supplier> findByBusinessIdAndName(Long businessId, String name);
 
-    boolean existsByBusinessIdAndName(Long businessId, String name);
+    boolean existsByBusinessIdAndNameAndDisabledTrue(Long businessId, String name);
 
     Boolean existsByBusinessIdAndId(Long businessId, Long id);
 
@@ -62,4 +62,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
          s.name ASC
 """)
     List<SupplierAndGroupCheck> getAllNamesByBusiness_IdAndGroupNullOrNameAndDisabledFalse(@Param("id") Long id, @Param("name") String name);
+
+    boolean existsByBusiness_IdAndName(Long id, String name);
+
 }

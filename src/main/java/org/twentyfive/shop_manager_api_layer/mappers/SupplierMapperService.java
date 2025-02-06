@@ -25,9 +25,10 @@ public class SupplierMapperService {
         supplier.setName(name);
         supplier.setBusiness(business);
         supplier.setGroup(supplierGroup);
-        Supplier supplierSaved = supplierRepository.save(supplier);
-
-        return supplierSaved;
+        if (!(supplierRepository.existsByBusiness_IdAndName(business.getId(),name))){
+            return supplierRepository.save(supplier);
+        }
+        throw new SupplierAlreadyExistsException("Supplier does exist with this name " +name+" and businessId: "+business.getId());
     }
 
     public List<SimpleSupplier> mapListSupplierToListSimpleSupplier(List<Supplier> suppliers) {
