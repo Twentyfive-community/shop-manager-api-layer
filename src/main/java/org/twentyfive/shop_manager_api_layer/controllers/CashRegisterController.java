@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCashRegisterReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotReq;
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetPeriodStatRes;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.PeriodStat;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.services.CashRegisterService;
@@ -45,23 +46,10 @@ public class CashRegisterController {
                                                                           @RequestBody DateRange dateRange) {
         return ResponseEntity.ok().body(cashRegisterService.getPeriodDailyActivities(id,page,size,dateRange));
     }
-
-    @PostMapping("/getPeriodStat/{id}")
-    public ResponseEntity<GetPeriodStatRes> getPeriodStat(@PathVariable("id") Long id,
-                                                          @RequestBody DateRange dateRange){
-        return ResponseEntity.ok().body(cashRegisterService.getPeriodStat(id,dateRange));
-    }
-
-    @PostMapping("/getPeriodClosure/{id}")
-    public ResponseEntity<PeriodClosure> getPeriodClosure(@PathVariable("id") Long id,
-                                                          @RequestBody DateRange dateRange) {
-        return ResponseEntity.ok().body(cashRegisterService.getPeriodClosure(id,dateRange));
-    }
-
-    @PostMapping("/getPeriodFinancialSummary/{id}")
-    public ResponseEntity<PeriodFinancialSummary> getPeriodFinancialSummary(@PathVariable("id") Long id,
-                                                          @RequestBody DateRange dateRange) {
-        return ResponseEntity.ok().body(cashRegisterService.getPeriodFinancialSummary(id,dateRange));
+    @PostMapping("/getPeriodStats/{id}")
+    public ResponseEntity<GetPeriodStatRes> getPeriodStats(@PathVariable("id") Long id,
+                                                           @RequestBody DateRange dateRange) {
+        return ResponseEntity.ok().body(cashRegisterService.getPeriodStats(id,dateRange));
     }
 
 }

@@ -2,10 +2,9 @@ package org.twentyfive.shop_manager_api_layer.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.twentyfive.shop_manager_api_layer.dtos.responses.GetPeriodStatRes;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.PeriodStat;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.models.EntryClosure;
-import org.twentyfive.shop_manager_api_layer.models.Expense;
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository;
 import org.twentyfive.shop_manager_api_layer.services.ExpenseService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
@@ -78,12 +77,12 @@ public class StatActivityMapperService {
     public PeriodFinancialSummary mapPeriodFinancialSummaryFromTimeSlots(Long id, List<SimpleTimeSlot> timeSlots, DateRange dateRange) {
         PeriodFinancialSummary periodFinancialSummary = new PeriodFinancialSummary();
 
-        GetPeriodStatRes getPeriodStatRes = new GetPeriodStatRes();
-        getPeriodStatRes.setPeriodStatCashRegisters(mapListPeriodCashRegisterFromTimeSlots(id,timeSlots,dateRange));
+        PeriodStat periodStat = new PeriodStat();
+        periodStat.setPeriodStatCashRegisters(mapListPeriodCashRegisterFromTimeSlots(id,timeSlots,dateRange));
 
         periodFinancialSummary.setPeriod(dateRange.getStart(), dateRange.getEnd());
-        periodFinancialSummary.setTotalRevenueCashRegisters(getPeriodStatRes.getPeriodTotalRevenue());
-        periodFinancialSummary.setTotalCostCashRegisters(getPeriodStatRes.getPeriodCost());
+        periodFinancialSummary.setTotalRevenueCashRegisters(periodStat.getPeriodTotalRevenue());
+        periodFinancialSummary.setTotalCostCashRegisters(periodStat.getPeriodCost());
 
 
         periodFinancialSummary.setTotalCostSuppliers(expenseService.getTotalExpensesInDateRange(id,dateRange));

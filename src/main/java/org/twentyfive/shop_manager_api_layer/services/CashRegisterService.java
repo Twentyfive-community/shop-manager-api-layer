@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCashRegisterReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotReq;
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetPeriodStatRes;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.PeriodStat;
 import org.twentyfive.shop_manager_api_layer.mappers.StatActivityMapperService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 import org.twentyfive.shop_manager_api_layer.exceptions.CashRegisterNotFoundException;
@@ -130,8 +131,8 @@ public class CashRegisterService {
         return PageUtility.convertListToPage(dailyActivities,pageable);
     }
 
-    public GetPeriodStatRes getPeriodStat(Long id, DateRange dateRange) {
-        GetPeriodStatRes res = new GetPeriodStatRes();
+    public PeriodStat getPeriodStat(Long id, DateRange dateRange) {
+        PeriodStat res = new PeriodStat();
 
         res.setPeriod(dateRange.getStart(), dateRange.getEnd());
 
@@ -162,5 +163,9 @@ public class CashRegisterService {
     public PeriodFinancialSummary getPeriodFinancialSummary(Long id, DateRange dateRange) {
         List<SimpleTimeSlot> timeSlots = timeSlotService.getAllByBusinessId(id);
         return statActivityMapperService.mapPeriodFinancialSummaryFromTimeSlots(id, timeSlots,dateRange);
+    }
+
+    public GetPeriodStatRes getPeriodStats(Long id, DateRange dateRange) {
+        return new GetPeriodStatRes(getPeriodStat(id,dateRange),getPeriodClosure(id,dateRange),getPeriodFinancialSummary(id,dateRange));
     }
 }
