@@ -24,6 +24,8 @@ public class PeriodFinancialSummary {
 
     private String totalCostSuppliers;
 
+    private String total;
+
     //TODO aggiungere i clienti.
 
     public void setTotalCostSuppliers(double totalCostSuppliers) {
