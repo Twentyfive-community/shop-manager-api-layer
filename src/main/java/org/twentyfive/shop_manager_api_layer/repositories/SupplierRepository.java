@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
-    List<Supplier> findByBusinessIdAndDisabledFalseOrderByNameAsc(Long businessId);
+    List<Supplier> findByBusinessIdAndNameContainsIgnoreCaseAndDisabledFalseOrderByNameAsc(Long businessId,String name);
     Optional<Supplier> findByBusinessIdAndName(Long businessId, String name);
 
     boolean existsByBusinessIdAndNameAndDisabledTrue(Long businessId, String name);
@@ -54,6 +54,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
             (:name IS NULL AND g IS NULL) 
          OR (:name IS NOT NULL AND (g IS NULL OR g.name = :name))
       )
+      AND (:value IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :value, '%')))
     ORDER BY 
          CASE 
              WHEN (:name IS NOT NULL AND g IS NOT NULL AND g.name = :name) THEN 0 
@@ -61,7 +62,11 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
          END,
          s.name ASC
 """)
-    List<SupplierAndGroupCheck> getAllNamesByBusiness_IdAndGroupNullOrNameAndDisabledFalse(@Param("id") Long id, @Param("name") String name);
+    List<SupplierAndGroupCheck> getAllNamesByBusiness_IdAndGroupNullOrNameAndFilterNameAndDisabledFalse(
+            @Param("id") Long id,
+            @Param("name") String name,
+            @Param("value") String value
+    );
 
     boolean existsByBusiness_IdAndName(Long id, String name);
 

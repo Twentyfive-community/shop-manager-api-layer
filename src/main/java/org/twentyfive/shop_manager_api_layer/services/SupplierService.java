@@ -11,7 +11,6 @@ import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetSupplierWithoutGroupReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateSupplierReq;
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAutoCompleteSupplierRes;
-import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
 import org.twentyfive.shop_manager_api_layer.exceptions.SupplierNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.SupplierMapperService;
 import org.twentyfive.shop_manager_api_layer.models.Business;
@@ -92,8 +91,8 @@ public class SupplierService {
         return true;
     }
 
-    public Page<SimpleSupplier> getAll(Long id, int page, int size) {
-        List<Supplier> suppliers = supplierRepository.findByBusinessIdAndDisabledFalseOrderByNameAsc(id);
+    public Page<SimpleSupplier> getAll(Long id, int page, int size, String name) {
+        List<Supplier> suppliers = supplierRepository.findByBusinessIdAndNameContainsIgnoreCaseAndDisabledFalseOrderByNameAsc(id,name);
         List<SimpleSupplier> simpleSuppliers = supplierMapperService.mapListSupplierToListSimpleSupplier(suppliers);
         Pageable pageable = PageRequest.of(page, size);
         return PageUtility.convertListToPage(simpleSuppliers,pageable);
@@ -173,7 +172,7 @@ public class SupplierService {
 
             return supplierRepository.save(supplier) != null;
         }
-        throw new ExpenseNotFoundException("Supplier not found with this id: " +updateSupplierReq.getId()+" or it's not associated to this businessId: "+id);
+        throw new SupplierNotFoundException("Supplier not found with this id: " +updateSupplierReq.getId()+" or it's not associated to this businessId: "+id);
     }
 
     @Transactional
@@ -193,10 +192,10 @@ public class SupplierService {
         return true;
     }
 
-    public Page<SimpleSupplierGroup> getAllGroups(Long id, int page, int size) {
+    public Page<SimpleSupplierGroup> getAllGroups(Long id, int page, int size,String name) {
         Pageable pageable = PageRequest.of(page, size);
 
-        List<SupplierGroup> supplierGroups = supplierGroupRepository.findAllByBusiness_Id(id);
+        List<SupplierGroup> supplierGroups = supplierGroupRepository.findAllByBusiness_IdAndNameContainsIgnoreCase(id,name);
 
         List<SimpleSupplierGroup> simpleSupplierGroups = supplierMapperService.mapListSimpleSupplierGroupFromListSupplierGroup(supplierGroups);
 
@@ -204,8 +203,8 @@ public class SupplierService {
     }
 
 
-    public GetSupplierWithoutGroupReq getSupplierWithoutGroup(Long id, String name) {
-        List<SupplierAndGroupCheck> supplierAndGroupChecks = supplierRepository.getAllNamesByBusiness_IdAndGroupNullOrNameAndDisabledFalse(id, name);
+    public GetSupplierWithoutGroupReq getSupplierWithoutGroup(Long id, String name, String value) {
+        List<SupplierAndGroupCheck> supplierAndGroupChecks = supplierRepository.getAllNamesByBusiness_IdAndGroupNullOrNameAndFilterNameAndDisabledFalse(id, name, value);
         return new GetSupplierWithoutGroupReq(supplierAndGroupChecks);
 
     }

@@ -25,8 +25,9 @@ public class SupplierController {
     @GetMapping("/getAll/{id}")
     public ResponseEntity<Page<SimpleSupplier>> getAll(@PathVariable Long id,
                                                        @RequestParam(value = "page", defaultValue = "0") int page,
-                                                       @RequestParam(value = "size", defaultValue = "25") int size) {
-        return ResponseEntity.ok().body(supplierService.getAll(id, page, size));
+                                                       @RequestParam(value = "size", defaultValue = "25") int size,
+                                                       @RequestParam(value = "name", defaultValue = "") String name) {
+        return ResponseEntity.ok().body(supplierService.getAll(id, page, size, name));
 
     }
 
@@ -53,8 +54,9 @@ public class SupplierController {
     @GetMapping("/getAllGroups/{id}")
     public ResponseEntity<Page<SimpleSupplierGroup>> getAllGroups(@PathVariable Long id,
                                                                   @RequestParam(value = "page", defaultValue = "0") int page,
-                                                                  @RequestParam(value = "size", defaultValue = "25") int size) {
-        return ResponseEntity.ok().body(supplierService.getAllGroups(id, page, size));
+                                                                  @RequestParam(value = "size", defaultValue = "25") int size,
+                                                                  @RequestParam(value ="name", defaultValue = "") String name) {
+        return ResponseEntity.ok().body(supplierService.getAllGroups(id, page, size,name));
     }
 
     @DeleteMapping("/deleteGroup/{id}")
@@ -85,7 +87,9 @@ public class SupplierController {
 
     @GetMapping("/getSupplierWithoutGroup/{id}")
     public ResponseEntity<GetSupplierWithoutGroupReq> getSupplierWithoutGroup(@PathVariable("id") Long id,
-                                                                                    @RequestParam(value = "name", required = false) String name) {
-        return ResponseEntity.ok().body(supplierService.getSupplierWithoutGroup(id,name));
+                                                                              @RequestParam(value = "name", required = false) String name,
+                                                                              @RequestParam(value = "value", defaultValue = "") String value) {
+        return ResponseEntity.ok().body(supplierService.getSupplierWithoutGroup(id,name, value));
     }
+
 }

@@ -22,4 +22,6 @@ public interface SupplierGroupRepository extends JpaRepository<SupplierGroup, Lo
             "AND LOWER(s.name) LIKE LOWER(CONCAT('%', :value, '%')) " +
             "ORDER BY s.name ASC")
     List<String> findSupplierGroupNamesByBusinessIdAndValue(@Param("businessId") Long businessId, @Param("value") String value);
+
+    List<SupplierGroup> findAllByBusiness_IdAndNameContainsIgnoreCase(Long businessId, String name);
 }
