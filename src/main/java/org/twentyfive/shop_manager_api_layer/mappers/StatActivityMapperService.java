@@ -40,15 +40,18 @@ public class StatActivityMapperService {
     }
 
     public PeriodClosure mapPeriodClosureFromTimeSlots(Long id, List<SimpleTimeSlot> timeSlots, DateRange dateRange) {
-        double totalPosClosures = 0.0;
+        double totalClosure = 0.0;
         double totalClosingReceipts = 0.0;
 
         for (SimpleTimeSlot timeSlot : timeSlots) {
             List<CashRegister> cashRegisters = cashRegisterRepository.findAllByRefTimeBetweenAndTimeSlot_NameAndBusiness_Id(dateRange.getStart(), dateRange.getEnd(), timeSlot.getName(), id);
 
-            totalPosClosures += cashRegisters.stream()
+            totalClosure += cashRegisters.stream()
                     .flatMap(cashRegister -> cashRegister.getEntryClosures().stream())
-                    .filter(entryClosure -> "Chiusura POS".equals(entryClosure.getId().getEntry().getLabel()))
+                    .filter(entryClosure -> {
+                        String label = entryClosure.getId().getEntry().getLabel();
+                        return "Chiusura POS".equals(label) || "SumUp".equals(label);
+                    })
                     .mapToDouble(EntryClosure::getValue)
                     .sum();
 
@@ -60,7 +63,7 @@ public class StatActivityMapperService {
                         .sum();
             }
         }
-        return new PeriodClosure(totalClosingReceipts,totalPosClosures,dateRange);
+        return new PeriodClosure(totalClosingReceipts,totalClosure,dateRange);
 
     }
 
