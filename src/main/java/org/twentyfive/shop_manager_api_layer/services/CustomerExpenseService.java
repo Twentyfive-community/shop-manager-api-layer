@@ -7,6 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCustomerExpenseReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateCustomerExpenseReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateExpenseReq;
+import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.CustomerExpenseMapperService;
 import org.twentyfive.shop_manager_api_layer.models.*;
 import org.twentyfive.shop_manager_api_layer.repositories.CustomerExpenseRepository;
@@ -68,5 +71,22 @@ public class CustomerExpenseService {
         Pageable pageable = PageRequest.of(page, size);
 
         return PageUtility.convertListToPage(expenseDTOS, pageable);
+    }
+
+    public boolean update(UpdateCustomerExpenseReq updateCustomerExpenseReq) throws IOException {
+        customerExpenseRepository.findById(updateCustomerExpenseReq.getId()).orElseThrow(() -> new ExpenseNotFoundException("Non esiste una spesa con questo id! : "+updateCustomerExpenseReq.getId()));
+
+        CustomerExpense customerExpense = createCustomerExpenseFromAddCustomerExpenseReq(updateCustomerExpenseReq.getAddCustomerExpenseReq());
+        customerExpense.setId(updateCustomerExpenseReq.getId());
+
+        return customerExpenseRepository.save(customerExpense) != null;
+    }
+
+    public Boolean delete(Long id) {
+        if(!customerExpenseRepository.existsById(id)) {
+            throw new ExpenseNotFoundException("Non esiste una spesa con questo id: "+id);
+        }
+        customerExpenseRepository.deleteById(id);
+        return true;
     }
 }
