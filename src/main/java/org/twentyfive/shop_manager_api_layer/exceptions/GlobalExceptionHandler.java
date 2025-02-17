@@ -78,17 +78,27 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RoleNotFoundException.class)
     public ResponseEntity<ApiError> handleRoleNotFoundException(RoleNotFoundException ex) {
-        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(SupplierAlreadyExistsException.class)
     public ResponseEntity<ApiError> handleSupplierAlreadyExistsException(SupplierAlreadyExistsException ex) {
-        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+        ApiError apiError = new ApiError(HttpStatus.CONFLICT, ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<ApiError> handleCustomerNotFoundException(CustomerNotFoundException ex) {
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
 
+    @ExceptionHandler(CustomerAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleCustomerAlreadyExistsException(CustomerAlreadyExistsException ex) {
+        ApiError apiError = new ApiError(HttpStatus.CONFLICT, ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
+    }
 
 
     @Data
