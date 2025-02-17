@@ -27,10 +27,10 @@ public class Customer {
     @Column(name ="company_name", nullable = false)
     private String companyName;
 
-    @Column(name="registered_office")
+    @Column(name="registered_office", nullable = false)
     private String registeredOffice;
 
-    @Column(name="vat_number")
+    @Column(name="vat_number", nullable = false)
     private String vatNumber;
 
     @Column(name="pec")
@@ -39,7 +39,7 @@ public class Customer {
     @Column(name="email")
     private String email;
 
-    @Column(name="sdi")
+    @Column(name="sdi", nullable = false)
     private String sdi;
 
     @Column(name = "disabled")
