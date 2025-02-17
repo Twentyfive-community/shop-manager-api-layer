@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddExpenseReq;
+import org.twentyfive.shop_manager_api_layer.dtos.requests.GetPeriodExpenseReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateExpenseReq;
 import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.ExpenseMapperService;
@@ -89,14 +90,22 @@ public class ExpenseService {
 
     public Boolean delete(Long id) {
         if(!expenseRepository.existsById(id)) {
-            throw new ExpenseNotFoundException("Non esiste una spesa con questo id: "+id);
+            throw new ExpenseNotFoundException("expense doesn't exist with this id: "+id);
         }
         expenseRepository.deleteById(id);
         return true;
     }
 
-    public Page<ExpenseDTO> getPeriodExpenses(Long id, int page, int size, DateRange dateRange) {
-        List<Expense> expenses = expenseRepository.findByWorker_Id_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(id, dateRange.getStart(), dateRange.getEnd());
+    public Page<ExpenseDTO> getPeriodExpenses(Long id, int page, int size, GetPeriodExpenseReq request) {
+        List<Expense> expenses = expenseRepository.findFilteredExpenses(
+                id,
+                request.getDateRange().getStart(),
+                request.getDateRange().getEnd(),
+                request.getExpenseFilter().getName() != null ? request.getExpenseFilter().getName() : null,
+                request.getExpenseFilter().getPaymentMethod() != null ? PaymentMethod.fromValue(request.getExpenseFilter().getPaymentMethod()) : null,
+                request.getExpenseFilter().getPaid() != null ? request.getExpenseFilter().getPaid() : null
+        );
+
         List<ExpenseDTO> expenseDTOS = expenseMapperService.mapListExpensesToListExpensesDTO(expenses);
 
         Pageable pageable = PageRequest.of(page, size);

@@ -8,6 +8,7 @@ import org.twentyfive.shop_manager_api_layer.dtos.requests.AddInExistentBusiness
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddWorkerReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateWorkerReq;
 import org.twentyfive.shop_manager_api_layer.services.WorkerService;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.filters.WorkerFilter;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleWorker;
 
 import java.io.IOException;
@@ -20,12 +21,13 @@ public class WorkerController {
 
     private final WorkerService workerService;
 
-    @GetMapping("/getAllByBusinessId/{id}")
+    @PostMapping("/getAllByBusinessId/{id}")
     public ResponseEntity<Page<SimpleWorker>> getAllByBusinessId(
             @PathVariable("id") Long id,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "25") int size){
-        return ResponseEntity.ok().body(workerService.getAllByBusinessId(id,page, size));
+            @RequestParam(value = "size", defaultValue = "25") int size,
+            @RequestBody WorkerFilter workerFilter) {
+        return ResponseEntity.ok().body(workerService.getAllByBusinessId(id,page, size,workerFilter));
     }
 
     @GetMapping("/get/{id}")

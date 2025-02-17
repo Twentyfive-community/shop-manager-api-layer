@@ -12,6 +12,7 @@ import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.models.ids.BusinessWorkerId;
 import org.twentyfive.shop_manager_api_layer.repositories.BusinessWorkerRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Role;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.filters.WorkerFilter;
 
 import java.util.List;
 
@@ -41,8 +42,14 @@ public class BusinessWorkerService {
         return businessWorker;
     }
 
-    public List<BusinessWorker> getAllBusinessWorkersById(Long id) {
-        return businessWorkerRepository.findById_Business_Id(id);
+    public List<BusinessWorker> getAllBusinessWorkersFiltered(Long id, WorkerFilter filter) {
+
+        return businessWorkerRepository.findByBusinessIdAndRoleAndFullName(
+                id,
+                filter.getRole() != null ? Role.fromString(filter.getRole()) : null,
+                filter.getName() != null ? filter.getName() : null
+        );
+
     }
 
     public Boolean changeRole(Long id, ChangeRoleReq changeRoleReq) {

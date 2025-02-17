@@ -14,6 +14,7 @@ import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.BusinessWorker;
 import org.twentyfive.shop_manager_api_layer.models.Worker;
 import org.twentyfive.shop_manager_api_layer.repositories.WorkerRepository;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.filters.WorkerFilter;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleWorker;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Role;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
@@ -68,8 +69,8 @@ public class WorkerService {
     }
 
 
-    public Page<SimpleWorker> getAllByBusinessId(Long id,int page, int size){
-        List<BusinessWorker> businessWorkers = businessWorkerService.getAllBusinessWorkersById(id);
+    public Page<SimpleWorker> getAllByBusinessId(Long id, int page, int size, WorkerFilter filter) {
+        List<BusinessWorker> businessWorkers = businessWorkerService.getAllBusinessWorkersFiltered(id,filter);
 
         //Sorting con compare personalizzato
         businessWorkers.sort((w1, w2) -> {

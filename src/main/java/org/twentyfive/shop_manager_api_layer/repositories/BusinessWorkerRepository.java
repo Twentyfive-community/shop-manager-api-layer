@@ -12,7 +12,21 @@ import java.util.Optional;
 
 @Repository
 public interface BusinessWorkerRepository extends JpaRepository<BusinessWorker, Long> {
-    List<BusinessWorker> findById_Business_Id(Long id);
+
+    @Query("SELECT bw FROM BusinessWorker bw " +
+            "JOIN bw.id.worker w " +
+            "WHERE bw.id.business.id = :businessId " +
+            "AND (:role IS NULL OR bw.role = :role) " +
+            "AND (:name IS NULL OR CONCAT(LOWER(w.firstName), ' ', LOWER(w.lastName)) LIKE LOWER(CONCAT('%', :name, '%')))")
+    List<BusinessWorker> findByBusinessIdAndRoleAndFullName(
+            @Param("businessId") Long businessId,
+            @Param("role") Role role,
+            @Param("name") String name
+    );
+
+
+
+
 
     Optional<BusinessWorker> findById_Business_IdAndId_Worker_KeycloakIdAndDisabledFalse(Long id, String keycloakId);
 
