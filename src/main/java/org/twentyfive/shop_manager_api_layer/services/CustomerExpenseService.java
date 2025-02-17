@@ -19,7 +19,6 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtili
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,8 +34,8 @@ public class CustomerExpenseService {
     private final CustomerExpenseRepository customerExpenseRepository;
 
 
-    public Page<CustomerExpenseDTO> getPeriodExpenses(Long id, int page, int size, DateRange dateRange) {
-        List<CustomerExpense> customerExpenses = customerExpenseRepository.findByWorker_Id_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(id, dateRange.getStart(), dateRange.getEnd());
+    public Page<CustomerExpenseDTO> getPeriodExpenses(Long id, int page, int size, DateRange dateRange, String value) {
+        List<CustomerExpense> customerExpenses = customerExpenseRepository.findByWorker_Id_Business_IdAndCustomer_CompanyNameContainsAndRefTimeBetweenOrderByRefTimeDesc(id,value, dateRange.getStart(), dateRange.getEnd());
         List<CustomerExpenseDTO> expenseDTOS = customerExpenseMapperService.mapListCustomerExpensesToListCustomerExpensesDTO(customerExpenses);
 
         Pageable pageable = PageRequest.of(page, size);

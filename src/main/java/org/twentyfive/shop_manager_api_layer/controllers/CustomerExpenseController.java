@@ -24,8 +24,9 @@ public class CustomerExpenseController {
     public ResponseEntity<Page<CustomerExpenseDTO>> getPeriodExpenses(@PathVariable("id") Long id,
                                                                       @RequestParam(value = "page", defaultValue = "0") int page,
                                                                       @RequestParam(value = "size", defaultValue = "25") int size,
+                                                                      @RequestParam(value = "value", defaultValue = "") String value,
                                                                       @RequestBody DateRange dateRange){
-        return ResponseEntity.ok().body(customerExpenseService.getPeriodExpenses(id,page,size,dateRange));
+        return ResponseEntity.ok().body(customerExpenseService.getPeriodExpenses(id,page,size,dateRange,value));
     }
 
     @PostMapping("/add")
