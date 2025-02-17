@@ -2,19 +2,30 @@ package org.twentyfive.shop_manager_api_layer.services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCustomerExpenseReq;
+import org.twentyfive.shop_manager_api_layer.mappers.CustomerExpenseMapperService;
 import org.twentyfive.shop_manager_api_layer.models.*;
 import org.twentyfive.shop_manager_api_layer.repositories.CustomerExpenseRepository;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.CustomerExpenseDTO;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.DateRange;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.ExpenseDTO;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.PaymentMethod;
+import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerExpenseService {
+
+    private final CustomerExpenseMapperService customerExpenseMapperService;
 
     private final CustomerService customerService;
     private final BusinessWorkerService businessWorkerService;
@@ -50,4 +61,12 @@ public class CustomerExpenseService {
     }
 
 
+    public Page<CustomerExpenseDTO> getPeriodExpenses(Long id, int page, int size, DateRange dateRange) {
+        List<CustomerExpense> customerExpenses = customerExpenseRepository.findByWorker_Id_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(id, dateRange.getStart(), dateRange.getEnd());
+        List<CustomerExpenseDTO> expenseDTOS = customerExpenseMapperService.mapListCustomerExpensesToListCustomerExpensesDTO(customerExpenses);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return PageUtility.convertListToPage(expenseDTOS, pageable);
+    }
 }
