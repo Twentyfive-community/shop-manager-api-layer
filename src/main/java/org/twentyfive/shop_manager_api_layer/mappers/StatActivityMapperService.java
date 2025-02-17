@@ -2,6 +2,8 @@ package org.twentyfive.shop_manager_api_layer.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.models.CustomerExpense;
+import org.twentyfive.shop_manager_api_layer.services.CustomerExpenseService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.PeriodStat;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.models.EntryClosure;
@@ -23,7 +25,9 @@ public class StatActivityMapperService {
     private final EntryMapperService entryMapperService;
     private final ComposedEntryMapperService composedEntryMapperService;
 
+    private final CustomerExpenseService customerExpenseService;
     private final ExpenseService expenseService;
+
 
     public List<DailyActivities> mapListDailyActivitiesFromTimeSlots(Long id,
                                                                      List<SimpleTimeSlot> timeSlots,
@@ -62,6 +66,11 @@ public class StatActivityMapperService {
                         .mapToDouble(EntryClosure::getValue)
                         .sum();
             }
+
+            List<CustomerExpense> customerExpenses = customerExpenseService.getAllByDateBetween(id, dateRange);
+
+            totalClosingReceipts += customerExpenses.stream().mapToDouble(CustomerExpense::getValue).sum();
+
         }
         return new PeriodClosure(totalClosingReceipts,totalClosure,dateRange);
 
