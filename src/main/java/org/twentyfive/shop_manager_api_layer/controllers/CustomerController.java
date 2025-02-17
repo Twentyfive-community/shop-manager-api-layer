@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCustomerReq;
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAutoCompleteCustomerRes;
-import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAutoCompleteSupplierRes;
 import org.twentyfive.shop_manager_api_layer.services.CustomerService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleCustomer;
 

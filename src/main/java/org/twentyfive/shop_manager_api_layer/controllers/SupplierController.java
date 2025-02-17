@@ -28,7 +28,6 @@ public class SupplierController {
                                                        @RequestParam(value = "size", defaultValue = "25") int size,
                                                        @RequestParam(value = "name", defaultValue = "") String name) {
         return ResponseEntity.ok().body(supplierService.getAll(id, page, size, name));
-
     }
 
     @PostMapping("/addList/{id}")

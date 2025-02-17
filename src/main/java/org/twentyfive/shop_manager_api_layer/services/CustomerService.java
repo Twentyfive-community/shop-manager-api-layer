@@ -39,7 +39,7 @@ public class CustomerService {
 
     public Customer getByIdAndCompanyName(Long id, String companyName) {
         return customerRepository.findByBusinessIdAndCompanyName(id,companyName).orElseThrow(() -> new CustomerNotFoundException("Can't find Customer with this company name = "+companyName+
-                "and this business id:" +id));
+                " and this business id:" +id));
     }
 
     @Transactional
