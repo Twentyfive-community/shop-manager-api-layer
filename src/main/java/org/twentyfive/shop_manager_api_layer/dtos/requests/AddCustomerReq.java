@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddCustomerReq {
 
+    private Long id;
     private String companyName;
     private String registeredOffice;
     private String vatNumber;

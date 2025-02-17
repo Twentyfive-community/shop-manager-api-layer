@@ -11,7 +11,6 @@ import org.twentyfive.shop_manager_api_layer.exceptions.CustomerNotFoundExceptio
 import org.twentyfive.shop_manager_api_layer.mappers.CustomerMapperService;
 import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.Customer;
-import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.repositories.CustomerRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleCustomer;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
@@ -44,10 +43,11 @@ public class CustomerService {
     @Transactional
     public Boolean add(Long id, AddCustomerReq addCustomerReq) {
         if (existsByBusinessIdAndCompanyNameAndDisabledTrue(id, addCustomerReq.getCompanyName())){
+
             Customer customer = getByIdAndCompanyName(id, addCustomerReq.getCompanyName());
-            customer.setDisabled(false);
-            return customerRepository.save(customer) != null;
+            return customerMapperService.enableAndUpdateCustomerFromAddCustomerReq(customer, addCustomerReq) != null;
         }
+
         Business business = businessService.getById(id);
         return customerMapperService.createCustomerFromAddSupplierReq(addCustomerReq,business) != null;
     }

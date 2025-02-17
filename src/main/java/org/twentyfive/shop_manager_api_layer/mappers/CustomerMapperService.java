@@ -40,20 +40,32 @@ public class CustomerMapperService {
     }
 
     public Customer createCustomerFromAddSupplierReq(AddCustomerReq addCustomerReq, Business business) {
-            Customer customer = new Customer();
+        Customer customer = new Customer();
 
-            customer.setCompanyName(addCustomerReq.getCompanyName());
-            customer.setBusiness(business);
-            customer.setRegisteredOffice(addCustomerReq.getRegisteredOffice());
-            customer.setVatNumber(addCustomerReq.getVatNumber());
-            customer.setPec(addCustomerReq.getPec());
-            customer.setEmail(addCustomerReq.getEmail());
-            customer.setSdi(addCustomerReq.getSdi());
+        customer.setId(addCustomerReq.getId());
+        customer.setCompanyName(addCustomerReq.getCompanyName());
+        customer.setBusiness(business);
+        customer.setRegisteredOffice(addCustomerReq.getRegisteredOffice());
+        customer.setVatNumber(addCustomerReq.getVatNumber());
+        customer.setPec(addCustomerReq.getPec());
+        customer.setEmail(addCustomerReq.getEmail());
+        customer.setSdi(addCustomerReq.getSdi());
 
-            if (!(customerRepository.existsByBusiness_IdAndCompanyName(business.getId(),addCustomerReq.getCompanyName()))){
-                return customerRepository.save(customer);
-            }
-
-            throw new CustomerAlreadyExistsException("Customer does exist with this company name " +addCustomerReq.getCompanyName()+" and businessId: "+business.getId());
+        if (!(customerRepository.existsByBusiness_IdAndCompanyName(business.getId(), addCustomerReq.getCompanyName()))) {
+            return customerRepository.save(customer);
         }
+
+        throw new CustomerAlreadyExistsException("Customer does exist with this company name " + addCustomerReq.getCompanyName() + " and businessId: " + business.getId());
+    }
+
+    public Boolean enableAndUpdateCustomerFromAddCustomerReq(Customer customer, AddCustomerReq addCustomerReq) {
+        customer.setPec(addCustomerReq.getPec());
+        customer.setDisabled(false);
+        customer.setEmail(addCustomerReq.getEmail());
+        customer.setSdi(addCustomerReq.getSdi());
+        customer.setVatNumber(addCustomerReq.getVatNumber());
+        customer.setRegisteredOffice(addCustomerReq.getRegisteredOffice());
+
+        return customerRepository.save(customer) != null;
+    }
 }
