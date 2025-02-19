@@ -51,11 +51,8 @@ public class CustomerMapperService {
         customer.setEmail(addCustomerReq.getEmail());
         customer.setSdi(addCustomerReq.getSdi());
 
-        if (!(customerRepository.existsByBusiness_IdAndCompanyName(business.getId(), addCustomerReq.getCompanyName()))) {
-            return customerRepository.save(customer);
-        }
+        return customerRepository.save(customer);
 
-        throw new CustomerAlreadyExistsException("Customer does exist with this company name " + addCustomerReq.getCompanyName() + " and businessId: " + business.getId());
     }
 
     public Boolean enableAndUpdateCustomerFromAddCustomerReq(Customer customer, AddCustomerReq addCustomerReq) {
