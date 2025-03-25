@@ -17,15 +17,21 @@ import java.util.List;
 public class JwtUtility {
 
     private static JsonNode rootNodeFromToken() throws JsonProcessingException {
+        // Recupera la richiesta HTTP dal contesto corrente
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String token = request.getHeader("Authorization").split(" ")[1];
 
+        // Estrai il token dalla richiesta
+        String token = extractTokenFromRequest(request);
+
+        // Decodifica il JWT
         DecodedJWT decoded = JWT.decode(token);
         String payload = new String(java.util.Base64.getDecoder().decode(decoded.getPayload()));
 
+        // Crea un ObjectMapper per fare il parsing del payload in un JsonNode
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(payload);
     }
+
     public static List<String> getRoles() throws IOException {
         JsonNode rootNode = rootNodeFromToken();
         JsonNode apaAppNode = rootNode.path("realm_access").path("roles");
@@ -46,4 +52,18 @@ public class JwtUtility {
         JsonNode keycloakNode = rootNode.path("sub");
         return keycloakNode.asText();
     }
+
+    public static String extractTokenFromRequest(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            // Estrae il token se il formato è corretto
+            return authorizationHeader.split(" ")[1];
+        } else {
+            // L'header Authorization non è presente o non ha il formato corretto
+            throw new IllegalArgumentException("Token non trovato o formato non valido");
+        }
+    }
+
+
 }
