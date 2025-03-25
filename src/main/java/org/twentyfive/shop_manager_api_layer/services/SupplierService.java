@@ -13,7 +13,6 @@ import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateSupplierReq;
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAutoCompleteSupplierRes;
 import org.twentyfive.shop_manager_api_layer.exceptions.SupplierNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.SupplierMapperService;
-import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.models.SupplierGroup;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierGroupRepository;
@@ -22,6 +21,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.SupplierAndGroupC
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplierGroup;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplier;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Service
 public class SupplierService {
 
-    private final BusinessService businessService;
+    //private final BusinessService businessService;
     private final SupplierGroupService supplierGroupService;
 
     private final SupplierMapperService supplierMapperService;
@@ -49,13 +49,16 @@ public class SupplierService {
             return supplierRepository.save(supplier) != null;
         }
 
-        Business business = businessService.getById(id);
+        //FIXME
+//        Business business = businessService.getById(id);
+        Business business = null;
         return supplierMapperService.createSupplierFromAddSupplierReq(addSupplierReq.getName(), supplierGroup,business) != null;
     }
 
     @Transactional
     public Boolean addGroup(Long id, AddSupplierGroupReq addSupplierGroupReq) {
-        Business business = businessService.getById(id);
+//        Business business = businessService.getById(id);
+        Business business = null;
         SupplierGroup supplierGroup;
         List<Supplier> suppliers = getAllByBusinessIdAndNameList(id, addSupplierGroupReq.getSupplierNames());
 

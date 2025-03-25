@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.PaymentMethod;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.BusinessUser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,8 +43,8 @@ public class Expense {
     @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "business_id", referencedColumnName = "business_id"),
-            @JoinColumn(name = "worker_id", referencedColumnName = "worker_id")
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     })
-    private BusinessWorker worker;
+    private BusinessUser worker;
 
 }

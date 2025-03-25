@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface CustomerExpenseRepository extends JpaRepository<CustomerExpense, Long> {
-    List<CustomerExpense> findByWorker_Id_Business_IdAndCustomer_CompanyNameContainsAndRefTimeBetweenOrderByRefTimeDesc(Long id, String value, LocalDate start, LocalDate end);
+    List<CustomerExpense> findByWorker_Business_IdAndCustomer_CompanyNameContainsAndRefTimeBetweenOrderByRefTimeDesc(Long id, String value, LocalDate start, LocalDate end);
 
-    List<CustomerExpense> findByWorker_Id_Business_IdAndRefTimeBetween(Long id, LocalDate start, LocalDate end);
+    List<CustomerExpense> findByWorker_Business_IdAndRefTimeBetween(Long id, LocalDate start, LocalDate end);
 }

@@ -3,12 +3,12 @@ package org.twentyfive.shop_manager_api_layer.mappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.exceptions.SupplierAlreadyExistsException;
-import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.models.SupplierGroup;
 import org.twentyfive.shop_manager_api_layer.repositories.SupplierRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplier;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplierGroup;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class SupplierMapperService {
 
     private final SupplierRepository supplierRepository;
 
-    public Supplier createSupplierFromAddSupplierReq(String name, SupplierGroup supplierGroup,Business business) {
+    public Supplier createSupplierFromAddSupplierReq(String name, SupplierGroup supplierGroup, Business business) {
         // Crea il fornitore
         Supplier supplier = new Supplier();
         supplier.setName(name);

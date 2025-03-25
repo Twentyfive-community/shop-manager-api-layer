@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.twentyfive.shop_manager_api_layer.auditable.Auditable;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.Report;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.MsUser;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,11 +48,11 @@ public class CashRegister extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "closed_by_id") // Dipendente che ha fatto la chiusura cassa
-    private Worker closedBy;
+    private MsUser closedBy;
 
     @ManyToOne
     @JoinColumn(name = "updated_by_id") // Dipendente che ha fatto l'ultima modifica della chiusura cassa, può essere null
-    private Worker updatedBy;
+    private MsUser updatedBy;
 
     @ToString.Exclude
     @OneToMany(mappedBy="cashRegister", cascade = CascadeType.ALL, orphanRemoval = true)

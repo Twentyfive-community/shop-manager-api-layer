@@ -82,7 +82,7 @@
         <dependency>
             <groupId>com.twentyfive</groupId>
             <artifactId>twentyfive-adapters</artifactId>
-            <version>0.0.196</version>
+            <version>0.0.309</version>
         </dependency>
 
         <dependency>

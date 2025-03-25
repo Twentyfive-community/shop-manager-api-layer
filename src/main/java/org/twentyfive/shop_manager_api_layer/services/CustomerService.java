@@ -10,12 +10,11 @@ import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCustomerReq;
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAutoCompleteCustomerRes;
 import org.twentyfive.shop_manager_api_layer.exceptions.CustomerNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.CustomerMapperService;
-import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.Customer;
-import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.repositories.CustomerRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleCustomer;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    private final BusinessService businessService;
+//    private final BusinessService businessService;
 
     private final CustomerMapperService customerMapperService;
 
@@ -50,7 +49,8 @@ public class CustomerService {
             return customerMapperService.enableAndUpdateCustomerFromAddCustomerReq(customer, addCustomerReq) != null;
         }
 
-        Business business = businessService.getById(id);
+//        Business business = businessService.getById(id);
+        Business business = null;
         return customerMapperService.createCustomerFromAddSupplierReq(addCustomerReq,business) != null;
     }
 

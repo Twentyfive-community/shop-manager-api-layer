@@ -3,11 +3,10 @@ package org.twentyfive.shop_manager_api_layer.mappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCustomerReq;
-import org.twentyfive.shop_manager_api_layer.exceptions.CustomerAlreadyExistsException;
-import org.twentyfive.shop_manager_api_layer.models.Business;
 import org.twentyfive.shop_manager_api_layer.models.Customer;
 import org.twentyfive.shop_manager_api_layer.repositories.CustomerRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleCustomer;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
 import java.util.ArrayList;
 import java.util.List;

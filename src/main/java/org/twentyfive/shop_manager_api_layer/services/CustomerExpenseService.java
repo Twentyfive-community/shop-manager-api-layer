@@ -17,6 +17,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.DateRange;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.PaymentMethod;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.BusinessUser;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -29,13 +30,13 @@ public class CustomerExpenseService {
     private final CustomerExpenseMapperService customerExpenseMapperService;
 
     private final CustomerService customerService;
-    private final BusinessWorkerService businessWorkerService;
+//    private final BusinessWorkerService businessWorkerService;
 
     private final CustomerExpenseRepository customerExpenseRepository;
 
 
     public Page<CustomerExpenseDTO> getPeriodExpenses(Long id, int page, int size, DateRange dateRange, String value) {
-        List<CustomerExpense> customerExpenses = customerExpenseRepository.findByWorker_Id_Business_IdAndCustomer_CompanyNameContainsAndRefTimeBetweenOrderByRefTimeDesc(id,value, dateRange.getStart(), dateRange.getEnd());
+        List<CustomerExpense> customerExpenses = customerExpenseRepository.findByWorker_Business_IdAndCustomer_CompanyNameContainsAndRefTimeBetweenOrderByRefTimeDesc(id,value, dateRange.getStart(), dateRange.getEnd());
         List<CustomerExpenseDTO> expenseDTOS = customerExpenseMapperService.mapListCustomerExpensesToListCustomerExpensesDTO(customerExpenses);
 
         Pageable pageable = PageRequest.of(page, size);
@@ -44,7 +45,7 @@ public class CustomerExpenseService {
     }
 
     public List<CustomerExpense> getAllByDateBetween(Long id, DateRange dateRange) {
-        return customerExpenseRepository.findByWorker_Id_Business_IdAndRefTimeBetween(id,dateRange.getStart(),dateRange.getEnd());
+        return customerExpenseRepository.findByWorker_Business_IdAndRefTimeBetween(id,dateRange.getStart(),dateRange.getEnd());
     }
     @Transactional
     public Boolean add(AddCustomerExpenseReq addCustomerExpenseReq) throws IOException {
@@ -75,8 +76,10 @@ public class CustomerExpenseService {
     private CustomerExpense createCustomerExpenseFromAddCustomerExpenseReq(AddCustomerExpenseReq addCustomerExpenseReq) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
 
-        BusinessWorker businessWorker = businessWorkerService.getByBusinessIdAndKeycloakId(addCustomerExpenseReq.getBusinessId(), keycloakId);
+        //FIXME
+//        BusinessWorker businessWorker = businessWorkerService.getByBusinessIdAndKeycloakId(addCustomerExpenseReq.getBusinessId(), keycloakId);
 
+        BusinessUser businessWorker = null;
         Customer customer = customerService.getByIdAndCompanyName(addCustomerExpenseReq.getBusinessId(), addCustomerExpenseReq.getCompanyName());
 
         CustomerExpense customerExpense = new CustomerExpense();

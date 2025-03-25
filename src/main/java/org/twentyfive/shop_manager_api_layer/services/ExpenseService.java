@@ -9,7 +9,6 @@ import org.twentyfive.shop_manager_api_layer.dtos.requests.AddExpenseReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateExpenseReq;
 import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.ExpenseMapperService;
-import org.twentyfive.shop_manager_api_layer.models.BusinessWorker;
 import org.twentyfive.shop_manager_api_layer.models.Expense;
 import org.twentyfive.shop_manager_api_layer.models.Supplier;
 import org.twentyfive.shop_manager_api_layer.repositories.ExpenseRepository;
@@ -18,6 +17,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.ExpenseDTO;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.PaymentMethod;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.BusinessUser;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -31,7 +31,6 @@ public class ExpenseService {
     private final ExpenseRepository expenseRepository;
 
     private final ExpenseMapperService expenseMapperService;
-    private final BusinessWorkerService businessWorkerService;
     private final SupplierService supplierService;
 
     public Boolean add(AddExpenseReq addExpenseReq) throws IOException {
@@ -49,7 +48,7 @@ public class ExpenseService {
     }
 
     public List<Expense> getAllByDate(Long id,LocalDate date) {
-        return expenseRepository.findByWorker_Id_Business_IdAndRefTime(id,date);
+        return expenseRepository.findByWorker_Business_IdAndRefTime(id,date);
     }
     public double getTotalExpensesInDateRange(Long id, DateRange dateRange) {
         double totalCost = 0.0;
@@ -71,7 +70,9 @@ public class ExpenseService {
     private Expense createExpenseFromAddExpenseReq(AddExpenseReq addExpenseReq) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
 
-        BusinessWorker businessWorker = businessWorkerService.getByBusinessIdAndKeycloakId(addExpenseReq.getBusinessId(), keycloakId);
+        //FIXME
+        //BusinessWorker businessWorker = businessWorkerService.getByBusinessIdAndKeycloakId(addExpenseReq.getBusinessId(), keycloakId);
+        BusinessUser businessWorker = null;
         Supplier supplier = supplierService.getByIdAndName(addExpenseReq.getBusinessId(), addExpenseReq.getSupplierName());
         Expense expense = new Expense();
 
@@ -96,7 +97,7 @@ public class ExpenseService {
     }
 
     public Page<ExpenseDTO> getPeriodExpenses(Long id, int page, int size, DateRange dateRange) {
-        List<Expense> expenses = expenseRepository.findByWorker_Id_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(id, dateRange.getStart(), dateRange.getEnd());
+        List<Expense> expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(id, dateRange.getStart(), dateRange.getEnd());
         List<ExpenseDTO> expenseDTOS = expenseMapperService.mapListExpensesToListExpensesDTO(expenses);
 
         Pageable pageable = PageRequest.of(page, size);

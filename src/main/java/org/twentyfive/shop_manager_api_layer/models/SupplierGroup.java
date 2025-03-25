@@ -3,6 +3,7 @@ package org.twentyfive.shop_manager_api_layer.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
 import java.util.List;
 import java.util.Set;

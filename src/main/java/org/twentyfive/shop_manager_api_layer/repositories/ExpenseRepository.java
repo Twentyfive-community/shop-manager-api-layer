@@ -10,11 +10,11 @@ import java.util.List;
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
-    List<Expense> findByWorker_Id_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(
+    List<Expense> findByWorker_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(
             Long businessId,
             LocalDate startDate,
             LocalDate endDate
     );
 
-    List<Expense> findByWorker_Id_Business_IdAndRefTime(Long id, LocalDate date);
+    List<Expense> findByWorker_Business_IdAndRefTime(Long id, LocalDate date);
 }

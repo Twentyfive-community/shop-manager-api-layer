@@ -26,7 +26,7 @@ public class CustomerExpenseMapperService {
 
         customerExpenseDTO.setId(customerExpense.getId());
         customerExpenseDTO.setRefTime(customerExpense.getRefTime());
-        customerExpenseDTO.setDoneBy(customerExpense.getWorker().getId().getWorker().getFullName());
+        customerExpenseDTO.setDoneBy(customerExpense.getWorker().toString());
         customerExpenseDTO.setIssued(customerExpense.isIssued());
         customerExpenseDTO.setPaymentMethod(customerExpense.getPaymentMethod().getValue());
         customerExpenseDTO.setCustomer(customerExpense.getCustomer().getCompanyName());

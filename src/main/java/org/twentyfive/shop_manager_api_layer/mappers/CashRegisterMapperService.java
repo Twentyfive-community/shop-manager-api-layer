@@ -27,10 +27,11 @@ public class CashRegisterMapperService {
         res.setComposedEntryClosures(composedEntryMapperService.mapListComposedEntryClosureToDTO(cashRegister.getComposedEntryClosures()));
 
         res.setRefTime(cashRegister.getRefTime());
-        res.setClosedBy(cashRegister.getClosedBy().getFullName());
+        //FIXME
+        res.setClosedBy(cashRegister.getClosedBy().toString());
 
         if(cashRegister.getUpdatedBy() != null) {
-            res.setUpdatedBy(cashRegister.getUpdatedBy().getFullName());
+            res.setUpdatedBy(cashRegister.getUpdatedBy().toString());
         }
 
         return res;
@@ -56,10 +57,10 @@ public class CashRegisterMapperService {
         cashRegisterDetails.setTotalCost(cashRegister.getReport().getTotalCost());
         cashRegisterDetails.setTotal(cashRegister.getReport().getTotalRevenue(),cashRegister.getReport().getTotalCost());
 
-        cashRegisterDetails.setFirstModifiedWorker(cashRegister.getClosedBy().getFullName());
+        cashRegisterDetails.setFirstModifiedWorker(cashRegister.getClosedBy().toString());
         cashRegisterDetails.setFirstModifiedDate(cashRegister.getCreatedAt());
 
-        cashRegisterDetails.setLastModifiedWorker(cashRegister.getUpdatedBy().getFullName());
+        cashRegisterDetails.setLastModifiedWorker(cashRegister.getUpdatedBy().toString());
         cashRegisterDetails.setLastModifiedDate(cashRegister.getUpdatedAt());
 
         cashRegisterDetails.setEntryClosureDetails(entryMapperService.mapEntryClosureToDetailsDTO(cashRegister.getEntryClosures()));

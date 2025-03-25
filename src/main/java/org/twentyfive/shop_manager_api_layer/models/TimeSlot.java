@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
 import java.time.LocalTime;
 import java.util.List;

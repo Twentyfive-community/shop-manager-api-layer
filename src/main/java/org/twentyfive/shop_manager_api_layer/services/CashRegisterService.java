@@ -19,6 +19,8 @@ import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,12 +30,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CashRegisterService {
 
-    private final BusinessWorkerService businessWorkerService;
+//    private final BusinessWorkerService businessWorkerService;
     private final CashRegisterRepository cashRegisterRepository;
     private final CashRegisterLogRepository cashRegisterLogRepository;
 
-    private final BusinessService businessService;
-    private final WorkerService workerService;
+//    private final BusinessService businessService;
+//    private final WorkerService workerService;
     private final TimeSlotService timeSlotService;
     private final EntryService entryService;
     private final ComposedEntryService composedEntryService;
@@ -44,11 +46,12 @@ public class CashRegisterService {
     public Boolean add(AddCashRegisterReq addCashRegisterReq) throws IOException {
         String keycloakId = JwtUtility.getIdKeycloak();
 
-        businessWorkerService.existsByKeycloakIdAndBusinessId(keycloakId, addCashRegisterReq.getBusinessId());
+        //FIXME
+//        businessWorkerService.existsByKeycloakIdAndBusinessId(keycloakId, addCashRegisterReq.getBusinessId());
 
         // Recupera il business associato
-        Business business = businessService.getById(addCashRegisterReq.getBusinessId());
-        Worker worker = workerService.getByKeycloakId(keycloakId);
+//        Business business = businessService.getById(addCashRegisterReq.getBusinessId());
+//        Worker worker = workerService.getByKeycloakId(keycloakId);
         TimeSlot timeSlot = timeSlotService.getByNameAndBusinessId(addCashRegisterReq.getTimeSlotName(), addCashRegisterReq.getBusinessId());
 
         Optional<CashRegister> optCashRegister =cashRegisterRepository.findByBusiness_IdAndTimeSlot_NameAndRefTime(addCashRegisterReq.getBusinessId(), addCashRegisterReq.getTimeSlotName(), addCashRegisterReq.getCashRegisterDate());
@@ -56,10 +59,10 @@ public class CashRegisterService {
         if (optCashRegister.isEmpty()) {
             CashRegister cashRegister = new CashRegister();
             cashRegister.setRefTime(addCashRegisterReq.getCashRegisterDate());
-            cashRegister.setBusiness(business);
+            cashRegister.setBusiness(null);
             cashRegister.setTimeSlot(timeSlot);
-            cashRegister.setClosedBy(worker);
-            cashRegister.setUpdatedBy(worker);
+            cashRegister.setClosedBy(null);
+            cashRegister.setUpdatedBy(null);
             CashRegister savedCashRegister = cashRegisterRepository.save(cashRegister);
 
             // Crea voci Entry e Composed Entry
@@ -75,10 +78,10 @@ public class CashRegisterService {
 
             // Aggiorna i campi modificabili
             cashRegister.setRefTime(addCashRegisterReq.getCashRegisterDate());
-            cashRegister.setBusiness(business);
+            cashRegister.setBusiness(null);
             cashRegister.setTimeSlot(timeSlot);
 
-            cashRegister.setUpdatedBy(worker); // Aggiorna il campo updatedBy
+            cashRegister.setUpdatedBy(null); // Aggiorna il campo updatedBy
 
             // Salva la CashRegister aggiornata
             CashRegister updatedCashRegister = cashRegisterRepository.save(cashRegister);
@@ -101,11 +104,12 @@ public class CashRegisterService {
         log.setRefTime(cashRegister.getRefTime());
         log.setTimeSlotName(cashRegister.getTimeSlot().getName());
 
-        log.setClosedBy(cashRegister.getClosedBy().getFullName());
+        //FIXME
+        log.setClosedBy(cashRegister.getClosedBy().toString());
         log.setCreatedAt(LocalDateTime.now());
 
         log.setUpdatedAt(LocalDateTime.now()); // Solo se hai bisogno di un timestamp
-        log.setUpdatedBy(cashRegister.getUpdatedBy().getFullName());
+        log.setUpdatedBy(cashRegister.getUpdatedBy().toString());
         cashRegisterLogRepository.save(log);
     }
 
