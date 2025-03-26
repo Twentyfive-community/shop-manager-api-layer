@@ -9,6 +9,5 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTim
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddTimeSlotReq {
-    private Long businessId;
     private SimpleTimeSlot timeSlot;
 }

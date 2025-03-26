@@ -75,7 +75,7 @@ public class ExpenseService {
     private Expense createExpenseFromAddExpenseReq(AddExpenseReq addExpenseReq,String authorization) throws IOException {
 
         BusinessUser businessUser = businessUserClient.getBusinessUserFromToken(authorization);
-        Supplier supplier = supplierService.getByIdAndName(addExpenseReq.getBusinessId(), addExpenseReq.getSupplierName());
+        Supplier supplier = supplierService.getByIdAndName(businessUser.getBusiness().getId(), addExpenseReq.getSupplierName());
         Expense expense = new Expense();
 
         expense.setWorker(businessUser);

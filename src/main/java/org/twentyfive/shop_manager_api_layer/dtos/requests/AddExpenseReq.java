@@ -17,7 +17,6 @@ public class AddExpenseReq {
     private double value;
     private boolean paid;
 
-    private Long businessId;
     private String supplierName;
 
 
