@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddCashRegisterReq {
-    private Long businessId;
     private String timeSlotName;
     private LocalDate cashRegisterDate;
     private List<AddEntryClosureReq> entries;

@@ -17,7 +17,7 @@ import java.io.IOException;
 public class BusinessUserController {
     private final BusinessUserClient businessUserClient;
 
-    @PatchMapping("/toggleStatus")
+    @PatchMapping("/toggle-status")
     public ResponseEntity<Boolean> toggleStatus(@RequestParam("email") String email,
                                                 HttpServletRequest request){
         String authorization = request.getHeader("Authorization");
@@ -25,7 +25,7 @@ public class BusinessUserController {
         return ResponseEntity.ok().body(businessUserClient.changeStatus(authorization,email));
     }
 
-    @PatchMapping("/changeRole")
+    @PatchMapping("/change-role")
     public ResponseEntity<Boolean> changeRole(@RequestBody ChangeRoleReq changeRoleReq,
                                               HttpServletRequest request){
         String authorization = request.getHeader("Authorization");

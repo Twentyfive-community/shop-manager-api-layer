@@ -4,10 +4,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.twentyfive.shop_manager_api_layer.clients.MsUserClient;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddTimeSlotReq;
 import org.twentyfive.shop_manager_api_layer.services.TimeSlotService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.CheckCashRegister;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -18,16 +20,20 @@ import java.util.List;
 @RequestMapping("/timeslot")
 public class TimeSlotController {
     private final TimeSlotService timeSlotService;
+    private final MsUserClient msUserClient;
 
-    @GetMapping("/getAllByBusinessId/{id}")
-    public ResponseEntity<List<SimpleTimeSlot>> getAllByBusinessId(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(timeSlotService.getAllByBusinessId(id));
+    @GetMapping("/get-all")
+    public ResponseEntity<List<SimpleTimeSlot>> getAll(HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        return ResponseEntity.ok().body(timeSlotService.getAll(business.getId()));
     }
 
-    @GetMapping("/checkCashRegisterInTimeSlot/{id}")
-    public ResponseEntity<List<CheckCashRegister>> checkCashRegisterInTimeSlot(@PathVariable("id") Long businessId,
-                                                                               @RequestParam("date") LocalDate date) {
-        return ResponseEntity.ok().body(timeSlotService.checkCashRegisterInTimeSlot(businessId,date));
+    @GetMapping("/check-cash-register-in-time-slot")
+    public ResponseEntity<List<CheckCashRegister>> checkCashRegisterInTimeSlot(HttpServletRequest request,
+                                                                               @RequestParam("date") LocalDate date) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(timeSlotService.checkCashRegisterInTimeSlot(authorization,date));
     }
 
     @PostMapping("/add")

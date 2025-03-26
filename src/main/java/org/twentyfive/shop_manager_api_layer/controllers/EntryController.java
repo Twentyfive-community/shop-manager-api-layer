@@ -16,12 +16,12 @@ import java.util.List;
 public class EntryController {
     private final EntryService entryService;
 
-    @GetMapping("/getAll")
+    @GetMapping("/get-all")
     public ResponseEntity<List<SimpleGenericEntry>> getAll() {
         return ResponseEntity.ok().body(entryService.getAll());
 
     }
-    @GetMapping("/getAllTotalEntries")
+    @GetMapping("/get-all-total-entries")
     public ResponseEntity<List<GetAllTotalEntriesReq>> getAllTotalEntries() {
         return ResponseEntity.ok().body(entryService.getAllTotalEntries());
     }

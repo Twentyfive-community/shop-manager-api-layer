@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.twentyfive.shop_manager_api_layer.clients.BusinessUserClient;
+import org.twentyfive.shop_manager_api_layer.clients.MsUserClient;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCustomerExpenseReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateCustomerExpenseReq;
 import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
@@ -18,6 +19,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.DateRange;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.PaymentMethod;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 import twentyfive.twentyfiveadapter.models.msUserBusinessModels.BusinessUser;
 
 import java.io.IOException;
@@ -35,10 +37,12 @@ public class CustomerExpenseService {
 
     private final CustomerExpenseRepository customerExpenseRepository;
     private final BusinessUserClient businessUserClient;
+    private final MsUserClient msUserClient;
 
 
-    public Page<CustomerExpenseDTO> getPeriodExpenses(Long id, int page, int size, DateRange dateRange, String value) {
-        List<CustomerExpense> customerExpenses = customerExpenseRepository.findByWorker_Business_IdAndCustomer_CompanyNameContainsAndRefTimeBetweenOrderByRefTimeDesc(id,value, dateRange.getStart(), dateRange.getEnd());
+    public Page<CustomerExpenseDTO> getPeriodExpenses(String authorization, int page, int size, DateRange dateRange, String value) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        List<CustomerExpense> customerExpenses = customerExpenseRepository.findByWorker_Business_IdAndCustomer_CompanyNameContainsAndRefTimeBetweenOrderByRefTimeDesc(business.getId(),value, dateRange.getStart(), dateRange.getEnd());
         List<CustomerExpenseDTO> expenseDTOS = customerExpenseMapperService.mapListCustomerExpensesToListCustomerExpensesDTO(customerExpenses);
 
         Pageable pageable = PageRequest.of(page, size);

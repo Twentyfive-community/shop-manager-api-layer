@@ -1,5 +1,6 @@
 package org.twentyfive.shop_manager_api_layer.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAutoCompleteCusto
 import org.twentyfive.shop_manager_api_layer.services.CustomerService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleCustomer;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,28 +20,32 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    @GetMapping("/getAll/{id}")
-    public ResponseEntity<Page<SimpleCustomer>> getAll(@PathVariable Long id,
+    @GetMapping("/get-all")
+    public ResponseEntity<Page<SimpleCustomer>> getAll(HttpServletRequest request,
                                                        @RequestParam(value = "page", defaultValue = "0") int page,
                                                        @RequestParam(value = "size", defaultValue = "25") int size,
-                                                       @RequestParam(value = "name", defaultValue = "") String name) {
-        return ResponseEntity.ok().body(customerService.getAll(id, page, size, name));
+                                                       @RequestParam(value = "name", defaultValue = "") String name) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(customerService.getAll(authorization, page, size, name));
     }
 
-    @PostMapping("/add/{id}")
-    public ResponseEntity<Boolean> add(@PathVariable("id") Long id, @RequestBody AddCustomerReq addCustomerReq) {
-        return ResponseEntity.ok().body(customerService.add(id, addCustomerReq));
+    @PostMapping("/add")
+    public ResponseEntity<Boolean> add(HttpServletRequest request, @RequestBody AddCustomerReq addCustomerReq) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(customerService.add(authorization, addCustomerReq));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> deleteByCompanyName(@PathVariable("id") Long id,
-                                                       @RequestParam("name") String name) {
-        return ResponseEntity.ok().body(customerService.deleteByCompanyName(id, name));
+    @DeleteMapping("/delete")
+    public ResponseEntity<Boolean> deleteByCompanyName(HttpServletRequest request,
+                                                       @RequestParam("name") String name) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(customerService.deleteByCompanyName(authorization, name));
     }
 
-    @GetMapping("/search/{id}")
-    public ResponseEntity<List<GetAutoCompleteCustomerRes>> search(@PathVariable("id") Long id,
-                                                                   @RequestParam(value = "value", defaultValue = "") String value) {
-        return ResponseEntity.ok().body(customerService.search(id, value));
+    @GetMapping("/search")
+    public ResponseEntity<List<GetAutoCompleteCustomerRes>> search(HttpServletRequest request,
+                                                                   @RequestParam(value = "value", defaultValue = "") String value) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(customerService.search(authorization, value));
     }
 }

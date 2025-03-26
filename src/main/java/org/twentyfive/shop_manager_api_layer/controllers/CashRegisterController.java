@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCashRegisterReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotReq;
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetPeriodStatRes;
-import org.twentyfive.shop_manager_api_layer.utilities.classes.PeriodStat;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.*;
 import org.twentyfive.shop_manager_api_layer.models.CashRegister;
 import org.twentyfive.shop_manager_api_layer.services.CashRegisterService;
@@ -22,17 +21,20 @@ import java.util.List;
 public class CashRegisterController {
     private final CashRegisterService cashRegisterService;
 
-    @GetMapping("/getAllByBusinessId/{id}")
-    public ResponseEntity<List<CashRegister>> getAllByBusinessId(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(cashRegisterService.getAllByBusinessId(id));
+    @GetMapping("/get-all")
+    public ResponseEntity<List<CashRegister>> getAll(HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(cashRegisterService.getAll(authorization));
     }
-    @GetMapping("/getDetailsById/{id}")
+    @GetMapping("/get-details-by-id/{id}")
     public ResponseEntity<CashRegisterDetails> getDetailsById(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(cashRegisterService.getDetailsById(id));
     }
-    @PostMapping("/getByDateAndTimeSlot/{id}")
-    public ResponseEntity<CashRegisterDTO> getByDateAndTimeSlot(@PathVariable("id") Long id, @RequestBody GetByDateAndTimeSlotReq request){
-        return ResponseEntity.ok().body(cashRegisterService.getByDateAndTimeSlot(id,request));
+    @PostMapping("/get-by-date-and-time-slot")
+    public ResponseEntity<CashRegisterDTO> getByDateAndTimeSlot(@RequestBody GetByDateAndTimeSlotReq req,
+                                                                HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(cashRegisterService.getByDateAndTimeSlot(authorization,req));
     }
 
     @PostMapping("/add")
@@ -42,17 +44,19 @@ public class CashRegisterController {
         return ResponseEntity.ok().body(cashRegisterService.add(addCashRegisterReq,authorization));
     }
 
-    @PostMapping("/getPeriodDailyActivities/{id}")
-    public ResponseEntity<Page<DailyActivities>> getPeriodDailyActivities(@PathVariable("id") Long id,
-                                                                          @RequestParam(value = "page", defaultValue = "0") int page,
+    @PostMapping("/get-period-daily-activities")
+    public ResponseEntity<Page<DailyActivities>> getPeriodDailyActivities(@RequestParam(value = "page", defaultValue = "0") int page,
                                                                           @RequestParam(value = "size", defaultValue = "25") int size,
-                                                                          @RequestBody DateRange dateRange) {
-        return ResponseEntity.ok().body(cashRegisterService.getPeriodDailyActivities(id,page,size,dateRange));
+                                                                          @RequestBody DateRange dateRange,
+                                                                          HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(cashRegisterService.getPeriodDailyActivities(authorization,page,size,dateRange));
     }
-    @PostMapping("/getPeriodStats/{id}")
-    public ResponseEntity<GetPeriodStatRes> getPeriodStats(@PathVariable("id") Long id,
-                                                           @RequestBody DateRange dateRange) {
-        return ResponseEntity.ok().body(cashRegisterService.getPeriodStats(id,dateRange));
+    @PostMapping("/get-period-stats")
+    public ResponseEntity<GetPeriodStatRes> getPeriodStats(HttpServletRequest request,
+                                                           @RequestBody DateRange dateRange) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(cashRegisterService.getPeriodStats(authorization,dateRange));
     }
 
 }

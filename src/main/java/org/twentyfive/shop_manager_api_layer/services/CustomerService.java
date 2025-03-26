@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.clients.MsUserClient;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCustomerReq;
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetAutoCompleteCustomerRes;
 import org.twentyfive.shop_manager_api_layer.exceptions.CustomerNotFoundException;
@@ -16,6 +17,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleCus
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,14 +25,13 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-
-//    private final BusinessService businessService;
-
     private final CustomerMapperService customerMapperService;
+    private final MsUserClient msUserClient;
 
 
-    public Page<SimpleCustomer> getAll(Long id, int page, int size, String companyName) {
-        List<Customer> customers = customerRepository.findByBusinessIdAndCompanyNameContainsIgnoreCaseAndDisabledFalseOrderByCompanyNameAsc(id,companyName);
+    public Page<SimpleCustomer> getAll(String authorization, int page, int size, String companyName) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        List<Customer> customers = customerRepository.findByBusinessIdAndCompanyNameContainsIgnoreCaseAndDisabledFalseOrderByCompanyNameAsc(business.getId(), companyName);
         List<SimpleCustomer> simpleCustomers = customerMapperService.mapListCustomerToListSimpleCustomers(customers);
         Pageable pageable = PageRequest.of(page, size);
         return PageUtility.convertListToPage(simpleCustomers, pageable);
@@ -42,29 +43,29 @@ public class CustomerService {
     }
 
     @Transactional
-    public Boolean add(Long id, AddCustomerReq addCustomerReq) {
-        if (existsByBusinessIdAndCompanyNameAndDisabledTrue(id, addCustomerReq.getCompanyName())){
+    public Boolean add(String authorization, AddCustomerReq addCustomerReq) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        if (existsByBusinessIdAndCompanyNameAndDisabledTrue(business.getId(), addCustomerReq.getCompanyName())){
 
-            Customer customer = getByIdAndCompanyName(id, addCustomerReq.getCompanyName());
+            Customer customer = getByIdAndCompanyName(business.getId(), addCustomerReq.getCompanyName());
             return customerMapperService.enableAndUpdateCustomerFromAddCustomerReq(customer, addCustomerReq) != null;
         }
 
-//        Business business = businessService.getById(id);
-        Business business = null;
         return customerMapperService.createCustomerFromAddSupplierReq(addCustomerReq,business) != null;
     }
 
     @Transactional
-    public Boolean deleteByCompanyName(Long id, String name) {
-
-        Customer customer = getByIdAndCompanyName(id, name);
+    public Boolean deleteByCompanyName(String authorization, String name) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        Customer customer = getByIdAndCompanyName(business.getId(), name);
         customer.setDisabled(true);
 
         return customerRepository.save(customer) != null;
     }
 
-    public List<GetAutoCompleteCustomerRes> search(Long id, String value) {
-        List<Customer> customers = customerRepository.findByBusinessIdAndCompanyNameContainsIgnoreCaseAndDisabledFalseOrderByCompanyNameAsc(id, value);
+    public List<GetAutoCompleteCustomerRes> search(String authorization, String value) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        List<Customer> customers = customerRepository.findByBusinessIdAndCompanyNameContainsIgnoreCaseAndDisabledFalseOrderByCompanyNameAsc(business.getId(), value);
 
         return customers.stream().map(customer -> new GetAutoCompleteCustomerRes(customer.getCompanyName())).toList();
     }

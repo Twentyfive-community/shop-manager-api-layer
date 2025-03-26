@@ -36,7 +36,7 @@ public class TimeSlotService {
         return true;
     }
 
-    public List<SimpleTimeSlot> getAllByBusinessId(Long id) {
+    public List<SimpleTimeSlot> getAll(Long id) throws IOException {
         List<TimeSlot> timeSlots = timeSlotRepository.findByBusiness_Id(id);
         return timeSlotMapperService.createSimpleTimeSlotsFromTimeSlots(timeSlots);
     }
@@ -54,8 +54,9 @@ public class TimeSlotService {
         return timeSlot;
     }
 
-    public List<CheckCashRegister> checkCashRegisterInTimeSlot(Long businessId, LocalDate date){
-        List<SimpleTimeSlot> timeSlots = getAllByBusinessId(businessId);
+    public List<CheckCashRegister> checkCashRegisterInTimeSlot(String authorization, LocalDate date) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        List<SimpleTimeSlot> timeSlots = getAll(business.getId());
         List<CheckCashRegister> checkCashRegisters = new ArrayList<>();
         for (SimpleTimeSlot timeSlot : timeSlots) {
             CheckCashRegister checkCashRegister = new CheckCashRegister();

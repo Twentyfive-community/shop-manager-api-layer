@@ -42,7 +42,9 @@ public class SupplierService {
     private final MsUserClient msUserClient;
 
     @Transactional
-    public boolean add(Long id,AddSupplierReq addSupplierReq,String authorization) throws IOException {
+    public boolean add(AddSupplierReq addSupplierReq,String authorization) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        Long id = business.getId();
         SupplierGroup supplierGroup = supplierGroupService.optFindByBusinessIdAndName(id, addSupplierReq.getGroupName()).orElse(null);
 
         if (existsByBusinessIdAndNameAndDisabledTrue(id, addSupplierReq.getName())){
@@ -51,20 +53,18 @@ public class SupplierService {
             supplier.setDisabled(false);
             return supplierRepository.save(supplier) != null;
         }
-        Business business = msUserClient.getBusinessFromToken(authorization);
 
         return supplierMapperService.createSupplierFromAddSupplierReq(addSupplierReq.getName(), supplierGroup,business) != null;
     }
 
     @Transactional
-    public Boolean addGroup(Long id, AddSupplierGroupReq addSupplierGroupReq) {
-//        Business business = businessService.getById(id);
-        Business business = null;
+    public Boolean addGroup(String authorization, AddSupplierGroupReq addSupplierGroupReq) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
         SupplierGroup supplierGroup;
-        List<Supplier> suppliers = getAllByBusinessIdAndNameList(id, addSupplierGroupReq.getSupplierNames());
+        List<Supplier> suppliers = getAllByBusinessIdAndNameList(business.getId(), addSupplierGroupReq.getSupplierNames());
 
-        if (supplierGroupService.existsByBusinessIdAndName(id, addSupplierGroupReq.getName())){
-            supplierGroup = supplierGroupService.findByBusinessIdAndName(id, addSupplierGroupReq.getName());
+        if (supplierGroupService.existsByBusinessIdAndName(business.getId(), addSupplierGroupReq.getName())){
+            supplierGroup = supplierGroupService.findByBusinessIdAndName(business.getId(), addSupplierGroupReq.getName());
             List<Supplier> oldSuppliers = supplierGroup.getSuppliers();
 
             for (Supplier supplier : oldSuppliers) {
@@ -86,19 +86,19 @@ public class SupplierService {
     }
 
     @Transactional
-    public Boolean addList(Long id,
-                           List<AddSupplierReq> addSupplierReqList,
+    public Boolean addList(List<AddSupplierReq> addSupplierReqList,
                            String authorization) throws IOException {
 
         for (AddSupplierReq addSupplierReq : addSupplierReqList) {
-            add(id,addSupplierReq,authorization);
+            add(addSupplierReq,authorization);
         }
 
         return true;
     }
 
-    public Page<SimpleSupplier> getAll(Long id, int page, int size, String name) {
-        List<Supplier> suppliers = supplierRepository.findByBusinessIdAndNameContainsIgnoreCaseAndDisabledFalseOrderByNameAsc(id,name);
+    public Page<SimpleSupplier> getAll(String authorization, int page, int size, String name) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        List<Supplier> suppliers = supplierRepository.findByBusinessIdAndNameContainsIgnoreCaseAndDisabledFalseOrderByNameAsc(business.getId(),name);
         List<SimpleSupplier> simpleSuppliers = supplierMapperService.mapListSupplierToListSimpleSupplier(suppliers);
         Pageable pageable = PageRequest.of(page, size);
         return PageUtility.convertListToPage(simpleSuppliers,pageable);
@@ -108,8 +108,9 @@ public class SupplierService {
         return supplierRepository.findAllByBusinessIdAndNameInAndDisabledFalse(businessId, supplierNames);
     }
 
-    public List<GetAutoCompleteSupplierRes> search(Long businessId, String value) {
-        List<Supplier> suppliers = supplierRepository.findSuppliersByBusinessIdAndValueAndDisabledFalse(businessId, value);
+    public List<GetAutoCompleteSupplierRes> search(String authorization, String value) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        List<Supplier> suppliers = supplierRepository.findSuppliersByBusinessIdAndValueAndDisabledFalse(business.getId(), value);
 
         return suppliers.stream()
                 .map(supplier -> {
@@ -126,13 +127,15 @@ public class SupplierService {
                 .collect(Collectors.toList());
     }
 
-    public List<String> getAllNames(Long id) {
-        return supplierRepository.findAllNamesByIdAndDisabledFalse(id);
+    public List<String> getAllNames(String authorization) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        return supplierRepository.findAllNamesByIdAndDisabledFalse(business.getId());
     }
 
 
-    public List<String> searchGroups(Long id, String value) {
-        return supplierGroupRepository.findSupplierGroupNamesByBusinessIdAndValue(id,value);
+    public List<String> searchGroups(String authorization, String value) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        return supplierGroupRepository.findSupplierGroupNamesByBusinessIdAndValue(business.getId(), value);
     }
 
     public Supplier getById(Long id){
@@ -146,8 +149,9 @@ public class SupplierService {
     }
 
     @Transactional
-    public Boolean deleteByName(Long id, String name) {
-        Supplier supplier = getByIdAndName(id, name);
+    public Boolean deleteByName(String authorization, String name) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        Supplier supplier = getByIdAndName(business.getId(), name);
 
         supplier.setDisabled(true);
         supplier.setGroup(null);
@@ -165,7 +169,8 @@ public class SupplierService {
     }
 
     @Transactional
-    public Boolean update(Long id, UpdateSupplierReq updateSupplierReq) {
+    public Boolean update(String authorization, UpdateSupplierReq updateSupplierReq) throws IOException {
+        Long id = msUserClient.getBusinessFromToken(authorization).getId();
         if (existsByBusinessIdAndSupplierId(id,updateSupplierReq.getId())){
             Supplier supplier = getById(updateSupplierReq.getId());
             supplier.setName(updateSupplierReq.getName());
@@ -182,9 +187,9 @@ public class SupplierService {
     }
 
     @Transactional
-    public Boolean deleteGroup(Long id, String name) {
-
-        SupplierGroup group = supplierGroupService.findByBusinessIdAndName(id,name);
+    public Boolean deleteGroup(String authorization, String name) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        SupplierGroup group = supplierGroupService.findByBusinessIdAndName(business.getId(),name);
 
         List<Supplier> suppliers = group.getSuppliers();
         for (Supplier supplier : suppliers) {
@@ -198,10 +203,11 @@ public class SupplierService {
         return true;
     }
 
-    public Page<SimpleSupplierGroup> getAllGroups(Long id, int page, int size,String name) {
+    public Page<SimpleSupplierGroup> getAllGroups(String authorization, int page, int size,String name) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
         Pageable pageable = PageRequest.of(page, size);
 
-        List<SupplierGroup> supplierGroups = supplierGroupRepository.findAllByBusiness_IdAndNameContainsIgnoreCase(id,name);
+        List<SupplierGroup> supplierGroups = supplierGroupRepository.findAllByBusiness_IdAndNameContainsIgnoreCase(business.getId(),name);
 
         List<SimpleSupplierGroup> simpleSupplierGroups = supplierMapperService.mapListSimpleSupplierGroupFromListSupplierGroup(supplierGroups);
 
@@ -209,8 +215,9 @@ public class SupplierService {
     }
 
 
-    public GetSupplierWithoutGroupReq getSupplierWithoutGroup(Long id, String name, String value) {
-        List<SupplierAndGroupCheck> supplierAndGroupChecks = supplierRepository.getAllNamesByBusiness_IdAndGroupNullOrNameAndFilterNameAndDisabledFalse(id, name, value);
+    public GetSupplierWithoutGroupReq getSupplierWithoutGroup(String authorization, String name, String value) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        List<SupplierAndGroupCheck> supplierAndGroupChecks = supplierRepository.getAllNamesByBusiness_IdAndGroupNullOrNameAndFilterNameAndDisabledFalse(business.getId(), name, value);
         return new GetSupplierWithoutGroupReq(supplierAndGroupChecks);
 
     }

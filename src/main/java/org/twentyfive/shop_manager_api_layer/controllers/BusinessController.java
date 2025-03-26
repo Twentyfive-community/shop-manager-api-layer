@@ -14,7 +14,7 @@ import org.twentyfive.shop_manager_api_layer.services.BusinessService;
 public class BusinessController {
     private final BusinessService businessService;
 
-    @GetMapping("/getAllPaymentMethod")
+    @GetMapping("/get-all-payment-method")
     public ResponseEntity<GetAllPaymentMethodRes> getAllPaymentMethod() {
         return ResponseEntity.ok().body(businessService.getAllPaymentMethod());
     }

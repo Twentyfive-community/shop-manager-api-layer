@@ -21,13 +21,14 @@ public class CustomerExpenseController {
 
     private final CustomerExpenseService customerExpenseService;
 
-    @PostMapping("/getPeriodExpenses/{id}")
-    public ResponseEntity<Page<CustomerExpenseDTO>> getPeriodExpenses(@PathVariable("id") Long id,
+    @PostMapping("/get-period-expenses")
+    public ResponseEntity<Page<CustomerExpenseDTO>> getPeriodExpenses(HttpServletRequest request,
                                                                       @RequestParam(value = "page", defaultValue = "0") int page,
                                                                       @RequestParam(value = "size", defaultValue = "25") int size,
                                                                       @RequestParam(value = "value", defaultValue = "") String value,
-                                                                      @RequestBody DateRange dateRange){
-        return ResponseEntity.ok().body(customerExpenseService.getPeriodExpenses(id,page,size,dateRange,value));
+                                                                      @RequestBody DateRange dateRange) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(customerExpenseService.getPeriodExpenses(authorization,page,size,dateRange,value));
     }
 
     @PostMapping("/add")

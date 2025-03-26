@@ -19,8 +19,6 @@ import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterLogReposit
 import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
-import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
-import rx.Scheduler;
 import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 import twentyfive.twentyfiveadapter.models.msUserBusinessModels.MsUser;
 
@@ -46,12 +44,11 @@ public class CashRegisterService {
 
     public Boolean add(AddCashRegisterReq addCashRegisterReq,
                        String authorization) throws IOException {
-        // Recupera il business associato
         Business business = msUserClient.getBusinessFromToken(authorization);
         MsUser msUser = msUserClient.getUserFromToken(authorization);
-        TimeSlot timeSlot = timeSlotService.getByNameAndBusinessId(addCashRegisterReq.getTimeSlotName(), addCashRegisterReq.getBusinessId());
+        TimeSlot timeSlot = timeSlotService.getByNameAndBusinessId(addCashRegisterReq.getTimeSlotName(), business.getId());
 
-        Optional<CashRegister> optCashRegister =cashRegisterRepository.findByBusiness_IdAndTimeSlot_NameAndRefTime(addCashRegisterReq.getBusinessId(), addCashRegisterReq.getTimeSlotName(), addCashRegisterReq.getCashRegisterDate());
+        Optional<CashRegister> optCashRegister =cashRegisterRepository.findByBusiness_IdAndTimeSlot_NameAndRefTime(business.getId(), addCashRegisterReq.getTimeSlotName(), addCashRegisterReq.getCashRegisterDate());
 
         if (optCashRegister.isEmpty()) {
             CashRegister cashRegister = new CashRegister();
@@ -109,13 +106,14 @@ public class CashRegisterService {
         cashRegisterLogRepository.save(log);
     }
 
-    public List<CashRegister> getAllByBusinessId(Long id) {
-        return cashRegisterRepository.findAllByBusiness_Id(id);
+    public List<CashRegister> getAll(String authorization) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        return cashRegisterRepository.findAllByBusiness(business);
     }
 
-    public CashRegisterDTO getByDateAndTimeSlot(Long id, GetByDateAndTimeSlotReq request) {
-
-        CashRegister cashRegister = cashRegisterRepository.findByBusiness_IdAndTimeSlot_NameAndRefTime(id, request.getTimeSlotName(),request.getRefTime()).orElse(null);
+    public CashRegisterDTO getByDateAndTimeSlot(String authorization, GetByDateAndTimeSlotReq request) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        CashRegister cashRegister = cashRegisterRepository.findByBusiness_IdAndTimeSlot_NameAndRefTime(business.getId(), request.getTimeSlotName(),request.getRefTime()).orElse(null);
 
         return cashRegisterMapperService.mapCashRegisterDTOFromCashRegister(cashRegister);
 
@@ -123,20 +121,20 @@ public class CashRegisterService {
     public List<CashRegister> getAllCashRegistersInAPeriod(DateRange dateRange){
         return cashRegisterRepository.findAllByRefTimeBetween(dateRange.getStart(), dateRange.getEnd());
     }
-    public Page<DailyActivities> getPeriodDailyActivities(Long id, int page, int size, DateRange dateRange) {
-
-        List<SimpleTimeSlot> timeSlots = timeSlotService.getAllByBusinessId(id);
+    public Page<DailyActivities> getPeriodDailyActivities(String authorization, int page, int size, DateRange dateRange) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        List<SimpleTimeSlot> timeSlots = timeSlotService.getAll(business.getId());
         Pageable pageable = PageRequest.of(page, size);
-        List<DailyActivities> dailyActivities = statActivityMapperService.mapListDailyActivitiesFromTimeSlots(id,timeSlots,dateRange);
+        List<DailyActivities> dailyActivities = statActivityMapperService.mapListDailyActivitiesFromTimeSlots(business.getId(),timeSlots,dateRange);
         return PageUtility.convertListToPage(dailyActivities,pageable);
     }
 
-    public PeriodStat getPeriodStat(Long id, DateRange dateRange) {
+    public PeriodStat getPeriodStat(Long id, DateRange dateRange) throws IOException {
         PeriodStat res = new PeriodStat();
 
         res.setPeriod(dateRange.getStart(), dateRange.getEnd());
 
-        List<SimpleTimeSlot> timeSlots = timeSlotService.getAllByBusinessId(id);
+        List<SimpleTimeSlot> timeSlots = timeSlotService.getAll(id);
 
         List<PeriodStatCashRegister> periodStatCashRegisters = statActivityMapperService.mapListPeriodCashRegisterFromTimeSlots(id,timeSlots,dateRange);
 
@@ -154,18 +152,19 @@ public class CashRegisterService {
 
     }
 
-    public PeriodClosure getPeriodClosure(Long id, DateRange dateRange) {
-        List<SimpleTimeSlot> timeSlots = timeSlotService.getAllByBusinessId(id);
+    public PeriodClosure getPeriodClosure(Long id, DateRange dateRange) throws IOException {
+        List<SimpleTimeSlot> timeSlots = timeSlotService.getAll(id);
         return statActivityMapperService.mapPeriodClosureFromTimeSlots(id, timeSlots,dateRange);
 
     }
 
-    public PeriodFinancialSummary getPeriodFinancialSummary(Long id, DateRange dateRange) {
-        List<SimpleTimeSlot> timeSlots = timeSlotService.getAllByBusinessId(id);
+    public PeriodFinancialSummary getPeriodFinancialSummary(Long id, DateRange dateRange) throws IOException {
+        List<SimpleTimeSlot> timeSlots = timeSlotService.getAll(id);
         return statActivityMapperService.mapPeriodFinancialSummaryFromTimeSlots(id, timeSlots,dateRange);
     }
 
-    public GetPeriodStatRes getPeriodStats(Long id, DateRange dateRange) {
-        return new GetPeriodStatRes(getPeriodStat(id,dateRange),getPeriodClosure(id,dateRange),getPeriodFinancialSummary(id,dateRange));
+    public GetPeriodStatRes getPeriodStats(String authorization, DateRange dateRange) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        return new GetPeriodStatRes(getPeriodStat(business.getId(), dateRange),getPeriodClosure(business.getId(), dateRange),getPeriodFinancialSummary(business.getId(), dateRange));
     }
 }

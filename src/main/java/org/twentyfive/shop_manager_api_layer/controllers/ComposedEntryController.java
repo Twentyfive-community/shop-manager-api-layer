@@ -15,7 +15,7 @@ import java.util.List;
 public class ComposedEntryController {
     private final ComposedEntryService composedEntryService;
 
-    @GetMapping("/getAll")
+    @GetMapping("/get-all")
     public ResponseEntity<List<SimpleGenericEntry>> getAll() {
         return ResponseEntity.ok().body(composedEntryService.getAll());
     }

@@ -24,79 +24,88 @@ public class SupplierController {
 
     private final SupplierService supplierService;
 
-    @GetMapping("/getAll/{id}")
-    public ResponseEntity<Page<SimpleSupplier>> getAll(@PathVariable Long id,
+    @GetMapping("/get-all")
+    public ResponseEntity<Page<SimpleSupplier>> getAll(HttpServletRequest request,
                                                        @RequestParam(value = "page", defaultValue = "0") int page,
                                                        @RequestParam(value = "size", defaultValue = "25") int size,
-                                                       @RequestParam(value = "name", defaultValue = "") String name) {
-        return ResponseEntity.ok().body(supplierService.getAll(id, page, size, name));
+                                                       @RequestParam(value = "name", defaultValue = "") String name) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.getAll(authorization, page, size, name));
     }
 
-    @PostMapping("/addList/{id}")
-    public ResponseEntity<Boolean> addList(@PathVariable("id") Long id,
-                                           @RequestBody List<AddSupplierReq> addSupplierReq,
+    @PostMapping("/add-list")
+    public ResponseEntity<Boolean> addList(@RequestBody List<AddSupplierReq> addSupplierReq,
                                            HttpServletRequest request) throws IOException {
         String authorization = request.getHeader("Authorization");
-        return ResponseEntity.ok().body(supplierService.addList(id, addSupplierReq,authorization));
+        return ResponseEntity.ok().body(supplierService.addList(addSupplierReq,authorization));
     }
 
-    @GetMapping("/searchGroups/{id}")
-    public ResponseEntity<List<String>> searchGroups(@PathVariable("id") Long id, @RequestParam(value = "value", defaultValue = "") String value) {
-        return ResponseEntity.ok().body(supplierService.searchGroups(id, value));
+    @GetMapping("/search-groups")
+    public ResponseEntity<List<String>> searchGroups(HttpServletRequest request, @RequestParam(value = "value", defaultValue = "") String value) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.searchGroups(authorization, value));
     }
 
-    @PostMapping("/add/{id}")
-    public ResponseEntity<Boolean> add(@PathVariable("id") Long id,
-                                       @RequestBody AddSupplierReq addSupplierReq,
+    @PostMapping("/add")
+    public ResponseEntity<Boolean> add(@RequestBody AddSupplierReq addSupplierReq,
                                        HttpServletRequest request) throws IOException {
         String authorization = request.getHeader("Authorization");
-        return ResponseEntity.ok().body(supplierService.add(id, addSupplierReq,authorization));
+        return ResponseEntity.ok().body(supplierService.add(addSupplierReq,authorization));
     }
 
-    @PostMapping("/addGroup/{id}")
-    public ResponseEntity<Boolean> addGroup(@PathVariable("id") Long id, @RequestBody AddSupplierGroupReq addSupplierGroupReq) {
-        return ResponseEntity.ok().body(supplierService.addGroup(id, addSupplierGroupReq));
+    @PostMapping("/add-group")
+    public ResponseEntity<Boolean> addGroup(HttpServletRequest request,
+                                            @RequestBody AddSupplierGroupReq addSupplierGroupReq) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.addGroup(authorization, addSupplierGroupReq));
     }
 
-    @GetMapping("/getAllGroups/{id}")
-    public ResponseEntity<Page<SimpleSupplierGroup>> getAllGroups(@PathVariable Long id,
+    @GetMapping("/get-all-groups")
+    public ResponseEntity<Page<SimpleSupplierGroup>> getAllGroups(HttpServletRequest request,
                                                                   @RequestParam(value = "page", defaultValue = "0") int page,
                                                                   @RequestParam(value = "size", defaultValue = "25") int size,
-                                                                  @RequestParam(value ="name", defaultValue = "") String name) {
-        return ResponseEntity.ok().body(supplierService.getAllGroups(id, page, size,name));
+                                                                  @RequestParam(value ="name", defaultValue = "") String name) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.getAllGroups(authorization, page, size,name));
     }
 
-    @DeleteMapping("/deleteGroup/{id}")
-    public ResponseEntity<Boolean> deleteGroupById(@PathVariable("id") Long id, @RequestParam("name") String name) {
-        return ResponseEntity.ok().body(supplierService.deleteGroup(id, name));
+    @DeleteMapping("/delete-group")
+    public ResponseEntity<Boolean> deleteGroupById(HttpServletRequest request, @RequestParam("name") String name) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.deleteGroup(authorization, name));
     }
 
-    @PatchMapping("/update/{id}")
-    public ResponseEntity<Boolean> update(@PathVariable("id") Long id, @RequestBody UpdateSupplierReq updateSupplierReq) {
-        return ResponseEntity.ok().body(supplierService.update(id, updateSupplierReq));
+    @PatchMapping("/update")
+    public ResponseEntity<Boolean> update(HttpServletRequest request, @RequestBody UpdateSupplierReq updateSupplierReq) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.update(authorization, updateSupplierReq));
 
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> deleteByName(@PathVariable("id") Long id, @RequestParam("name") String name) {
-        return ResponseEntity.ok().body(supplierService.deleteByName(id, name));
+    @DeleteMapping("/delete")
+    public ResponseEntity<Boolean> deleteByName(HttpServletRequest request, @RequestParam("name") String name) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.deleteByName(authorization, name));
     }
 
-    @GetMapping("/search/{id}")
-    public ResponseEntity<List<GetAutoCompleteSupplierRes>> search(@PathVariable("id") Long id, @RequestParam(value = "value", defaultValue = "") String value) {
-        return ResponseEntity.ok().body(supplierService.search(id, value));
+    @GetMapping("/search")
+    public ResponseEntity<List<GetAutoCompleteSupplierRes>> search(HttpServletRequest request, @RequestParam(value = "value", defaultValue = "") String value)throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.search(authorization, value));
     }
 
-    @GetMapping("/getAllNames/{id}")
-    public ResponseEntity<List<String>> getAllNames(@PathVariable("id") Long id) {
-        return ResponseEntity.ok().body(supplierService.getAllNames(id));
+    @GetMapping("/get-all-names")
+    public ResponseEntity<List<String>> getAllNames(HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.getAllNames(authorization));
     }
 
-    @GetMapping("/getSupplierWithoutGroup/{id}")
-    public ResponseEntity<GetSupplierWithoutGroupReq> getSupplierWithoutGroup(@PathVariable("id") Long id,
+    @GetMapping("/get-supplier-without-group")
+    public ResponseEntity<GetSupplierWithoutGroupReq> getSupplierWithoutGroup(HttpServletRequest request,
                                                                               @RequestParam(value = "name", required = false) String name,
-                                                                              @RequestParam(value = "value", defaultValue = "") String value) {
-        return ResponseEntity.ok().body(supplierService.getSupplierWithoutGroup(id,name, value));
+                                                                              @RequestParam(value = "value", defaultValue = "") String value) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.getSupplierWithoutGroup(authorization,name, value));
     }
 
 }
