@@ -1,5 +1,6 @@
 package org.twentyfive.shop_manager_api_layer.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +31,18 @@ public class CustomerExpenseController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Boolean> add(@RequestBody AddCustomerExpenseReq addCustomerExpenseReq) throws IOException {
-        return ResponseEntity.ok().body(customerExpenseService.add(addCustomerExpenseReq));
+    public ResponseEntity<Boolean> add(@RequestBody AddCustomerExpenseReq addCustomerExpenseReq,
+                                       HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+
+        return ResponseEntity.ok().body(customerExpenseService.add(addCustomerExpenseReq,authorization));
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Boolean> update(@RequestBody UpdateCustomerExpenseReq updateCustomerExpenseReq) throws IOException {
-        return ResponseEntity.ok().body(customerExpenseService.update(updateCustomerExpenseReq));
+    public ResponseEntity<Boolean> update(@RequestBody UpdateCustomerExpenseReq updateCustomerExpenseReq,
+                                          HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(customerExpenseService.update(updateCustomerExpenseReq,authorization));
     }
 
     @DeleteMapping("/delete/{id}")

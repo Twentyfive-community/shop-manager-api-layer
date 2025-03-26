@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.clients.BusinessUserClient;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddExpenseReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateExpenseReq;
 import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
@@ -32,16 +33,17 @@ public class ExpenseService {
 
     private final ExpenseMapperService expenseMapperService;
     private final SupplierService supplierService;
+    private final BusinessUserClient businessUserClient;
 
-    public Boolean add(AddExpenseReq addExpenseReq) throws IOException {
-        Expense expense = createExpenseFromAddExpenseReq(addExpenseReq);
+    public Boolean add(AddExpenseReq addExpenseReq,String authorization) throws IOException {
+        Expense expense = createExpenseFromAddExpenseReq(addExpenseReq,authorization);
         return expenseRepository.save(expense) != null;
     }
 
-    public boolean update(UpdateExpenseReq updateExpenseReq) throws IOException {
+    public boolean update(UpdateExpenseReq updateExpenseReq,String authorization) throws IOException {
         expenseRepository.findById(updateExpenseReq.getId()).orElseThrow(() -> new ExpenseNotFoundException("Non esiste una spesa con questo id! : "+updateExpenseReq.getId()));
 
-        Expense expense = createExpenseFromAddExpenseReq(updateExpenseReq.getAddExpenseReq());
+        Expense expense = createExpenseFromAddExpenseReq(updateExpenseReq.getAddExpenseReq(),authorization);
         expense.setId(updateExpenseReq.getId());
 
         return expenseRepository.save(expense) != null;
@@ -67,16 +69,13 @@ public class ExpenseService {
 
     }
 
-    private Expense createExpenseFromAddExpenseReq(AddExpenseReq addExpenseReq) throws IOException {
-        String keycloakId = JwtUtility.getIdKeycloak();
+    private Expense createExpenseFromAddExpenseReq(AddExpenseReq addExpenseReq,String authorization) throws IOException {
 
-        //FIXME
-        //BusinessWorker businessWorker = businessWorkerService.getByBusinessIdAndKeycloakId(addExpenseReq.getBusinessId(), keycloakId);
-        BusinessUser businessWorker = null;
+        BusinessUser businessUser = businessUserClient.getBusinessUserFromToken(authorization);
         Supplier supplier = supplierService.getByIdAndName(addExpenseReq.getBusinessId(), addExpenseReq.getSupplierName());
         Expense expense = new Expense();
 
-        expense.setWorker(businessWorker);
+        expense.setWorker(businessUser);
         expense.setSupplier(supplier);
 
         expense.setRefTime(addExpenseReq.getRefTime());

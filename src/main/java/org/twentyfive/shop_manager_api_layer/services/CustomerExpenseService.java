@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.clients.BusinessUserClient;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCustomerExpenseReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.UpdateCustomerExpenseReq;
 import org.twentyfive.shop_manager_api_layer.exceptions.ExpenseNotFoundException;
@@ -33,6 +34,7 @@ public class CustomerExpenseService {
 //    private final BusinessWorkerService businessWorkerService;
 
     private final CustomerExpenseRepository customerExpenseRepository;
+    private final BusinessUserClient businessUserClient;
 
 
     public Page<CustomerExpenseDTO> getPeriodExpenses(Long id, int page, int size, DateRange dateRange, String value) {
@@ -48,17 +50,19 @@ public class CustomerExpenseService {
         return customerExpenseRepository.findByWorker_Business_IdAndRefTimeBetween(id,dateRange.getStart(),dateRange.getEnd());
     }
     @Transactional
-    public Boolean add(AddCustomerExpenseReq addCustomerExpenseReq) throws IOException {
-        CustomerExpense customerExpense = createCustomerExpenseFromAddCustomerExpenseReq(addCustomerExpenseReq);
+    public Boolean add(AddCustomerExpenseReq addCustomerExpenseReq,
+                       String authorization) throws IOException {
+        CustomerExpense customerExpense = createCustomerExpenseFromAddCustomerExpenseReq(addCustomerExpenseReq,authorization);
 
         return customerExpenseRepository.save(customerExpense) != null;
     }
 
     @Transactional
-    public boolean update(UpdateCustomerExpenseReq updateCustomerExpenseReq) throws IOException {
+    public boolean update(UpdateCustomerExpenseReq updateCustomerExpenseReq,
+                          String authorization) throws IOException {
         customerExpenseRepository.findById(updateCustomerExpenseReq.getId()).orElseThrow(() -> new ExpenseNotFoundException("Non esiste una spesa con questo id! : "+updateCustomerExpenseReq.getId()));
 
-        CustomerExpense customerExpense = createCustomerExpenseFromAddCustomerExpenseReq(updateCustomerExpenseReq.getAddCustomerExpenseReq());
+        CustomerExpense customerExpense = createCustomerExpenseFromAddCustomerExpenseReq(updateCustomerExpenseReq.getAddCustomerExpenseReq(),authorization);
         customerExpense.setId(updateCustomerExpenseReq.getId());
 
         return customerExpenseRepository.save(customerExpense) != null;
@@ -73,19 +77,15 @@ public class CustomerExpenseService {
         return true;
     }
 
-    private CustomerExpense createCustomerExpenseFromAddCustomerExpenseReq(AddCustomerExpenseReq addCustomerExpenseReq) throws IOException {
-        String keycloakId = JwtUtility.getIdKeycloak();
+    private CustomerExpense createCustomerExpenseFromAddCustomerExpenseReq(AddCustomerExpenseReq addCustomerExpenseReq,String authorization) throws IOException {
 
-        //FIXME
-//        BusinessWorker businessWorker = businessWorkerService.getByBusinessIdAndKeycloakId(addCustomerExpenseReq.getBusinessId(), keycloakId);
-
-        BusinessUser businessWorker = null;
-        Customer customer = customerService.getByIdAndCompanyName(addCustomerExpenseReq.getBusinessId(), addCustomerExpenseReq.getCompanyName());
+        BusinessUser businessUser = businessUserClient.getBusinessUserFromToken(authorization);
+        Customer customer = customerService.getByIdAndCompanyName(businessUser.getBusiness().getId(), addCustomerExpenseReq.getCompanyName());
 
         CustomerExpense customerExpense = new CustomerExpense();
 
         customerExpense.setCustomer(customer);
-        customerExpense.setWorker(businessWorker);
+        customerExpense.setWorker(businessUser);
 
         customerExpense.setValue(addCustomerExpenseReq.getValue());
         customerExpense.setPaymentMethod(PaymentMethod.fromValue(addCustomerExpenseReq.getPaymentMethod()));

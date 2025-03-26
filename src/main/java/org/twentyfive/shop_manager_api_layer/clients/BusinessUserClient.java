@@ -3,6 +3,7 @@ package org.twentyfive.shop_manager_api_layer.clients;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.BusinessUser;
 import twentyfive.twentyfiveadapter.request.msUserBusinessRequests.AddExistingUserReq;
 import twentyfive.twentyfiveadapter.request.msUserBusinessRequests.ChangeRoleReq;
 import twentyfive.twentyfiveadapter.response.msUserBusinessResponses.GetInfoMsUserRes;
@@ -26,4 +27,7 @@ public interface BusinessUserClient {
     @PostMapping("/add-existing-user")
     Boolean addExistingUser(@RequestHeader("authorization") String authorization,
                             @RequestBody AddExistingUserReq req);
+
+    @GetMapping("/get-from-token")
+    BusinessUser getBusinessUserFromToken(@RequestHeader("authorization") String authorization) throws IOException;
 }

@@ -26,8 +26,6 @@ public class PeriodFinancialSummary {
 
     private String total;
 
-    //TODO aggiungere i clienti.
-
     public void setTotalCostSuppliers(double totalCostSuppliers) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ITALY);

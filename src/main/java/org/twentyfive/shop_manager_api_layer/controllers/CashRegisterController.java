@@ -1,5 +1,6 @@
 package org.twentyfive.shop_manager_api_layer.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,10 @@ public class CashRegisterController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Boolean> add(@RequestBody AddCashRegisterReq addCashRegisterReq) throws IOException {
-        return ResponseEntity.ok().body(cashRegisterService.add(addCashRegisterReq));
+    public ResponseEntity<Boolean> add(@RequestBody AddCashRegisterReq addCashRegisterReq,
+                                       HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(cashRegisterService.add(addCashRegisterReq,authorization));
     }
 
     @PostMapping("/getPeriodDailyActivities/{id}")

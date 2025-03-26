@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.clients.MsUserClient;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddCashRegisterReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetByDateAndTimeSlotReq;
 import org.twentyfive.shop_manager_api_layer.dtos.responses.GetPeriodStatRes;
@@ -19,7 +20,9 @@ import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import org.twentyfive.shop_manager_api_layer.utilities.statics.JwtUtility;
+import rx.Scheduler;
 import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.MsUser;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -30,28 +33,22 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CashRegisterService {
 
-//    private final BusinessWorkerService businessWorkerService;
     private final CashRegisterRepository cashRegisterRepository;
     private final CashRegisterLogRepository cashRegisterLogRepository;
 
-//    private final BusinessService businessService;
-//    private final WorkerService workerService;
     private final TimeSlotService timeSlotService;
     private final EntryService entryService;
     private final ComposedEntryService composedEntryService;
 
     private final CashRegisterMapperService cashRegisterMapperService;
     private final StatActivityMapperService statActivityMapperService;
+    private final MsUserClient msUserClient;
 
-    public Boolean add(AddCashRegisterReq addCashRegisterReq) throws IOException {
-        String keycloakId = JwtUtility.getIdKeycloak();
-
-        //FIXME
-//        businessWorkerService.existsByKeycloakIdAndBusinessId(keycloakId, addCashRegisterReq.getBusinessId());
-
+    public Boolean add(AddCashRegisterReq addCashRegisterReq,
+                       String authorization) throws IOException {
         // Recupera il business associato
-//        Business business = businessService.getById(addCashRegisterReq.getBusinessId());
-//        Worker worker = workerService.getByKeycloakId(keycloakId);
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        MsUser msUser = msUserClient.getUserFromToken(authorization);
         TimeSlot timeSlot = timeSlotService.getByNameAndBusinessId(addCashRegisterReq.getTimeSlotName(), addCashRegisterReq.getBusinessId());
 
         Optional<CashRegister> optCashRegister =cashRegisterRepository.findByBusiness_IdAndTimeSlot_NameAndRefTime(addCashRegisterReq.getBusinessId(), addCashRegisterReq.getTimeSlotName(), addCashRegisterReq.getCashRegisterDate());
@@ -59,10 +56,10 @@ public class CashRegisterService {
         if (optCashRegister.isEmpty()) {
             CashRegister cashRegister = new CashRegister();
             cashRegister.setRefTime(addCashRegisterReq.getCashRegisterDate());
-            cashRegister.setBusiness(null);
+            cashRegister.setBusiness(business);
             cashRegister.setTimeSlot(timeSlot);
-            cashRegister.setClosedBy(null);
-            cashRegister.setUpdatedBy(null);
+            cashRegister.setClosedBy(msUser);
+            cashRegister.setUpdatedBy(msUser);
             CashRegister savedCashRegister = cashRegisterRepository.save(cashRegister);
 
             // Crea voci Entry e Composed Entry
@@ -78,10 +75,10 @@ public class CashRegisterService {
 
             // Aggiorna i campi modificabili
             cashRegister.setRefTime(addCashRegisterReq.getCashRegisterDate());
-            cashRegister.setBusiness(null);
+            cashRegister.setBusiness(business);
             cashRegister.setTimeSlot(timeSlot);
 
-            cashRegister.setUpdatedBy(null); // Aggiorna il campo updatedBy
+            cashRegister.setUpdatedBy(msUser); // Aggiorna il campo updatedBy
 
             // Salva la CashRegister aggiornata
             CashRegister updatedCashRegister = cashRegisterRepository.save(cashRegister);
@@ -104,12 +101,11 @@ public class CashRegisterService {
         log.setRefTime(cashRegister.getRefTime());
         log.setTimeSlotName(cashRegister.getTimeSlot().getName());
 
-        //FIXME
-        log.setClosedBy(cashRegister.getClosedBy().toString());
+        log.setClosedBy(cashRegister.getClosedBy().getFullName());
         log.setCreatedAt(LocalDateTime.now());
 
         log.setUpdatedAt(LocalDateTime.now()); // Solo se hai bisogno di un timestamp
-        log.setUpdatedBy(cashRegister.getUpdatedBy().toString());
+        log.setUpdatedBy(cashRegister.getUpdatedBy().getFullName());
         cashRegisterLogRepository.save(log);
     }
 

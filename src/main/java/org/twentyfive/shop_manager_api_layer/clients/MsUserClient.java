@@ -4,6 +4,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.MsUser;
 import twentyfive.twentyfiveadapter.request.msUserBusinessRequests.AddMsUserReq;
 import twentyfive.twentyfiveadapter.request.msUserBusinessRequests.UpdateUserReq;
 import twentyfive.twentyfiveadapter.response.msUserBusinessResponses.GetUserRes;
@@ -28,5 +30,11 @@ public interface MsUserClient {
     @PutMapping("/update")
     Boolean updateUser(@RequestHeader("authorization") String authorization,
                        @RequestBody UpdateUserReq request) throws IOException;
+
+    @GetMapping("/get-business-from-token")
+    Business getBusinessFromToken(@RequestHeader("authorization") String authorization) throws IOException;
+
+    @GetMapping("/get-user-from-token")
+    MsUser getUserFromToken(@RequestHeader("authorization") String authorization) throws IOException;
 
 }

@@ -1,5 +1,6 @@
 package org.twentyfive.shop_manager_api_layer.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.twentyfive.shop_manager_api_layer.services.SupplierService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplierGroup;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSupplier;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,8 +33,11 @@ public class SupplierController {
     }
 
     @PostMapping("/addList/{id}")
-    public ResponseEntity<Boolean> addList(@PathVariable("id") Long id, @RequestBody List<AddSupplierReq> addSupplierReq) {
-        return ResponseEntity.ok().body(supplierService.addList(id, addSupplierReq));
+    public ResponseEntity<Boolean> addList(@PathVariable("id") Long id,
+                                           @RequestBody List<AddSupplierReq> addSupplierReq,
+                                           HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.addList(id, addSupplierReq,authorization));
     }
 
     @GetMapping("/searchGroups/{id}")
@@ -41,8 +46,11 @@ public class SupplierController {
     }
 
     @PostMapping("/add/{id}")
-    public ResponseEntity<Boolean> add(@PathVariable("id") Long id, @RequestBody AddSupplierReq addSupplierReq) {
-        return ResponseEntity.ok().body(supplierService.add(id, addSupplierReq));
+    public ResponseEntity<Boolean> add(@PathVariable("id") Long id,
+                                       @RequestBody AddSupplierReq addSupplierReq,
+                                       HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(supplierService.add(id, addSupplierReq,authorization));
     }
 
     @PostMapping("/addGroup/{id}")

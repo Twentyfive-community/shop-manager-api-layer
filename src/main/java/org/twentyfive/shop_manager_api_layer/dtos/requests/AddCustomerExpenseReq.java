@@ -17,6 +17,5 @@ public class AddCustomerExpenseReq {
     private double value;
     private boolean issued;
 
-    private Long businessId;
     private String companyName;
 }

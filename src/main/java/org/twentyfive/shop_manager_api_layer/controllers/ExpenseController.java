@@ -1,5 +1,6 @@
 package org.twentyfive.shop_manager_api_layer.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -27,13 +28,17 @@ public class ExpenseController {
         return ResponseEntity.ok().body(expenseService.getPeriodExpenses(id,page,size,dateRange));
     }
     @PostMapping("/add")
-    public ResponseEntity<Boolean> add(@RequestBody AddExpenseReq addExpenseReq) throws IOException {
-        return ResponseEntity.ok().body(expenseService.add(addExpenseReq));
+    public ResponseEntity<Boolean> add(@RequestBody AddExpenseReq addExpenseReq,
+                                       HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(expenseService.add(addExpenseReq,authorization));
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Boolean> update(@RequestBody UpdateExpenseReq updateExpenseReq) throws IOException {
-        return ResponseEntity.ok().body(expenseService.update(updateExpenseReq));
+    public ResponseEntity<Boolean> update(@RequestBody UpdateExpenseReq updateExpenseReq,
+                                          HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(expenseService.update(updateExpenseReq,authorization));
     }
 
     @DeleteMapping("/delete/{id}")

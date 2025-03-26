@@ -2,6 +2,7 @@ package org.twentyfive.shop_manager_api_layer.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.clients.MsUserClient;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddTimeSlotReq;
 import org.twentyfive.shop_manager_api_layer.exceptions.TimeSlotNotFoundException;
 import org.twentyfive.shop_manager_api_layer.mappers.TimeSlotMapperService;
@@ -12,6 +13,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.CheckCashRegister
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
 import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +24,12 @@ public class TimeSlotService {
 
     private final TimeSlotRepository timeSlotRepository;
 
-//    private final BusinessService businessService;
-
     private final TimeSlotMapperService timeSlotMapperService;
     private final CashRegisterRepository cashRegisterRepository;
+    private final MsUserClient msUserClient;
 
-    public Boolean add(AddTimeSlotReq addTimeSlotReq) {
-        //FIXME
-//        Business business = businessService.getById(addTimeSlotReq.getBusinessId());
-        Business business = null;
+    public Boolean add(AddTimeSlotReq addTimeSlotReq,String authorization) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
         TimeSlot timeSlot = createTimeSlotFromSimpleTimeSlot(addTimeSlotReq.getTimeSlot());
         timeSlot.setBusiness(business);
         timeSlotRepository.save(timeSlot);

@@ -1,5 +1,6 @@
 package org.twentyfive.shop_manager_api_layer.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,7 @@ import org.twentyfive.shop_manager_api_layer.services.TimeSlotService;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.CheckCashRegister;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleTimeSlot;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,7 +31,8 @@ public class TimeSlotController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Boolean> add(@RequestBody AddTimeSlotReq addTimeSlotReq) {
-        return ResponseEntity.ok().body(timeSlotService.add(addTimeSlotReq));
+    public ResponseEntity<Boolean> add(@RequestBody AddTimeSlotReq addTimeSlotReq, HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok().body(timeSlotService.add(addTimeSlotReq,authorization));
     }
 }

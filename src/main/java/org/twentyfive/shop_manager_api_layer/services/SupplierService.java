@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.clients.MsUserClient;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierGroupReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddSupplierReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetSupplierWithoutGroupReq;
@@ -23,6 +24,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleSup
 import org.twentyfive.shop_manager_api_layer.utilities.classes.statics.PageUtility;
 import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,9 +39,10 @@ public class SupplierService {
 
     private final SupplierGroupRepository supplierGroupRepository;
     private final SupplierRepository supplierRepository;
+    private final MsUserClient msUserClient;
 
     @Transactional
-    public boolean add(Long id,AddSupplierReq addSupplierReq) {
+    public boolean add(Long id,AddSupplierReq addSupplierReq,String authorization) throws IOException {
         SupplierGroup supplierGroup = supplierGroupService.optFindByBusinessIdAndName(id, addSupplierReq.getGroupName()).orElse(null);
 
         if (existsByBusinessIdAndNameAndDisabledTrue(id, addSupplierReq.getName())){
@@ -48,10 +51,8 @@ public class SupplierService {
             supplier.setDisabled(false);
             return supplierRepository.save(supplier) != null;
         }
+        Business business = msUserClient.getBusinessFromToken(authorization);
 
-        //FIXME
-//        Business business = businessService.getById(id);
-        Business business = null;
         return supplierMapperService.createSupplierFromAddSupplierReq(addSupplierReq.getName(), supplierGroup,business) != null;
     }
 
@@ -85,10 +86,12 @@ public class SupplierService {
     }
 
     @Transactional
-    public Boolean addList(Long id,List<AddSupplierReq> addSupplierReqList) {
+    public Boolean addList(Long id,
+                           List<AddSupplierReq> addSupplierReqList,
+                           String authorization) throws IOException {
 
         for (AddSupplierReq addSupplierReq : addSupplierReqList) {
-            add(id,addSupplierReq);
+            add(id,addSupplierReq,authorization);
         }
 
         return true;
