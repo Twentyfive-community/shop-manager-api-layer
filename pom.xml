@@ -89,7 +89,7 @@
         <dependency>
             <groupId>com.twentyfive</groupId>
             <artifactId>twentyfive-adapters</artifactId>
-            <version>0.0.313</version>
+            <version>0.0.314</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
