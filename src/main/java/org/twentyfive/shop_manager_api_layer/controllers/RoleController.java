@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.twentyfive.shop_manager_api_layer.clients.MsRoleClient;
 import twentyfive.twentyfiveadapter.response.msUserBusinessResponses.GetRoleRes;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/role")
 @RequiredArgsConstructor
@@ -17,7 +19,7 @@ public class RoleController {
     private final MsRoleClient roleClient;
 
     @GetMapping("/get-all")
-    public ResponseEntity<GetRoleRes> getAllRoles(HttpServletRequest request) {
+    public ResponseEntity<List<String>> getAllRoles(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
         return ResponseEntity.ok(roleClient.getAllRoles(authorization));
     }
