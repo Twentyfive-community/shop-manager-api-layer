@@ -43,7 +43,7 @@ public class Expense {
     @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "business_id", referencedColumnName = "business_id"),
-            @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+            @JoinColumn(name = "worker_id", referencedColumnName = "user_id")
     })
     private BusinessUser worker;
 
