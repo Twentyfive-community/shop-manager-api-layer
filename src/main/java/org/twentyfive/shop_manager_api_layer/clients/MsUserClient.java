@@ -37,4 +37,8 @@ public interface MsUserClient {
     @GetMapping("/get-user-from-token")
     MsUser getUserFromToken(@RequestHeader("authorization") String authorization) throws IOException;
 
+    @GetMapping("/change-active-business")
+    Boolean changeActiveBusiness(@RequestHeader("authorization") String authorization,
+                                 @RequestParam("name") String name) throws IOException;
+
 }

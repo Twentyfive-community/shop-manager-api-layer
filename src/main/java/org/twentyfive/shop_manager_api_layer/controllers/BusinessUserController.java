@@ -10,6 +10,7 @@ import twentyfive.twentyfiveadapter.request.msUserBusinessRequests.ChangeRoleReq
 import twentyfive.twentyfiveadapter.response.msUserBusinessResponses.GetInfoMsUserRes;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,4 +48,9 @@ public class BusinessUserController {
         return ResponseEntity.ok(businessUserClient.addExistingUser(authorization,req));
     }
 
+    @GetMapping("/get-all-businesses-associated")
+    public ResponseEntity<List<String>> getAllBusinessesAssociated(HttpServletRequest request) throws IOException {
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok(businessUserClient.getAllBusinessesAssociated(authorization));
+    }
 }

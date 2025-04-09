@@ -40,4 +40,11 @@ public class MsUserController {
         String authorization = request.getHeader("Authorization");
         return ResponseEntity.ok(msUserClient.updateUser(authorization,updateUserReq));
     }
+
+    @GetMapping("/change-active-business")
+    ResponseEntity<Boolean> changeActiveBusiness(HttpServletRequest request,
+                                                 @RequestParam("name") String name) throws IOException{
+        String authorization = request.getHeader("Authorization");
+        return ResponseEntity.ok(msUserClient.changeActiveBusiness(authorization,name));
+    }
 }

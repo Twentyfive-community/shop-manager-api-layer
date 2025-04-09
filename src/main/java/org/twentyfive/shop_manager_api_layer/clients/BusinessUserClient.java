@@ -9,6 +9,7 @@ import twentyfive.twentyfiveadapter.request.msUserBusinessRequests.ChangeRoleReq
 import twentyfive.twentyfiveadapter.response.msUserBusinessResponses.GetInfoMsUserRes;
 
 import java.io.IOException;
+import java.util.List;
 
 @FeignClient(name = "BusinessUserController", url = "${ms-user-business.url}/business-user")
 public interface BusinessUserClient {
@@ -30,4 +31,7 @@ public interface BusinessUserClient {
 
     @GetMapping("/get-from-token")
     BusinessUser getBusinessUserFromToken(@RequestHeader("authorization") String authorization) throws IOException;
+
+    @GetMapping("/get-all-businesses-associated")
+    List<String> getAllBusinessesAssociated(@RequestHeader("authorization") String authorization) throws IOException;
 }
