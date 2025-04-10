@@ -64,7 +64,7 @@ public class CashRegisterService {
                 entryService.createAndAddListOfEntryClosure(addCashRegisterReq.getEntries(), savedCashRegister, business);
             }
             if(addCashRegisterReq.getComposedEntries() != null){
-                composedEntryService.createAndAddListOfComposedEntryClosure(addCashRegisterReq.getComposedEntries(), savedCashRegister);
+                composedEntryService.createAndAddListOfComposedEntryClosure(addCashRegisterReq.getComposedEntries(), savedCashRegister, business);
             }
 
         } else {
@@ -82,7 +82,7 @@ public class CashRegisterService {
 
             // Aggiorna le voci Entry e Composed Entry
             entryService.updateAndRemoveEntryClosure(addCashRegisterReq.getEntries(), updatedCashRegister, business);
-            composedEntryService.updateAndRemoveComposedEntryClosure(addCashRegisterReq.getComposedEntries(), updatedCashRegister);
+            composedEntryService.updateAndRemoveComposedEntryClosure(addCashRegisterReq.getComposedEntries(), updatedCashRegister, business);
 
             // Crea il log per l'aggiornamento
             createLog(cashRegister);

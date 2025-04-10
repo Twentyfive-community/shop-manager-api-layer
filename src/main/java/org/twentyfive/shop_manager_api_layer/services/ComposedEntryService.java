@@ -12,6 +12,7 @@ import org.twentyfive.shop_manager_api_layer.repositories.CashRegisterRepository
 import org.twentyfive.shop_manager_api_layer.repositories.ComposedEntryClosureRepository;
 import org.twentyfive.shop_manager_api_layer.repositories.ComposedEntryRepository;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleGenericEntry;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
 import java.util.List;
 
@@ -31,8 +32,8 @@ public class ComposedEntryService {
         return composedEntryMapperService.mapListComposedEntrytoListSimpleEntry(composedEntries);
     }
 
-    public ComposedEntry getByLabel(String label) {
-        return composedEntryRepository.findByLabel(label).orElseThrow(() -> new ComposedEntryNotFoundException("composed entry not found with label: " + label));
+    public ComposedEntry getByLabel(String label, Business business) {
+        return composedEntryRepository.findByLabelAndBusiness(label, business).orElseThrow(() -> new ComposedEntryNotFoundException("composed entry not found with label: " + label));
     }
     public Boolean add(AddComposedEntryReq addComposedEntryReq) {
         ComposedEntry composedEntry = createComposedEntryFromAddComposedEntryReq(addComposedEntryReq);
@@ -41,14 +42,14 @@ public class ComposedEntryService {
     }
 
 
-    public void createAndAddListOfComposedEntryClosure(List<AddComposedEntryClosureReq> simpleComposedEntries, CashRegister cashRegister) {
+    public void createAndAddListOfComposedEntryClosure(List<AddComposedEntryClosureReq> simpleComposedEntries, CashRegister cashRegister, Business business) {
         for (AddComposedEntryClosureReq simpleComposedEntryClosure : simpleComposedEntries) {
-            createAndAddComposedEntryClosure(simpleComposedEntryClosure, cashRegister);
+            createAndAddComposedEntryClosure(simpleComposedEntryClosure, cashRegister, business);
         }
     }
 
-    private void createAndAddComposedEntryClosure(AddComposedEntryClosureReq simpleComposedEntryClosure, CashRegister cashRegister){
-        ComposedEntry composedEntry = getByLabel(simpleComposedEntryClosure.getComposedLabelEntry());
+    private void createAndAddComposedEntryClosure(AddComposedEntryClosureReq simpleComposedEntryClosure, CashRegister cashRegister, Business business){
+        ComposedEntry composedEntry = getByLabel(simpleComposedEntryClosure.getComposedLabelEntry(), business);
 
         ComposedEntryClosureId composedEntryClosureId = new ComposedEntryClosureId(composedEntry, cashRegister);
         ComposedEntryClosure composedEntryClosure = new ComposedEntryClosure(composedEntryClosureId, simpleComposedEntryClosure.getLabelAndValues());
@@ -62,14 +63,14 @@ public class ComposedEntryService {
         return composedEntry;
     }
 
-    public void updateAndRemoveComposedEntryClosure(List<AddComposedEntryClosureReq> composedEntries, CashRegister updatedCashRegister) {
+    public void updateAndRemoveComposedEntryClosure(List<AddComposedEntryClosureReq> composedEntries, CashRegister updatedCashRegister, Business business) {
         // Estrapolazione della lista di label
         List<ComposedEntryClosure> delComposedEntries = updatedCashRegister.getComposedEntryClosures();
 
         delComposedEntries.clear();
         cashRegisterRepository.save(updatedCashRegister);
         if(composedEntries != null) {
-            createAndAddListOfComposedEntryClosure(composedEntries, updatedCashRegister);
+            createAndAddListOfComposedEntryClosure(composedEntries, updatedCashRegister, business);
         }
     }
 }

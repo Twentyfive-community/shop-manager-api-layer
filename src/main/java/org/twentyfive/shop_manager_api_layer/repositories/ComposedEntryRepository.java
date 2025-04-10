@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ComposedEntryRepository extends JpaRepository<ComposedEntry, Long> {
-    Optional<ComposedEntry> findByLabel(String label);
+    Optional<ComposedEntry> findByLabelAndBusiness(String label, Business business);
 
     List<ComposedEntry> findAllByBusinessOrderByIdAsc(Business business);
 }
