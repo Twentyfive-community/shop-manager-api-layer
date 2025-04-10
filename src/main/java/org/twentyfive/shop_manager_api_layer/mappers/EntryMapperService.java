@@ -66,6 +66,7 @@ public class EntryMapperService {
         return simpleEntries;
     }
     public List<EntryClosureDetails> mapEntryClosureToDetailsDTO(List<EntryClosure> entryClosures) {
+        entryClosures.sort(Comparator.comparing(c -> c.getId().getEntry().getId()));
         List<EntryClosureDetails> entryClosureDetails = new ArrayList<>();
 
         for(EntryClosure entryClosure : entryClosures){
