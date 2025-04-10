@@ -7,13 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.enums.Operation;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name ="composed_entries",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"label"})  // Unicità label
+        uniqueConstraints = @UniqueConstraint(columnNames = {"label", "business_id"})
 )
 @Data
 @NoArgsConstructor
@@ -37,4 +38,7 @@ public class ComposedEntry {
     @JsonIgnore
     @OneToMany(mappedBy = "id.composedEntry")  // mappedBy si riferisce al campo 'entry' in EntryClosureId, chiave composta
     private List<ComposedEntryClosure> composedEntryClosures;
+
+    @ManyToOne
+    private Business business;
 }

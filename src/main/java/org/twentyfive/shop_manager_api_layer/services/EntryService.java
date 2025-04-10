@@ -2,6 +2,7 @@ package org.twentyfive.shop_manager_api_layer.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.twentyfive.shop_manager_api_layer.clients.MsUserClient;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddEntryClosureReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.AddEntryReq;
 import org.twentyfive.shop_manager_api_layer.dtos.requests.GetAllTotalEntriesReq;
@@ -11,10 +12,10 @@ import org.twentyfive.shop_manager_api_layer.models.*;
 import org.twentyfive.shop_manager_api_layer.models.ids.EntryClosureId;
 import org.twentyfive.shop_manager_api_layer.repositories.*;
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleGenericEntry;
+import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 
-import java.util.HashSet;
+import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,23 +29,15 @@ public class EntryService {
     private final EntryMapperService entryMapperService;
     private final ComposedEntryClosureRepository composedEntryClosureRepository;
     private final CashRegisterRepository cashRegisterRepository;
+    private final MsUserClient msUserClient;
 
     public List<SimpleGenericEntry> getAll() {
         List<Entry> entries = entryRepository.findAll();
         return entryMapperService.mapListEntrytoListSimpleEntry(entries);
     }
 
-    public Entry getByLabel(String label) {
-        return entryRepository.findByLabel(label).orElseThrow(() -> new EntryNotFoundException("entry not found with label: " + label));
-    }
-
-    public Set<Entry> getAllByLabelList(List<String> labels) {
-        Set<Entry> entries = new HashSet<>();
-        for (String label : labels) {
-            Entry entry = getByLabel(label);
-            entries.add(entry);
-        }
-        return entries;
+    public Entry getByLabel(String label,Business business) {
+        return entryRepository.findByLabelAndBusiness(label,business).orElseThrow(() -> new EntryNotFoundException("entry not found with label: " + label));
     }
 
     public Boolean add(AddEntryReq addEntryReq) {
@@ -54,14 +47,14 @@ public class EntryService {
     }
 
 
-    public void createAndAddListOfEntryClosure(List<AddEntryClosureReq> simpleEntries, CashRegister cashRegister) {
+    public void createAndAddListOfEntryClosure(List<AddEntryClosureReq> simpleEntries, CashRegister cashRegister,Business business) {
         for (AddEntryClosureReq simpleEntryClosure : simpleEntries) {
-            createAndAddEntryClosure(simpleEntryClosure, cashRegister);
+            createAndAddEntryClosure(simpleEntryClosure, cashRegister, business);
         }
     }
 
-    private void createAndAddEntryClosure(AddEntryClosureReq simpleEntryClosure, CashRegister cashRegister){
-        Entry entry = getByLabel(simpleEntryClosure.getLabel());
+    private void createAndAddEntryClosure(AddEntryClosureReq simpleEntryClosure, CashRegister cashRegister, Business business) {
+        Entry entry = getByLabel(simpleEntryClosure.getLabel(), business);
 
         EntryClosureId entryClosureId = new EntryClosureId(entry, cashRegister);
         EntryClosure entryClosure = new EntryClosure(entryClosureId, simpleEntryClosure.getValue());
@@ -76,20 +69,21 @@ public class EntryService {
         return entry;
     }
 
-    public List<GetAllTotalEntriesReq> getAllTotalEntries() {
-        List<Entry> entries = entryRepository.findAllByOrderByIdAsc();
-        List<ComposedEntry> composedEntries = composedEntryRepository.findAllByOrderByIdAsc();
+    public List<GetAllTotalEntriesReq> getAllTotalEntries(String authorization) throws IOException {
+        Business business = msUserClient.getBusinessFromToken(authorization);
+        List<Entry> entries = entryRepository.findAllByBusinessOrderByIdAsc(business);
+        List<ComposedEntry> composedEntries = composedEntryRepository.findAllByBusinessOrderByIdAsc(business);
         return entryMapperService.mapTotalEntriesToDTO(entries,composedEntries);
     }
 
-    public void updateAndRemoveEntryClosure(List<AddEntryClosureReq> entries, CashRegister updatedCashRegister) {
+    public void updateAndRemoveEntryClosure(List<AddEntryClosureReq> entries, CashRegister updatedCashRegister, Business business) {
         // Estrapolazione della lista di label
         List<EntryClosure> delComposedEntries = updatedCashRegister.getEntryClosures();
 
         delComposedEntries.clear();
         cashRegisterRepository.save(updatedCashRegister);
         if (entries != null) {
-            createAndAddListOfEntryClosure(entries, updatedCashRegister);
+            createAndAddListOfEntryClosure(entries, updatedCashRegister, business);
         }
 
     }

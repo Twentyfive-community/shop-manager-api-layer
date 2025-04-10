@@ -61,7 +61,7 @@ public class CashRegisterService {
 
             // Crea voci Entry e Composed Entry
             if(addCashRegisterReq.getEntries() != null){
-                entryService.createAndAddListOfEntryClosure(addCashRegisterReq.getEntries(), savedCashRegister);
+                entryService.createAndAddListOfEntryClosure(addCashRegisterReq.getEntries(), savedCashRegister, business);
             }
             if(addCashRegisterReq.getComposedEntries() != null){
                 composedEntryService.createAndAddListOfComposedEntryClosure(addCashRegisterReq.getComposedEntries(), savedCashRegister);
@@ -81,7 +81,7 @@ public class CashRegisterService {
             CashRegister updatedCashRegister = cashRegisterRepository.save(cashRegister);
 
             // Aggiorna le voci Entry e Composed Entry
-            entryService.updateAndRemoveEntryClosure(addCashRegisterReq.getEntries(), updatedCashRegister);
+            entryService.updateAndRemoveEntryClosure(addCashRegisterReq.getEntries(), updatedCashRegister, business);
             composedEntryService.updateAndRemoveComposedEntryClosure(addCashRegisterReq.getComposedEntries(), updatedCashRegister);
 
             // Crea il log per l'aggiornamento
