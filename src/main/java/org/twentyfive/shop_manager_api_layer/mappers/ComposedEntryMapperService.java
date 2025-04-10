@@ -8,6 +8,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleCom
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleGenericEntry;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -30,6 +31,8 @@ public class ComposedEntryMapperService {
 
     public List<SimpleComposedEntryClosure> mapListComposedEntryClosureToDTO(List<ComposedEntryClosure> composedEntryClosures) {
         List<SimpleComposedEntryClosure> composedSimpleEntries = new ArrayList<>();
+
+        composedEntryClosures.sort(Comparator.comparing(c -> c.getId().getComposedEntry().getId()));
 
         for (ComposedEntryClosure composedEntryClosure : composedEntryClosures) {
             SimpleComposedEntryClosure simpleComposedEntryClosure = mapComposedEntryClosureToSimpleComposedEntryClosure(composedEntryClosure);

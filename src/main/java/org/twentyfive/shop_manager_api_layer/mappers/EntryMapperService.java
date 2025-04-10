@@ -10,6 +10,7 @@ import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleEnt
 import org.twentyfive.shop_manager_api_layer.utilities.classes.simples.SimpleGenericEntry;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -53,6 +54,8 @@ public class EntryMapperService {
     }
 
     public List<SimpleEntryClosure> mapListEntryClosureToDTO(List<EntryClosure> entries) {
+        entries.sort(Comparator.comparing(c -> c.getId().getEntry().getId()));
+
         List<SimpleEntryClosure> simpleEntries = new ArrayList<>();
 
         for(EntryClosure entryClosure : entries){
