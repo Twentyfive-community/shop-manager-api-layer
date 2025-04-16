@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import twentyfive.twentyfiveadapter.models.msUserBusinessModels.Business;
 import twentyfive.twentyfiveadapter.models.msUserBusinessModels.MsUser;
 import twentyfive.twentyfiveadapter.request.msUserBusinessRequests.AddMsUserReq;
+import twentyfive.twentyfiveadapter.request.msUserBusinessRequests.ResetPasswordMsUserReq;
 import twentyfive.twentyfiveadapter.request.msUserBusinessRequests.UpdateUserReq;
 import twentyfive.twentyfiveadapter.response.msUserBusinessResponses.GetUserRes;
 
@@ -15,8 +16,7 @@ import java.io.IOException;
 @FeignClient(name = "MsUserController", url = "${ms-user-business.url}/ms-user")
 public interface MsUserClient {
     @PutMapping("/reset-password")
-    Boolean resetPasswordFromEmail(@RequestHeader("authorization") String authorization,
-                                   @RequestParam("email") String email) throws IOException;
+    Boolean resetPasswordFromEmail(@RequestBody ResetPasswordMsUserReq resetPasswordMsUserReq);
 
     @PostMapping("/get-all")
     Page<GetUserRes> getAllUser(@RequestHeader("authorization") String authorization,

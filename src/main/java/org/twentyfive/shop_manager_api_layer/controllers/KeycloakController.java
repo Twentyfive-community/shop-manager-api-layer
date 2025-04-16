@@ -21,10 +21,8 @@ public class KeycloakController {
     }
 
     @PatchMapping("/reset-password/{email}")
-    public ResponseEntity<Boolean> resetPasswordFromEmail(@PathVariable("email") String email,
-                                                          HttpServletRequest request) throws IOException {
-        String authorization = request.getHeader("Authorization");
+    public ResponseEntity<Boolean> resetPasswordFromEmail(@PathVariable("email") String email) {
 
-        return ResponseEntity.ok().body(keycloakService.resetPasswordFromEmail(authorization,email));
+        return ResponseEntity.ok().body(keycloakService.resetPasswordFromEmail(email));
     }
 }

@@ -8,6 +8,7 @@ import org.twentyfive.shop_manager_api_layer.clients.MsUserClient;
 import twentyfive.twentyfiveadapter.dto.keycloakDto.LoginRequest;
 import twentyfive.twentyfiveadapter.models.msUserBusinessModels.MsUser;
 import twentyfive.twentyfiveadapter.request.msUserBusinessRequests.LoginMsUserRequest;
+import twentyfive.twentyfiveadapter.request.msUserBusinessRequests.ResetPasswordMsUserReq;
 
 import java.io.IOException;
 
@@ -31,7 +32,12 @@ public class KeycloakService {
         return keycloakClient.login(loginMsUserRequest);
     }
 
-    public Boolean resetPasswordFromEmail(String authorization, String email) throws IOException {
-        return msUserClient.resetPasswordFromEmail(authorization,email);
+    public Boolean resetPasswordFromEmail(String email) {
+
+        ResetPasswordMsUserReq resetPasswordMsUserReq = new ResetPasswordMsUserReq();
+        resetPasswordMsUserReq.setEmail(email);
+        resetPasswordMsUserReq.setAppName(appName);
+
+        return msUserClient.resetPasswordFromEmail(resetPasswordMsUserReq);
     }
 }
