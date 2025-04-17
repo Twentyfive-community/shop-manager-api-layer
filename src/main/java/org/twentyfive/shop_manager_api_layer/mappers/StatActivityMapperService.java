@@ -58,8 +58,16 @@ public class StatActivityMapperService {
                     })
                     .mapToDouble(EntryClosure::getValue)
                     .sum();
-
-            if ("Cena".equals(timeSlot.getName())) {
+            //TODO da arresto
+            if(id==1) {
+                if ("Cena".equals(timeSlot.getName())) {
+                    totalClosingReceipts += cashRegisters.stream()
+                            .flatMap(cashRegister -> cashRegister.getEntryClosures().stream())
+                            .filter(entryClosure -> "Chiusura scontrini".equals(entryClosure.getId().getEntry().getLabel()))
+                            .mapToDouble(EntryClosure::getValue)
+                            .sum();
+                }
+            } else {
                 totalClosingReceipts += cashRegisters.stream()
                         .flatMap(cashRegister -> cashRegister.getEntryClosures().stream())
                         .filter(entryClosure -> "Chiusura scontrini".equals(entryClosure.getId().getEntry().getLabel()))
