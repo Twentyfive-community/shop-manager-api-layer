@@ -43,7 +43,7 @@ public class ComposedEntryMapperService {
     }
     public List<ComposedEntryClosureDetails> mapComposedEntryClosureToDetailsDTO(List<ComposedEntryClosure> composedEntryClosures) {
         List<ComposedEntryClosureDetails> entryClosureDetails = new ArrayList<>();
-        composedEntryClosures.sort(Comparator.comparing(c -> c.getId().getComposedEntry().getId()));
+        composedEntryClosures.sort(Comparator.comparing(c -> c.getId().getComposedEntry().getPosition()));
 
         for (ComposedEntryClosure composedEntryClosure : composedEntryClosures) {
             ComposedEntryClosureDetails composedEntryClosureDetail = mapComposedEntryClosureToDetailsComposedEntryClosure(composedEntryClosure);
