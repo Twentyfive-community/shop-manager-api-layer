@@ -35,6 +35,9 @@ public class Entry {
     @Column(name ="required")
     private boolean required;
 
+    @Column(name ="position")
+    private Integer position;
+
     @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "id.entry")  // mappedBy si riferisce al campo 'entry' in EntryClosureId, chiave composta

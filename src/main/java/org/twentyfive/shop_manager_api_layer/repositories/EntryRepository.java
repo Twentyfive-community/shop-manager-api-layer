@@ -12,5 +12,7 @@ import java.util.Optional;
 public interface EntryRepository extends JpaRepository<Entry, Long> {
     Optional<Entry> findByLabelAndBusiness(String label, Business business);
 
-    List<Entry> findAllByBusinessOrderByIdAsc(Business business);
+    List<Entry> findAllByBusinessOrderByPositionAsc(Business business);
+
+
 }

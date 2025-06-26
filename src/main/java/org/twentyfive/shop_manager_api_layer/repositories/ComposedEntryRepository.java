@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface ComposedEntryRepository extends JpaRepository<ComposedEntry, Long> {
     Optional<ComposedEntry> findByLabelAndBusiness(String label, Business business);
 
-    List<ComposedEntry> findAllByBusinessOrderByIdAsc(Business business);
+    List<ComposedEntry> findAllByBusinessOrderByPositionAsc(Business business);
 }

@@ -27,7 +27,6 @@ public class EntryService {
     private final ComposedEntryRepository composedEntryRepository;
 
     private final EntryMapperService entryMapperService;
-    private final ComposedEntryClosureRepository composedEntryClosureRepository;
     private final CashRegisterRepository cashRegisterRepository;
     private final MsUserClient msUserClient;
 
@@ -71,8 +70,8 @@ public class EntryService {
 
     public List<GetAllTotalEntriesReq> getAllTotalEntries(String authorization) throws IOException {
         Business business = msUserClient.getBusinessFromToken(authorization);
-        List<Entry> entries = entryRepository.findAllByBusinessOrderByIdAsc(business);
-        List<ComposedEntry> composedEntries = composedEntryRepository.findAllByBusinessOrderByIdAsc(business);
+        List<Entry> entries = entryRepository.findAllByBusinessOrderByPositionAsc(business);
+        List<ComposedEntry> composedEntries = composedEntryRepository.findAllByBusinessOrderByPositionAsc(business);
         return entryMapperService.mapTotalEntriesToDTO(entries,composedEntries);
     }
 
