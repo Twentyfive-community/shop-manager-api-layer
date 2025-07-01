@@ -102,16 +102,16 @@ public class ExpenseService {
         return true;
     }
 
-    public Page<ExpenseDTO> getPeriodExpenses(String authorization, int page, int size, DateRange dateRange, String payed) throws IOException {
+    public Page<ExpenseDTO> getPeriodExpenses(String authorization, int page, int size, DateRange dateRange, String payed, String name) throws IOException {
         Business business = msUserClient.getBusinessFromToken(authorization);
 
         List<Expense> expenses = List.of();
         if (Objects.equals(payed, "Tutte")) {
-            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd());
+            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndNameContainsIgnoreCaseOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), name);
         } else if (Objects.equals(payed, "Pagate")) {
-            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndPaidOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), true);
+            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndPaidAndNameContainsIgnoreCaseOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), true, name);
         } else if (Objects.equals(payed, "Non pagate")) {
-            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndPaidOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), false);
+            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndPaidAndNameContainsIgnoreCaseOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), false,name);
         }
 
         List<ExpenseDTO> expenseDTOS = expenseMapperService.mapListExpensesToListExpensesDTO(expenses);

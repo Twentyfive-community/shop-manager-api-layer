@@ -22,12 +22,13 @@ public class ExpenseController {
 
     @PostMapping("/get-period-expenses")
     public ResponseEntity<Page<ExpenseDTO>> getPeriodExpenses(HttpServletRequest request,
+                                                              @RequestParam(value = "name", defaultValue = "") String name,
                                                               @RequestParam(value = "page", defaultValue = "0") int page,
                                                               @RequestParam(value = "payed", defaultValue = "Tutte") String payed,
                                                               @RequestParam(value = "size", defaultValue = "25") int size,
                                                               @RequestBody DateRange dateRange) throws IOException {
         String authorization = request.getHeader("Authorization");
-        return ResponseEntity.ok().body(expenseService.getPeriodExpenses(authorization, page, size, dateRange, payed));
+        return ResponseEntity.ok().body(expenseService.getPeriodExpenses(authorization, page, size, dateRange, payed, name));
     }
 
     @PostMapping("/add")
