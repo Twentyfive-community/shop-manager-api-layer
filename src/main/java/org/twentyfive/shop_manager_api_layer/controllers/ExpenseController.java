@@ -22,28 +22,30 @@ public class ExpenseController {
 
     @PostMapping("/get-period-expenses")
     public ResponseEntity<Page<ExpenseDTO>> getPeriodExpenses(HttpServletRequest request,
-                                                             @RequestParam(value = "page", defaultValue = "0") int page,
-                                                             @RequestParam(value = "size", defaultValue = "25") int size,
-                                                             @RequestBody DateRange dateRange) throws IOException {
+                                                              @RequestParam(value = "page", defaultValue = "0") int page,
+                                                              @RequestParam(value = "payed", defaultValue = "Tutte") String payed,
+                                                              @RequestParam(value = "size", defaultValue = "25") int size,
+                                                              @RequestBody DateRange dateRange) throws IOException {
         String authorization = request.getHeader("Authorization");
-        return ResponseEntity.ok().body(expenseService.getPeriodExpenses(authorization,page,size,dateRange));
+        return ResponseEntity.ok().body(expenseService.getPeriodExpenses(authorization, page, size, dateRange, payed));
     }
+
     @PostMapping("/add")
     public ResponseEntity<Boolean> add(@RequestBody AddExpenseReq addExpenseReq,
                                        HttpServletRequest request) throws IOException {
         String authorization = request.getHeader("Authorization");
-        return ResponseEntity.ok().body(expenseService.add(addExpenseReq,authorization));
+        return ResponseEntity.ok().body(expenseService.add(addExpenseReq, authorization));
     }
 
     @PutMapping("/update")
     public ResponseEntity<Boolean> update(@RequestBody UpdateExpenseReq updateExpenseReq,
                                           HttpServletRequest request) throws IOException {
         String authorization = request.getHeader("Authorization");
-        return ResponseEntity.ok().body(expenseService.update(updateExpenseReq,authorization));
+        return ResponseEntity.ok().body(expenseService.update(updateExpenseReq, authorization));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable Long id){
+    public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         return ResponseEntity.ok().body(expenseService.delete(id));
     }
 }

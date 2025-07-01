@@ -25,7 +25,9 @@ import twentyfive.twentyfiveadapter.models.msUserBusinessModels.BusinessUser;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -38,33 +40,35 @@ public class ExpenseService {
     private final BusinessUserClient businessUserClient;
     private final MsUserClient msUserClient;
 
-    public Boolean add(AddExpenseReq addExpenseReq,String authorization) throws IOException {
-        Expense expense = createExpenseFromAddExpenseReq(addExpenseReq,authorization);
+    public Boolean add(AddExpenseReq addExpenseReq, String authorization) throws IOException {
+        Expense expense = createExpenseFromAddExpenseReq(addExpenseReq, authorization);
         return expenseRepository.save(expense) != null;
     }
 
-    public boolean update(UpdateExpenseReq updateExpenseReq,String authorization) throws IOException {
-        expenseRepository.findById(updateExpenseReq.getId()).orElseThrow(() -> new ExpenseNotFoundException("Non esiste una spesa con questo id! : "+updateExpenseReq.getId()));
+    public boolean update(UpdateExpenseReq updateExpenseReq, String authorization) throws IOException {
+        expenseRepository.findById(updateExpenseReq.getId()).orElseThrow(() -> new ExpenseNotFoundException("Non esiste una spesa con questo id! : " + updateExpenseReq.getId()));
 
-        Expense expense = createExpenseFromAddExpenseReq(updateExpenseReq.getAddExpenseReq(),authorization);
+        Expense expense = createExpenseFromAddExpenseReq(updateExpenseReq.getAddExpenseReq(), authorization);
         expense.setId(updateExpenseReq.getId());
 
         return expenseRepository.save(expense) != null;
     }
 
-    public List<Expense> getAllByDate(Long id,LocalDate date) {
-        return expenseRepository.findByWorker_Business_IdAndRefTime(id,date);
+    public List<Expense> getAllByDate(Long id, LocalDate date) {
+        return expenseRepository.findByWorker_Business_IdAndRefTime(id, date);
     }
+
     public double getTotalExpensesInDateRange(Long id, DateRange dateRange) {
         double totalCost = 0.0;
         LocalDate dateRef = dateRange.getStart();
         while (!dateRef.isAfter(dateRange.getEnd())) {
-            totalCost +=getTotalExpensesByDate(id, dateRef);
+            totalCost += getTotalExpensesByDate(id, dateRef);
             dateRef = dateRef.plusDays(1);
         }
         return totalCost;
     }
-    public double getTotalExpensesByDate(Long id,LocalDate date) {
+
+    public double getTotalExpensesByDate(Long id, LocalDate date) {
         List<Expense> expenses = getAllByDate(id, date);
 
         return expenses.stream().mapToDouble(Expense::getValue).sum();
@@ -72,7 +76,7 @@ public class ExpenseService {
 
     }
 
-    private Expense createExpenseFromAddExpenseReq(AddExpenseReq addExpenseReq,String authorization) throws IOException {
+    private Expense createExpenseFromAddExpenseReq(AddExpenseReq addExpenseReq, String authorization) throws IOException {
 
         BusinessUser businessUser = businessUserClient.getBusinessUserFromToken(authorization);
         Supplier supplier = supplierService.getByIdAndName(businessUser.getBusiness().getId(), addExpenseReq.getSupplierName());
@@ -91,20 +95,27 @@ public class ExpenseService {
     }
 
     public Boolean delete(Long id) {
-        if(!expenseRepository.existsById(id)) {
-            throw new ExpenseNotFoundException("Non esiste una spesa con questo id: "+id);
+        if (!expenseRepository.existsById(id)) {
+            throw new ExpenseNotFoundException("Non esiste una spesa con questo id: " + id);
         }
         expenseRepository.deleteById(id);
         return true;
     }
 
-    public Page<ExpenseDTO> getPeriodExpenses(String authorization, int page, int size, DateRange dateRange) throws IOException {
+    public Page<ExpenseDTO> getPeriodExpenses(String authorization, int page, int size, DateRange dateRange, String payed) throws IOException {
         Business business = msUserClient.getBusinessFromToken(authorization);
-        List<Expense> expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd());
+
+        List<Expense> expenses = List.of();
+        if (Objects.equals(payed, "Tutte")) {
+            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd());
+        } else if (Objects.equals(payed, "Pagate")) {
+            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndPaidOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), true);
+        } else if (Objects.equals(payed, "Non pagate")) {
+            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndPaidOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), false);
+        }
+
         List<ExpenseDTO> expenseDTOS = expenseMapperService.mapListExpensesToListExpensesDTO(expenses);
-
         Pageable pageable = PageRequest.of(page, size);
-
         return PageUtility.convertListToPage(expenseDTOS, pageable);
     }
 }
