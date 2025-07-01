@@ -10,19 +10,17 @@ import java.util.List;
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
-    List<Expense> findByWorker_Business_IdAndRefTimeBetweenAndNameContainsIgnoreCaseOrderByRefTimeDesc(
+    List<Expense> findByWorker_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(
             Long businessId,
             LocalDate startDate,
-            LocalDate endDate,
-            String name
+            LocalDate endDate
     );
 
-    List<Expense> findByWorker_Business_IdAndRefTimeBetweenAndPaidAndNameContainsIgnoreCaseOrderByRefTimeDesc(
+    List<Expense> findByWorker_Business_IdAndRefTimeBetweenAndPaidOrderByRefTimeDesc(
             Long businessId,
             LocalDate startDate,
             LocalDate endDate,
-            boolean paid,
-            String name
+            boolean paid
     );
 
     List<Expense> findByWorker_Business_IdAndRefTime(Long id, LocalDate date);

@@ -107,11 +107,11 @@ public class ExpenseService {
 
         List<Expense> expenses = List.of();
         if (Objects.equals(payed, "Tutte")) {
-            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndNameContainsIgnoreCaseOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), name);
+            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd());
         } else if (Objects.equals(payed, "Pagate")) {
-            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndPaidAndNameContainsIgnoreCaseOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), true, name);
+            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndPaidOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), true);
         } else if (Objects.equals(payed, "Non pagate")) {
-            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndPaidAndNameContainsIgnoreCaseOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), false,name);
+            expenses = expenseRepository.findByWorker_Business_IdAndRefTimeBetweenAndPaidOrderByRefTimeDesc(business.getId(), dateRange.getStart(), dateRange.getEnd(), false);
         }
 
         List<ExpenseDTO> expenseDTOS = expenseMapperService.mapListExpensesToListExpensesDTO(expenses);
